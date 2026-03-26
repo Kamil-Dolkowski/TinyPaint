@@ -2,6 +2,8 @@
 
 ***TinyPaint*** is my small project of web application that allows you to draw simple images.
 
+Check out my app: [TinyPaint](https://kamil-dolkowski.github.io/TinyPaint/)
+
 In the future, I want to add a cooperative option to draw with friends :), but now I am working at basic functionalities of my graphic application.
 
 The application has only polish interface now, but I plan to add english interface in the future (but it's not a big problem, because app is very intuitive thanks to many icons :D).
