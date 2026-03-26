@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <title>Tiny Paint</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toolbox">
+        <div class="toolbox-group">
+            <button disabled id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
+        </div>
+        <div class="toolbox-group">
+            <button disabled id="undo-btn" title="Cofnij" class="button-22"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+            <button disabled id="redo-btn" title="Ponów" class="button-22"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+        </div>
+        <div id="toolbox-tools" class="toolbox-group">
+            <button id="pencil-btn" title="Ołówek" class="button-22" data-state="on"><i class="fa-solid fa-pencil"></i></i></button>
+            <button id="brush-btn" title="Pędzel" class="button-22" data-state="off"><i class="fa-solid fa-brush"></i></button>
+            <button id="line-btn" title="Linia" class="button-22" data-state="off"><i class="fa-solid fa-slash"></i></button>
+            <button id="eraser-btn" title="Gumka" class="button-22" data-state="off"><i class="fa-solid fa-eraser"></i></button>
+            <button disabled id="fill-btn" title="Wypełnij" class="button-22" data-state="off"><i class="fa-solid fa-fill-drip"></i></button>
+            <button disabled id="text-btn" title="Tekst" class="button-22" data-state="off"><i class="fa-solid fa-t"></i></button>
+            <button disabled id="move-btn" title="Przesuń" class="button-22" data-state="off"><i class="fa-solid fa-arrows-up-down-left-right"></i></button>
+            <button disabled id="zoom-btn" title="Przybliż/Oddal" class="button-22" data-state="off"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button disabled id="color-picker-btn" title="Wybierz kolor" class="button-22" data-state="off"><i class="fa-solid fa-eye-dropper"></i></button>
+            <button disabled id="select-btn" title="Zaznacz" class="button-22" data-state="off"><i class="fa-solid fa-object-group"></i></button>
+        </div>
+        <div class="toolbox-group">
+            <button disabled id="bgcolor-btn" title="Kolor tła" class="button-22"><i class="fa-solid fa-image"></i></button>
+            <button id="clear-btn" title="Wyczyść" class="button-22"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div class="toolbox-group">
+            <button id="download-btn" title="Pobierz" class="button-22"><i class="fa-solid fa-file-arrow-down"></i></button>
+            <button id="upload-btn" title="Załaduj" class="button-22"><i class="fa-solid fa-file-arrow-up"></i></button>
+        </div>
+    </div>
+
+    <div id="brush-settings">
+        <div id="size-lbl">1</div>
+        <button id="increase-btn" class="button-22"><i class="fa-solid fa-plus"></i></button>
+        <button id="decrease-btn" class="button-22"><i class="fa-solid fa-minus"></i></button>
+        <input type="color" id="color-picker">
+    </div>
+
+    <input type="file" id="upload" style="display:none">
+
+    <!-- <canvas id="bg-canvas"></canvas> -->
+    <canvas id="canvas"></canvas>
+    <canvas id="cursor-canvas"></canvas>
+
+    <script src="js/script.js"></script>
+</body>

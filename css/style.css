@@ -1,0 +1,123 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+
+    background-image: 
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+#cursor-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+#toolbox {
+    display: flex;
+    position: absolute;
+    top: 2vh;
+    left: 2vw;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.toolbox-group {
+    display: flex;
+    margin: 10px;
+}
+
+#brush-settings {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    bottom: 2vh;
+    left: 2vw;
+}
+
+#color-picker {
+    width: 100%;
+    height: 2.2rem;
+    border-radius: 8px;
+    border-style: none;
+    background-color: #0276FF;
+}
+
+#size-lbl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: x-large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* https://getcssscan.com/css-buttons-examples */
+.button-22 {
+    align-items: center;
+    appearance: button;
+    background-color: #0276FF;
+    border-radius: 8px;
+    border-style: none;
+    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    font-family: "RM Neue",sans-serif;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 2px;
+    padding: 10px 21px;
+    text-align: center;
+    text-transform: none;
+    transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-22:active {
+    background-color: #006AE8;
+    color: #fff;
+}
+
+.button-22:hover {
+    background-color: #1C84FF;
+}
+
+.button-22:disabled {
+    background-color: #ccc;
+    color: #888888;
+}
+
+.button-22[data-state="on"]:not([disabled]) {
+    background-color: #fff;
+    color: #006AE8;
+    /*  border-radius: 1rem; */
+    outline: 4px solid #006AE8;
+    outline-offset: -4px;
+}
+
+.button-22[data-state="off"]:not([disabled]) {
+    background-color: #006AE8;
+    color: #fff;
+}
