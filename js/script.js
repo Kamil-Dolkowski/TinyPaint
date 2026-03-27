@@ -13,8 +13,32 @@ const Tool = Object.freeze({
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-let cursorCanvas = document.getElementById("cursor-canvas");
-let cursorCtx = cursorCanvas.getContext("2d");
+// let cursorCanvas = document.getElementById("cursor-canvas");
+// let cursorCtx = cursorCanvas.getContext("2d");
+
+let zoomV = 2;
+let widthZoom = canvas.width;
+let heightZoom = canvas.height;
+
+function setCanvasSize(width, height) {
+    canvas.width = width;
+    canvas.height = height;
+
+    widthZoom = canvas.width;
+    heightZoom = canvas.height;
+}
+
+function zoomIn() {
+    ctx.scale(1/zoomV, 1/zoomV);
+
+    widthZoom *= zoomV;
+    heightZoom *= zoomV;
+
+    canvas.style.width = widthZoom + 'px';
+    canvas.style.height = heightZoom + 'px';
+}
+
+setCanvasSize(128,64);
 
 function resizeCanvas() {
     const lineWidth = ctx.lineWidth;
@@ -36,9 +60,9 @@ function resizeCanvas() {
     // ctx.globalCompositeOperation = globalCompositeOperation;
 }
 
-resizeCanvas();
+// resizeCanvas();
 
-window.addEventListener("resize", renderImage);
+// window.addEventListener("resize", renderImage);
 
 // Cursor
 
@@ -398,10 +422,17 @@ function load_image() {
     addCanvasToHistory();
 }
 
+// ======== SETTINGS ========
+const settingsBtn = document.getElementById("settings-btn");
+
+settingsBtn.addEventListener("click", () => {
+    zoomIn();
+});
+
 // ======== EXIT ALERT ========
 window.addEventListener("beforeunload", e => {
-    e.preventDefault();
-    e.returnValue = '';
+    // e.preventDefault();
+    // e.returnValue = '';
 });
 
 // ======== SHORTCUT KEYS ========

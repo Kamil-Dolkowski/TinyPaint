@@ -4,10 +4,17 @@ html, body {
     height: 100%;
 }
 
-#canvas {
-    display: block;
-    width: 100vw;
+#workspace {
+    display: grid;
+    place-items: center;
     height: 100vh;
+    margin: 0;
+    background-color: #bdbdbd;
+}
+
+canvas {
+    border: 3px solid #000000;
+    image-rendering: pixelated;
 
     background-image: 
         linear-gradient(45deg, #ccc 25%, transparent 25%),
@@ -33,7 +40,7 @@ html, body {
     top: 2vh;
     left: 2vw;
     overflow-x: auto;
-    width: 100%;
+    width: auto;
 }
 
 .toolbox-group {

@@ -11,7 +11,7 @@
 <body>
     <div id="toolbox">
         <div class="toolbox-group">
-            <button disabled id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
+            <button id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
         </div>
         <div class="toolbox-group">
             <button disabled id="undo-btn" title="Cofnij" class="button-22"><i class="fa-solid fa-arrow-rotate-left"></i></button>
@@ -48,9 +48,11 @@
 
     <input type="file" id="upload" style="display:none">
 
-    <!-- <canvas id="bg-canvas"></canvas> -->
-    <canvas id="canvas"></canvas>
-    <canvas id="cursor-canvas"></canvas>
+    <div id="workspace">
+        <!-- <canvas id="bg-canvas"></canvas> -->
+        <canvas id="canvas"></canvas>
+        <!-- <canvas id="cursor-canvas"></canvas> -->
+    </div>
 
     <script src="js/script.js"></script>
 </body>
