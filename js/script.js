@@ -306,11 +306,11 @@ eraserBtn.addEventListener("click", () => {
 });
 
 // ======== BACKGROUND COLOR ========
-const bgColorBtn = document.getElementById("bgcolor-btn");
+// const bgColorBtn = document.getElementById("bgcolor-btn");
 
-bgColorBtn.addEventListener("click", () => {
+// bgColorBtn.addEventListener("click", () => {
 
-});
+// });
 
 // ======== CLEAR ========
 const clearBtn = document.getElementById("clear-btn");
