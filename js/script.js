@@ -55,8 +55,10 @@ canvas.addEventListener("pointermove", e => {
 function drawCursor() {
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
 
+    cursorCtx.save();
     cursorCtx.lineWidth = 1;
     cursorCtx.strokeStyle = "black"
+    cursorCtx.restore();
 
     cursorCtx.beginPath();
     cursorCtx.arc(mouseX, mouseY, ctx.lineWidth / 2, 0, 2 * Math.PI);
@@ -175,7 +177,7 @@ function drawLineVisualization() {
 
         cursorCtx.lineWidth = ctx.lineWidth;
         cursorCtx.lineCap = "round";
-        cursorCtx.fillStroke = ctx.fillStroke;
+        cursorCtx.strokeStyle = ctx.strokeStyle;
 
         cursorCtx.beginPath();
         cursorCtx.moveTo(lastX, lastY);
@@ -294,6 +296,7 @@ const lineBtn = document.getElementById("line-btn");
 
 lineBtn.addEventListener("click", () => {
     tool = Tool.LINE;
+    ctx.lineCap = "round";
     ctx.globalCompositeOperation = "source-over";
 });
 
