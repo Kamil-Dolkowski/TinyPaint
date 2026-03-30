@@ -9,6 +9,8 @@ const Tool = Object.freeze({
     COLOR_PICKER: 'color_picker'
 });
 
+var brushSize = 1;
+
 // ======== CANVAS ========
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
@@ -70,12 +72,12 @@ canvas.addEventListener("pointerout", e => {
 });
 
 // ======== DRAWING ========
-ctx.lineWidth = 5;
+ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
 canvas.style.touchAction = "none";
 
-var tool = Tool.BRUSH;
+var tool = Tool.PENCIL;
 var drawing = false;
 
 var lastX = null;
@@ -94,9 +96,17 @@ canvas.addEventListener("pointerdown", e => {
         currentX = e.offsetX;
         currentY = e.offsetY;
 
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
-        ctx.stroke();
+        if (tool == Tool.PENCIL) {
+            ctx.beginPath();
+            ctx.fillRect(x, y, 1, 1);
+            ctx.stroke();
+        }
+
+        if (tool == Tool.BRUSH) {
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
     }
 });
 
@@ -106,7 +116,23 @@ canvas.addEventListener("pointermove", e => {
     currentX = e.offsetX;
     currentY = e.offsetY;
 
-    if (tool == Tool.PENCIL || tool == Tool.BRUSH || tool == Tool.ERASER) {
+    if (tool == Tool.PENCIL) {
+        ctx.save();
+
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(currentX, currentY)
+        ctx.stroke();
+
+        ctx.restore();
+
+        lastX = currentX;
+        lastY = currentY;
+    }
+
+    if (tool == Tool.BRUSH || tool == Tool.ERASER) {
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(currentX, currentY)
@@ -278,7 +304,8 @@ const pencilBtn = document.getElementById("pencil-btn");
 
 pencilBtn.addEventListener("click", () => {
     tool = Tool.PENCIL;
-    ctx.lineCap = "square";
+    ctx.lineWidth = 1;
+    ctx.lineCap = "round";
     ctx.globalCompositeOperation = "source-over";
 });
 
@@ -287,6 +314,7 @@ const brushBtn = document.getElementById("brush-btn");
 
 brushBtn.addEventListener("click", () => {
     tool = Tool.BRUSH;
+    ctx.lineWidth = brushSize;
     ctx.lineCap = "round";
     ctx.globalCompositeOperation = "source-over";
 });
@@ -305,6 +333,7 @@ const eraserBtn = document.getElementById("eraser-btn");
 
 eraserBtn.addEventListener("click", () => {
     tool = Tool.ERASER;
+    ctx.lineWidth = brushSize;
     ctx.globalCompositeOperation = "destination-out";
 });
 
@@ -330,28 +359,31 @@ const increaseBtn = document.getElementById("increase-btn");
 const decreaseBtn = document.getElementById("decrease-btn");
 const sizeLbl = document.getElementById("size-lbl");
 
-sizeLbl.innerText = ctx.lineWidth / 5;
+sizeLbl.innerText = ctx.lineWidth;
 
 increaseBtn.addEventListener("click", () => {
-    ctx.lineWidth += 5;
-    sizeLbl.innerText = ctx.lineWidth / 5;
+    ctx.lineWidth += 1;
+    brushSize = ctx.lineWidth;
+    sizeLbl.innerText = ctx.lineWidth;
 });
 
 decreaseBtn.addEventListener("click", () => {
-    ctx.lineWidth -= 5;
-    sizeLbl.innerText = ctx.lineWidth / 5;
+    ctx.lineWidth -= 1;
+    brushSize = ctx.lineWidth;
+    sizeLbl.innerText = ctx.lineWidth;
 });
 
 // -- MOUSE SCROLL --
 window.addEventListener("wheel", e => {
     if (e.deltaY > 0) {
-        ctx.lineWidth -= 5;
-        sizeLbl.innerText = ctx.lineWidth / 5;
+        ctx.lineWidth -= 1;
+        sizeLbl.innerText = ctx.lineWidth;
     } else {
-        ctx.lineWidth += 5;
-        sizeLbl.innerText = ctx.lineWidth / 5;
+        ctx.lineWidth += 1;
+        sizeLbl.innerText = ctx.lineWidth;
     }
 
+    brushSize = ctx.lineWidth;
     drawCursor();
 });
 
