@@ -364,12 +364,16 @@ const sizeLbl = document.getElementById("size-lbl");
 sizeLbl.innerText = ctx.lineWidth;
 
 increaseBtn.addEventListener("click", () => {
+    if (tool == Tool.PENCIL) return;
+
     ctx.lineWidth += 1;
     brushSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
 });
 
 decreaseBtn.addEventListener("click", () => {
+    if (tool == Tool.PENCIL) return;
+
     ctx.lineWidth -= 1;
     brushSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
@@ -377,6 +381,8 @@ decreaseBtn.addEventListener("click", () => {
 
 // -- MOUSE SCROLL --
 window.addEventListener("wheel", e => {
+    if (tool == Tool.PENCIL) return;
+    
     if (e.deltaY > 0) {
         ctx.lineWidth -= 1;
         sizeLbl.innerText = ctx.lineWidth;
