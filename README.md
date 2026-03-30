@@ -11,6 +11,20 @@ The application has only polish interface now, but I plan to add english interfa
 
 # Changelog
 
+## [0.5.0] - 2026-03-30
+The first changes after uploading the project to GitHub.
+
+### Added
+- added button with link to github project
+
+### Changed
+- pencil draws 1 pixel line
+ 
+### Fixed
+- hidden unimplemented buttons (fill, text, move, zoom, pick color, select, background)
+- fixed line color visualization - now visualization has the same color as drawing line
+
+
 ## [0.4.0] - 2026-03-26
 The last changes before uploading the project to GitHub.
 
