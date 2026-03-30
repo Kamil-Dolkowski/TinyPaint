@@ -324,6 +324,7 @@ const lineBtn = document.getElementById("line-btn");
 
 lineBtn.addEventListener("click", () => {
     tool = Tool.LINE;
+    ctx.lineWidth = brushSize;
     ctx.lineCap = "round";
     ctx.globalCompositeOperation = "source-over";
 });
@@ -334,6 +335,7 @@ const eraserBtn = document.getElementById("eraser-btn");
 eraserBtn.addEventListener("click", () => {
     tool = Tool.ERASER;
     ctx.lineWidth = brushSize;
+    ctx.lineCap = "round";
     ctx.globalCompositeOperation = "destination-out";
 });
 
