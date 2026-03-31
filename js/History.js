@@ -51,11 +51,14 @@ export default class History {
         this.img.src = this.undoStack[this.undoStack.length - 1];
 
         this.img.onload = () => {
-            // resizeCanvas();
+            this.ctx.save();
+            this.ctx.globalCompositeOperation = "source-over";
             
             this.ctx.imageSmoothingEnabled = false;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.drawImage(this.img, 0, 0);
+
+            this.ctx.restore();
         }
 
         if (this.undoStack.length > 1) {
