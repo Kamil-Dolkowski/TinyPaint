@@ -1,11 +1,9 @@
-import { ToolBase } from './ToolBase.js';
-import { Tool } from './Tool.js';
+import ToolBase from './ToolBase.js';
+import Tool from './Tool.js';
 
-export class Pencil extends ToolBase {
-    constructor(ctx) {
-        super();
-        this.ctx = ctx;
-        this.tool = Tool.PENCIL;
+export default class Pencil extends ToolBase {
+    constructor(ctx, cursorCtx, drawingStatus) {
+        super(Tool.PENCIL, ctx, cursorCtx, drawingStatus);
     }
 
     setTool() {
@@ -14,31 +12,33 @@ export class Pencil extends ToolBase {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    pointerdown(currentX, currentY) {
+    pointerdown(e) {
         this.ctx.beginPath();
-        this.ctx.fillRect(currentX, currentY, 1, 1);
+        this.ctx.fillRect(this.drawingStatus.currentX, this.drawingStatus.currentY, 1, 1);
         this.ctx.stroke();
     }
 
-    pointermove(lastX, lastY, currentX, currentY, e = null) {
+    pointermove(e) {
         this.ctx.save();
 
         this.ctx.lineWidth = 1;
 
         this.ctx.beginPath();
-        this.ctx.moveTo(lastX, lastY);
-        this.ctx.lineTo(currentX, currentY)
+        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
+        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
         this.ctx.stroke();
 
         this.ctx.restore();
 
-        lastX = currentX;
-        lastY = currentY;
-
-        return {lastX: lastX, lastY: lastY};
+        this.drawingStatus.lastX = this.drawingStatus.currentX;
+        this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
-    pointerup(lastX, lastY, currentX, currentY, e = null) {
+    pointerup(e) {
 
+    }
+
+    drawAnimationFrame() {
+        
     }
 }

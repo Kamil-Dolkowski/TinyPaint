@@ -1,15 +1,10 @@
-const Tool = Object.freeze({
-    PENCIL: 'pencil',
-    BRUSH: 'brush',
-    ERASER: 'eraser',
-    LINE: 'line',
-    FILL: 'fill',
-    MOVE: 'move',
-    ZOOM: 'zoom',
-    COLOR_PICKER: 'color_picker'
-});
+import drawingStatus from './DrawingStatus.js';
 
-var brushSize = 1;
+import Tool from './tools/Tool.js';
+import Pencil from './tools/Pencil.js';
+import Brush from './tools/Brush.js';
+import Line from './tools/Line.js';
+import Eraser from './tools/Eraser.js';
 
 // ======== CANVAS ========
 let canvas = document.getElementById("canvas");
@@ -44,8 +39,8 @@ window.addEventListener("resize", renderImage);
 
 // Cursor
 
-var mouseX = null;
-var mouseY = null;
+let mouseX = null;
+let mouseY = null;
 
 canvas.addEventListener("pointermove", e => {
     mouseX = e.offsetX;
@@ -71,82 +66,42 @@ canvas.addEventListener("pointerout", e => {
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
 });
 
+
+// ======== TOOLS INICIALIZATION ========
+let pencil = new Pencil(ctx, cursorCtx, drawingStatus);
+let brush = new Brush(ctx, cursorCtx, drawingStatus);
+let line = new Line(ctx, cursorCtx, drawingStatus);
+let eraser = new Eraser(ctx, cursorCtx, drawingStatus);
+
+let currentTool = pencil;
+
 // ======== DRAWING ========
 ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
 canvas.style.touchAction = "none";
 
-var tool = Tool.PENCIL;
-var drawing = false;
-
-var lastX = null;
-var lastY = null;
-
-var currentX = null;
-var currentY = null;
-
 canvas.addEventListener("pointerdown", e => {
     if (e.button == 0) {
-        drawing = true;
+        drawingStatus.isDrawing = true;
 
-        lastX = e.offsetX;
-        lastY = e.offsetY;
+        drawingStatus.lastX = e.offsetX;
+        drawingStatus.lastY = e.offsetY;
 
-        currentX = e.offsetX;
-        currentY = e.offsetY;
+        drawingStatus.currentX = e.offsetX;
+        drawingStatus.currentY = e.offsetY;
 
-        if (tool == Tool.PENCIL) {
-            ctx.beginPath();
-            ctx.fillRect(x, y, 1, 1);
-            ctx.stroke();
-        }
-
-        if (tool == Tool.BRUSH) {
-            ctx.beginPath();
-            ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
-            ctx.stroke();
-        }
+        currentTool?.pointerdown(e);
     }
 });
 
 canvas.addEventListener("pointermove", e => {
-    if (!drawing) return;
+    if (!drawingStatus.isDrawing) return;
 
-    currentX = e.offsetX;
-    currentY = e.offsetY;
+    drawingStatus.currentX = e.offsetX;
+    drawingStatus.currentY = e.offsetY;
 
-    if (tool == Tool.PENCIL) {
-        ctx.save();
-
-        ctx.lineWidth = 1;
-
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(currentX, currentY)
-        ctx.stroke();
-
-        ctx.restore();
-
-        lastX = currentX;
-        lastY = currentY;
-    }
-
-    if (tool == Tool.BRUSH || tool == Tool.ERASER) {
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(currentX, currentY)
-        ctx.stroke();
-
-        lastX = currentX;
-        lastY = currentY;
-    }
-
-    if (tool == Tool.LINE) {
-        if (e.shiftKey) {
-            ({x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY));
-        }
-    }
+    currentTool?.pointermove(e);
 });
 
 canvas.addEventListener("pointerup", e => {
@@ -158,65 +113,27 @@ canvas.addEventListener("pointerout", e => {
 });
 
 function stopDraw(e) {
-    if (!drawing) return;
+    if (!drawingStatus.isDrawing) return;
 
-    drawing = false;
+    drawingStatus.isDrawing = false;
 
-    currentX = e.offsetX;
-    currentY = e.offsetY;
-    
-    if (tool == Tool.LINE) {
-        if (e.shiftKey) {
-            var {x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY);
-        }
+    drawingStatus.currentX = e.offsetX;
+    drawingStatus.currentY = e.offsetY;
 
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(currentX, currentY)
-        ctx.stroke();
-    }
+    currentTool?.pointerup(e);
 
     addCanvasToHistory();
 }
 
-function getPerpendicularLineCoords(originX, originY, currentX, currentY) {
-    // 1. create 2 points by crossing coordinates
-    // 2. select the closest point to the current point
-
-    const current = {x: currentX, y: currentY};
-    const point1 = {x: originX, y: currentY};
-    const point2 = {x: currentX, y: originY};
-
-    const distance1 = (point1.x - current.x) ** 2 + (point1.y - current.y) ** 2
-    const distance2 = (point2.x - current.x) ** 2 + (point2.y - current.y) ** 2
-
-    if (distance1 < distance2) {
-        return {x: point1.x, y: point1.y};
-    } else {
-        return {x: point2.x, y: point2.y};
-    }
-}
-
-function drawLineVisualization() {
-    if (drawing && tool == Tool.LINE) {
-        cursorCtx.save();
-
-        cursorCtx.lineWidth = ctx.lineWidth;
-        cursorCtx.lineCap = "round";
-        cursorCtx.strokeStyle = ctx.strokeStyle;
-
-        cursorCtx.beginPath();
-        cursorCtx.moveTo(lastX, lastY);
-        cursorCtx.lineTo(currentX, currentY)
-        cursorCtx.stroke();
-
-        cursorCtx.restore();
+function drawToolAnimation() {
+    if (drawingStatus.isDrawing) {
+        currentTool?.drawAnimationFrame();
     }
 
-    requestAnimationFrame(drawLineVisualization);
+    requestAnimationFrame(drawToolAnimation);
 }
 
-drawLineVisualization();
+drawToolAnimation();
 
 // ======== UNDO/REDO ========
 
@@ -228,7 +145,6 @@ let undoStack = [canvas.toDataURL()];
 let redoStack = [];
 
 let img = new Image;
-let source = undoStack[undoStack.length - 1];
 
 function addCanvasToHistory() {
     undoStack.push(canvas.toDataURL());
@@ -303,40 +219,32 @@ toolBtns.forEach(toolBtn => {
 const pencilBtn = document.getElementById("pencil-btn");
 
 pencilBtn.addEventListener("click", () => {
-    tool = Tool.PENCIL;
-    ctx.lineWidth = 1;
-    ctx.lineCap = "round";
-    ctx.globalCompositeOperation = "source-over";
+    currentTool = pencil;
+    currentTool.setTool();
 });
 
 // ======== BRUSH ========
 const brushBtn = document.getElementById("brush-btn");
 
 brushBtn.addEventListener("click", () => {
-    tool = Tool.BRUSH;
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = "round";
-    ctx.globalCompositeOperation = "source-over";
+    currentTool = brush;
+    currentTool.setTool();
 });
 
 // ======== LINE ========
 const lineBtn = document.getElementById("line-btn");
 
 lineBtn.addEventListener("click", () => {
-    tool = Tool.LINE;
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = "round";
-    ctx.globalCompositeOperation = "source-over";
+    currentTool = line;
+    currentTool.setTool();
 });
 
 // ======== ERASER ========
 const eraserBtn = document.getElementById("eraser-btn");
 
 eraserBtn.addEventListener("click", () => {
-    tool = Tool.ERASER;
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = "round";
-    ctx.globalCompositeOperation = "destination-out";
+    currentTool = eraser;
+    currentTool.setTool();
 });
 
 // ======== BACKGROUND COLOR ========
@@ -364,24 +272,24 @@ const sizeLbl = document.getElementById("size-lbl");
 sizeLbl.innerText = ctx.lineWidth;
 
 increaseBtn.addEventListener("click", () => {
-    if (tool == Tool.PENCIL) return;
+    if (currentTool.tool == Tool.PENCIL) return;
 
     ctx.lineWidth += 1;
-    brushSize = ctx.lineWidth;
+    drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
 });
 
 decreaseBtn.addEventListener("click", () => {
-    if (tool == Tool.PENCIL) return;
+    if (currentTool.tool == Tool.PENCIL) return;
 
     ctx.lineWidth -= 1;
-    brushSize = ctx.lineWidth;
+    drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
 });
 
 // -- MOUSE SCROLL --
 window.addEventListener("wheel", e => {
-    if (tool == Tool.PENCIL) return;
+    if (currentTool.tool == Tool.PENCIL) return;
     
     if (e.deltaY > 0) {
         ctx.lineWidth -= 1;
@@ -391,7 +299,7 @@ window.addEventListener("wheel", e => {
         sizeLbl.innerText = ctx.lineWidth;
     }
 
-    brushSize = ctx.lineWidth;
+    drawingStatus.drawSize = ctx.lineWidth;
     drawCursor();
 });
 

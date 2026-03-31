@@ -1,4 +1,4 @@
-export const Tool = Object.freeze({
+const Tool = Object.freeze({
     PENCIL: 'pencil',
     BRUSH: 'brush',
     ERASER: 'eraser',
@@ -8,3 +8,5 @@ export const Tool = Object.freeze({
     ZOOM: 'zoom',
     COLOR_PICKER: 'color_picker'
 });
+
+export default Tool;

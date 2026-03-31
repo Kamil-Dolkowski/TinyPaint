@@ -1,45 +1,53 @@
-import { ToolBase } from './ToolBase.js';
-import { Tool } from './Tool.js';
+import ToolBase from './ToolBase.js';
+import Tool from './Tool.js';
 
-export class Line extends ToolBase {
-    constructor(ctx, drawSize) {
-        super();
-        this.ctx = ctx;
-        this.tool = Tool.LINE;
-        this.brushSize = drawSize;
+export default class Line extends ToolBase {
+    constructor(ctx, cursorCtx, drawingStatus) {
+        super(Tool.LINE, ctx, cursorCtx, drawingStatus);
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawSize;
+        this.ctx.lineWidth = this.drawingStatus.drawSize;
         this.ctx.lineCap = "round";
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    pointerdown(currentX, currentY) {
+    pointerdown(e) {
         this.ctx.beginPath();
-        this.ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
+        this.ctx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, 0, 0, 2 * Math.PI);
         this.ctx.stroke();
     }
 
-    pointermove(lastX, lastY, currentX, currentY, e = null) {
+    pointermove(e) {
         if (e.shiftKey) {
-            ({x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY));
+            ({x: this.drawingStatus.currentX, y: this.drawingStatus.currentY} = this.getPerpendicularLineCoords(this.drawingStatus.lastX, this.drawingStatus.lastY, this.drawingStatus.currentX, this.drawingStatus.currentY));
         }
-
-        return {currentX: currentX, currentY: currentY};
     }
 
-    pointerup(lastX, lastY, currentX, currentY, e = null) {
+    pointerup(e) {
         if (e.shiftKey) {
-            var {x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY);
+            ({x: this.drawingStatus.currentX, y: this.drawingStatus.currentY} = this.getPerpendicularLineCoords(this.drawingStatus.lastX, this.drawingStatus.lastY, this.drawingStatus.currentX, this.drawingStatus.currentY));
         }
 
         this.ctx.beginPath();
-        this.ctx.moveTo(lastX, lastY);
-        this.ctx.lineTo(currentX, currentY)
+        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
+        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
         this.ctx.stroke();
+    }
 
-        return {currentX: currentX, currentY: currentY};
+    drawAnimationFrame() {
+        this.cursorCtx.save();
+
+        this.cursorCtx.lineWidth = this.ctx.lineWidth;
+        this.cursorCtx.lineCap = "round";
+        this.cursorCtx.strokeStyle = this.ctx.strokeStyle;
+
+        this.cursorCtx.beginPath();
+        this.cursorCtx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
+        this.cursorCtx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
+        this.cursorCtx.stroke();
+
+        this.cursorCtx.restore();
     }
 
     getPerpendicularLineCoords(originX, originY, currentX, currentY) {
