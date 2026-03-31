@@ -95,6 +95,12 @@ var lastY = null;
 var currentX = null;
 var currentY = null;
 
+let lastMoveX = null;
+let lastMoveY = null;
+
+let currentMoveX = null;
+let currentMoveY = null;
+
 window.addEventListener("pointerdown", e => {
     if (e.button == 0) {
         const rect = canvas1.getBoundingClientRect();
@@ -110,9 +116,23 @@ window.addEventListener("pointerdown", e => {
         currentX = lastX;
         currentY = lastY;
 
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
-        ctx.stroke();
+        lastMoveX = e.clientX;
+        lastMoveY = e.clientY;
+
+        currentMoveX = lastMoveX;
+        currentMoveY = lastMoveY;
+
+        if (tool == Tool.BRUSH) {
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
+        if (tool == Tool.MOVE) {
+            document.body.style.cursor = "grabbing";
+        } else {
+            document.body.style.cursor = "auto";
+        }
     }
 });
 
@@ -126,6 +146,9 @@ window.addEventListener("pointermove", e => {
 
     currentX /= canvas.currentZoom;
     currentY /= canvas.currentZoom;
+
+    currentMoveX = e.clientX;
+    currentMoveY = e.clientY;
 
     if (tool == Tool.PENCIL || tool == Tool.BRUSH || tool == Tool.ERASER) {
         ctx.beginPath();
@@ -141,6 +164,16 @@ window.addEventListener("pointermove", e => {
         if (e.shiftKey) {
             ({x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY));
         }
+    }
+
+    if (tool == Tool.MOVE) {
+        const x = currentMoveX - lastMoveX;
+        const y = currentMoveY - lastMoveY;
+
+        canvas.move(x,y);
+
+        lastMoveX = currentMoveX;
+        lastMoveY = currentMoveY;
     }
 });
 
@@ -173,6 +206,12 @@ function stopDraw(e) {
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(currentX, currentY)
         ctx.stroke();
+    }
+
+    if (tool == Tool.MOVE) {
+        document.body.style.cursor = "grab";
+    } else {
+        document.body.style.cursor = "auto";
     }
 
     addCanvasToHistory();
@@ -352,6 +391,14 @@ const zoomBtn = document.getElementById("zoom-btn");
 
 zoomBtn.addEventListener("click", () => {
     tool = Tool.ZOOM;
+});
+
+// ======== MOVE ========
+const moveBtn = document.getElementById("move-btn");
+
+moveBtn.addEventListener("click", () => {
+    tool = Tool.MOVE;
+    document.body.style.cursor = "grab";
 });
 
 
