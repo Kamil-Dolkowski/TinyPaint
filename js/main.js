@@ -23,6 +23,9 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    drawingStatus.canvasWidth = canvas.width;
+    drawingStatus.canvasHeight = canvas.height;
+
     cursorCanvas.width = window.innerWidth;
     cursorCanvas.height = window.innerHeight;
 
@@ -36,36 +39,6 @@ function resizeCanvas() {
 resizeCanvas();
 
 window.addEventListener("resize", renderImage);
-
-// Cursor
-
-let mouseX = null;
-let mouseY = null;
-
-canvas.addEventListener("pointermove", e => {
-    mouseX = e.offsetX;
-    mouseY = e.offsetY;
-
-    drawCursor();
-});
-
-function drawCursor() {
-    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
-
-    cursorCtx.save();
-    cursorCtx.lineWidth = 1;
-    cursorCtx.strokeStyle = "black"
-    cursorCtx.restore();
-
-    cursorCtx.beginPath();
-    cursorCtx.arc(mouseX, mouseY, ctx.lineWidth / 2, 0, 2 * Math.PI);
-    cursorCtx.stroke();
-}
-
-canvas.addEventListener("pointerout", e => {
-    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
-});
-
 
 // ======== TOOLS INICIALIZATION ========
 let pencil = new Pencil(ctx, cursorCtx, drawingStatus);
@@ -96,10 +69,12 @@ canvas.addEventListener("pointerdown", e => {
 });
 
 canvas.addEventListener("pointermove", e => {
-    if (!drawingStatus.isDrawing) return;
-
     drawingStatus.currentX = e.offsetX;
     drawingStatus.currentY = e.offsetY;
+
+    currentTool?.drawCursor();
+
+    if (!drawingStatus.isDrawing) return;
 
     currentTool?.pointermove(e);
 });
@@ -113,6 +88,9 @@ canvas.addEventListener("pointerout", e => {
 });
 
 function stopDraw(e) {
+    // Clear cursor canvas
+    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+
     if (!drawingStatus.isDrawing) return;
 
     drawingStatus.isDrawing = false;
@@ -300,7 +278,7 @@ window.addEventListener("wheel", e => {
     }
 
     drawingStatus.drawSize = ctx.lineWidth;
-    drawCursor();
+    currentTool?.drawCursor();
 });
 
 // ======== COLOR PICKER ========

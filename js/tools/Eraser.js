@@ -35,6 +35,19 @@ export default class Eraser extends ToolBase {
 
     }
 
+    drawCursor() {
+        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+
+        this.cursorCtx.save();
+        this.cursorCtx.lineWidth = 1;
+        this.cursorCtx.strokeStyle = "black"
+        this.cursorCtx.restore();
+
+        this.cursorCtx.beginPath();
+        this.cursorCtx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
+        this.cursorCtx.stroke();
+    }
+
     drawAnimationFrame() {
         
     }

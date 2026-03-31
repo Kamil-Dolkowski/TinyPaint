@@ -12,6 +12,9 @@ class DrawingStatus {
             this.currentY = null;
 
             this.drawSize = 5;
+
+            this.canvasWidth = null;
+            this.canvasHeight = null;
         }
 
         return DrawingStatus.instance;

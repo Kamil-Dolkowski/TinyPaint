@@ -22,6 +22,10 @@ export default class ToolBase {
         throw new Error('Method "pointerup()" must be implemented');
     } 
 
+    drawCursor() {
+        throw new Error('Method "drawCursor()" must be implemented');
+    }
+
     drawAnimationFrame() {
         throw new Error('Method "drawAnimationFrame()" must be implemented');
     }
