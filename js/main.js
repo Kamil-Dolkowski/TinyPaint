@@ -7,11 +7,11 @@ import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 
 // ======== CANVAS ========
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-let cursorCanvas = document.getElementById("cursor-canvas");
-let cursorCtx = cursorCanvas.getContext("2d");
+const cursorCanvas = document.getElementById("cursor-canvas");
+const cursorCtx = cursorCanvas.getContext("2d");
 
 function resizeCanvas() {
     const lineWidth = ctx.lineWidth;
@@ -41,10 +41,10 @@ resizeCanvas();
 window.addEventListener("resize", renderImage);
 
 // ======== TOOLS INICIALIZATION ========
-let pencil = new Pencil(ctx, cursorCtx, drawingStatus);
-let brush = new Brush(ctx, cursorCtx, drawingStatus);
-let line = new Line(ctx, cursorCtx, drawingStatus);
-let eraser = new Eraser(ctx, cursorCtx, drawingStatus);
+const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
+const brush = new Brush(ctx, cursorCtx, drawingStatus);
+const line = new Line(ctx, cursorCtx, drawingStatus);
+const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 
 let currentTool = pencil;
 
@@ -119,10 +119,10 @@ const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
 
 // Drawing History
-let undoStack = [canvas.toDataURL()];
+const undoStack = [canvas.toDataURL()];
 let redoStack = [];
 
-let img = new Image;
+const img = new Image;
 
 function addCanvasToHistory() {
     undoStack.push(canvas.toDataURL());
