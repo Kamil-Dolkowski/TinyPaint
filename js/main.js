@@ -6,7 +6,7 @@ import Brush from './tools/Brush.js';
 import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 
-// ======== CANVAS ========
+// ===================== CANVAS =====================
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -48,12 +48,15 @@ const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 
 let currentTool = pencil;
 
-// ======== DRAWING ========
+// ======== DRAW INITIAL SETTINGS ========
 ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
 canvas.style.touchAction = "none";
 
+// ======== CANVAS EVENTS ========
+
+// 1 - pointerdown
 canvas.addEventListener("pointerdown", e => {
     if (e.button == 0) {
         drawingStatus.isDrawing = true;
@@ -68,6 +71,7 @@ canvas.addEventListener("pointerdown", e => {
     }
 });
 
+// 2 - pointermove
 canvas.addEventListener("pointermove", e => {
     drawingStatus.currentX = e.offsetX;
     drawingStatus.currentY = e.offsetY;
@@ -79,10 +83,12 @@ canvas.addEventListener("pointermove", e => {
     currentTool?.pointermove(e);
 });
 
+// 3 - pointerup
 canvas.addEventListener("pointerup", e => {
     stopDraw(e);
 });
 
+// 3 - pointerout
 canvas.addEventListener("pointerout", e => {
     stopDraw(e);
 });
@@ -103,6 +109,7 @@ function stopDraw(e) {
     addCanvasToHistory();
 }
 
+// 4 - tool animation
 function drawToolAnimation() {
     if (drawingStatus.isDrawing) {
         currentTool?.drawAnimationFrame();
@@ -113,7 +120,7 @@ function drawToolAnimation() {
 
 drawToolAnimation();
 
-// ======== UNDO/REDO ========
+// ===================== UNDO/REDO =====================
 
 const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
@@ -179,6 +186,8 @@ function renderImage() {
         redoBtn.disabled = true;
     }
 }
+
+// ===================== TOOLS =====================
 
 // ======== TOOLS RADIO ========
 const toolBtns = document.querySelectorAll("#toolbox-tools button")
