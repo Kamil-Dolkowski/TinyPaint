@@ -2,6 +2,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 #workspace {
@@ -40,6 +41,7 @@ html, body {
     left: 2vw;
     overflow-x: auto;
     width: auto;
+    z-index: 9999;
 }
 
 .toolbox-group {

@@ -22,32 +22,6 @@ let cursorCtx = cursorCanvas.getContext("2d");
 
 const canvas = new Canvas(checkerboard, canvas1, cursorCanvas);
 
-// canvas.setSize(160,160);
-
-let zoomV = 2;
-let widthZoom = canvas.width;
-let heightZoom = canvas.height;
-
-function setCanvasSize(width, height) {
-    canvas.width = width;
-    canvas.height = height;
-
-    widthZoom = canvas.width;
-    heightZoom = canvas.height;
-}
-
-function zoomIn() {
-    ctx.scale(1/zoomV, 1/zoomV);
-
-    widthZoom *= zoomV;
-    heightZoom *= zoomV;
-
-    canvas.style.width = widthZoom + 'px';
-    canvas.style.height = heightZoom + 'px';
-}
-
-// setCanvasSize(128,64);
-
 function resizeCanvas() {
     const lineWidth = ctx.lineWidth;
     const strokeStyle = ctx.strokeStyle;
@@ -79,8 +53,12 @@ var mouseY = null;
 
 window.addEventListener("pointermove", e => {
     const rect = canvas1.getBoundingClientRect();
+
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
+
+    mouseX /= canvas.currentZoom;
+    mouseY /= canvas.currentZoom;
 
     drawCursor();
 });
@@ -126,6 +104,9 @@ window.addEventListener("pointerdown", e => {
         lastX = e.clientX - rect.left;
         lastY = e.clientY - rect.top;
 
+        lastX /= canvas.currentZoom;
+        lastY /= canvas.currentZoom;
+
         currentX = lastX;
         currentY = lastY;
 
@@ -142,6 +123,9 @@ window.addEventListener("pointermove", e => {
 
     currentX = e.clientX - rect.left;
     currentY = e.clientY - rect.top;
+
+    currentX /= canvas.currentZoom;
+    currentY /= canvas.currentZoom;
 
     if (tool == Tool.PENCIL || tool == Tool.BRUSH || tool == Tool.ERASER) {
         ctx.beginPath();
@@ -176,6 +160,9 @@ function stopDraw(e) {
 
     currentX = e.clientX - rect.left;
     currentY = e.clientY - rect.top;
+
+    currentX /= canvas.currentZoom;
+    currentY /= canvas.currentZoom;
     
     if (tool == Tool.LINE) {
         if (e.shiftKey) {
@@ -360,6 +347,14 @@ clearBtn.addEventListener("click", () => {
     addCanvasToHistory();
 });
 
+// ======== ZOOM ========
+const zoomBtn = document.getElementById("zoom-btn");
+
+zoomBtn.addEventListener("click", () => {
+    tool = Tool.ZOOM;
+});
+
+
 // ======== INCREASE/DECREASE BRUSH SIZE ========
 
 // -- BUTTONS --
@@ -382,11 +377,20 @@ decreaseBtn.addEventListener("click", () => {
 // -- MOUSE SCROLL --
 window.addEventListener("wheel", e => {
     if (e.deltaY > 0) {
-        ctx.lineWidth -= 5;
-        sizeLbl.innerText = ctx.lineWidth / 5;
+        if (tool == Tool.ZOOM) {
+            canvas.zoom(0.5);
+        } else {
+            ctx.lineWidth -= 5;
+            sizeLbl.innerText = ctx.lineWidth / 5;
+        }
+
     } else {
-        ctx.lineWidth += 5;
-        sizeLbl.innerText = ctx.lineWidth / 5;
+        if (tool == Tool.ZOOM) {
+            canvas.zoom(2);
+        } else {
+            ctx.lineWidth += 5;
+            sizeLbl.innerText = ctx.lineWidth / 5;
+        }
     }
 
     drawCursor();
@@ -439,7 +443,7 @@ function load_image() {
 const settingsBtn = document.getElementById("settings-btn");
 
 settingsBtn.addEventListener("click", () => {
-    zoomIn();
+    canvas.move(20, 20);
 });
 
 // ======== EXIT ALERT ========
