@@ -283,11 +283,11 @@ window.addEventListener("beforeunload", e => {
 function shortcutKeysHandler(e) {
     if (e.ctrlKey && e.key === 'z') {
         e.preventDefault(); 
-        undo();
+        history.undo();
     }
     if (e.ctrlKey && e.key === 'y') {
         e.preventDefault(); 
-        redo();
+        history.redo();
     }
 }
 
