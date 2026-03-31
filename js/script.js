@@ -1,3 +1,5 @@
+import Canvas from './Canvas.js';
+
 const Tool = Object.freeze({
     PENCIL: 'pencil',
     BRUSH: 'brush',
@@ -10,11 +12,17 @@ const Tool = Object.freeze({
 });
 
 // ======== CANVAS ========
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+let canvas1 = document.getElementById("canvas");
+let ctx = canvas1.getContext("2d");
 
-// let cursorCanvas = document.getElementById("cursor-canvas");
-// let cursorCtx = cursorCanvas.getContext("2d");
+const checkerboard = document.getElementById("checkerboard");
+
+let cursorCanvas = document.getElementById("cursor-canvas");
+let cursorCtx = cursorCanvas.getContext("2d");
+
+const canvas = new Canvas(checkerboard, canvas1, cursorCanvas);
+
+// canvas.setSize(160,160);
 
 let zoomV = 2;
 let widthZoom = canvas.width;
@@ -38,7 +46,7 @@ function zoomIn() {
     canvas.style.height = heightZoom + 'px';
 }
 
-setCanvasSize(128,64);
+// setCanvasSize(128,64);
 
 function resizeCanvas() {
     const lineWidth = ctx.lineWidth;
@@ -69,9 +77,10 @@ function resizeCanvas() {
 var mouseX = null;
 var mouseY = null;
 
-canvas.addEventListener("pointermove", e => {
-    mouseX = e.offsetX;
-    mouseY = e.offsetY;
+window.addEventListener("pointermove", e => {
+    const rect = canvas1.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
 
     drawCursor();
 });
@@ -89,7 +98,7 @@ function drawCursor() {
     cursorCtx.stroke();
 }
 
-canvas.addEventListener("pointerout", e => {
+window.addEventListener("pointerout", e => {
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
 });
 
@@ -97,7 +106,7 @@ canvas.addEventListener("pointerout", e => {
 ctx.lineWidth = 5;
 ctx.strokeStyle = "black";
 
-canvas.style.touchAction = "none";
+canvas1.style.touchAction = "none";
 
 var tool = Tool.BRUSH;
 var drawing = false;
@@ -108,15 +117,17 @@ var lastY = null;
 var currentX = null;
 var currentY = null;
 
-canvas.addEventListener("pointerdown", e => {
+window.addEventListener("pointerdown", e => {
     if (e.button == 0) {
+        const rect = canvas1.getBoundingClientRect();
+
         drawing = true;
 
-        lastX = e.offsetX;
-        lastY = e.offsetY;
+        lastX = e.clientX - rect.left;
+        lastY = e.clientY - rect.top;
 
-        currentX = e.offsetX;
-        currentY = e.offsetY;
+        currentX = lastX;
+        currentY = lastY;
 
         ctx.beginPath();
         ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
@@ -124,11 +135,13 @@ canvas.addEventListener("pointerdown", e => {
     }
 });
 
-canvas.addEventListener("pointermove", e => {
+window.addEventListener("pointermove", e => {
     if (!drawing) return;
 
-    currentX = e.offsetX;
-    currentY = e.offsetY;
+    const rect = canvas1.getBoundingClientRect();
+
+    currentX = e.clientX - rect.left;
+    currentY = e.clientY - rect.top;
 
     if (tool == Tool.PENCIL || tool == Tool.BRUSH || tool == Tool.ERASER) {
         ctx.beginPath();
@@ -147,21 +160,22 @@ canvas.addEventListener("pointermove", e => {
     }
 });
 
-canvas.addEventListener("pointerup", e => {
+window.addEventListener("pointerup", e => {
     stopDraw(e);
 });
 
-canvas.addEventListener("pointerout", e => {
-    stopDraw(e);
+window.addEventListener("pointerout", e => {
+    // stopDraw(e);
 });
 
 function stopDraw(e) {
     if (!drawing) return;
+    const rect = canvas1.getBoundingClientRect();
 
     drawing = false;
 
-    currentX = e.offsetX;
-    currentY = e.offsetY;
+    currentX = e.clientX - rect.left;
+    currentY = e.clientY - rect.top;
     
     if (tool == Tool.LINE) {
         if (e.shiftKey) {
@@ -222,14 +236,13 @@ const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
 
 // Drawing History
-let undoStack = [canvas.toDataURL()];
+let undoStack = [canvas1.toDataURL()];
 let redoStack = [];
 
 let img = new Image;
-let source = undoStack[undoStack.length - 1];
 
 function addCanvasToHistory() {
-    undoStack.push(canvas.toDataURL());
+    undoStack.push(canvas1.toDataURL());
     redoStack = [];
 
     if (undoStack.length > 30) {
@@ -343,7 +356,7 @@ eraserBtn.addEventListener("click", () => {
 const clearBtn = document.getElementById("clear-btn");
 
 clearBtn.addEventListener("click", () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas1.width, canvas1.height);
     addCanvasToHistory();
 });
 
@@ -390,7 +403,7 @@ colorPicker.addEventListener("input", () => {
 const downloadBtn = document.getElementById("download-btn");
 
 downloadBtn.addEventListener("click", () => {
-    const canvasUrl = canvas.toDataURL("image/png", 0.5);
+    const canvasUrl = canvas1.toDataURL("image/png", 0.5);
     const createEl = document.createElement('a');
     createEl.href = canvasUrl;
     createEl.download = "new_picture";
@@ -418,7 +431,7 @@ function load_image() {
     ctx.imageSmoothingEnabled = false;
     // canvas.width = this.width;
     // canvas.height = this.height;
-    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this, 0, 0, canvas1.width, canvas1.height);
     addCanvasToHistory();
 }
 

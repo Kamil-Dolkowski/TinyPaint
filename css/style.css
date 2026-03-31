@@ -9,29 +9,28 @@ html, body {
     place-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #bdbdbd;
+    background-color: #585858;
 }
 
-canvas {
+#checkerboard {
     border: 3px solid #000000;
+    pointer-events: none;
     image-rendering: pixelated;
+    position: absolute;
+    z-index: 0;
+}
 
-    background-image: 
-        linear-gradient(45deg, #ccc 25%, transparent 25%),
-        linear-gradient(-45deg, #ccc 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #ccc 75%),
-        linear-gradient(-45deg, transparent 75%, #ccc 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+#canvas {
+    image-rendering: pixelated;
+    position: absolute;
+    z-index: 1;
 }
 
 #cursor-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
     pointer-events: none;
+    image-rendering: pixelated;
+    position: absolute;
+    z-index: 2;
 }
 
 #toolbox {
