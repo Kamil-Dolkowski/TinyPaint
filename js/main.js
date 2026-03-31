@@ -340,8 +340,6 @@ function load_image() {
     resizeCanvas();
         
     ctx.imageSmoothingEnabled = false;
-    // canvas.width = this.width;
-    // canvas.height = this.height;
     ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
     addCanvasToHistory();
 }
