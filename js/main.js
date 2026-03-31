@@ -6,6 +6,8 @@ import Brush from './tools/Brush.js';
 import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 
+import History from './History.js'
+
 // ===================== CANVAS =====================
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -38,7 +40,7 @@ function resizeCanvas() {
 
 resizeCanvas();
 
-window.addEventListener("resize", renderImage);
+// window.addEventListener("resize", renderImage);
 
 // ======== TOOLS INICIALIZATION ========
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
@@ -106,7 +108,7 @@ function stopDraw(e) {
 
     currentTool?.pointerup(e);
 
-    addCanvasToHistory();
+    history.addCanvasToHistory();
 }
 
 // 4 - tool animation
@@ -125,67 +127,7 @@ drawToolAnimation();
 const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
 
-// Drawing History
-const undoStack = [canvas.toDataURL()];
-let redoStack = [];
-
-const img = new Image;
-
-function addCanvasToHistory() {
-    undoStack.push(canvas.toDataURL());
-    redoStack = [];
-
-    if (undoStack.length > 30) {
-        undoStack.shift();
-    }
-
-    undoBtn.disabled = false;
-    redoBtn.disabled = true;
-}
-
-function undo() {
-    if (undoStack.length > 1) {
-        const currentSource = undoStack.pop();
-        redoStack.push(currentSource);
-
-        renderImage();
-    }
-}
-
-function redo() {
-    if (redoStack.length > 0) {
-        const currentSource = redoStack.pop();
-        undoStack.push(currentSource);
-
-        renderImage();
-    }
-}
-
-undoBtn.addEventListener("click", undo);
-redoBtn.addEventListener("click", redo);
-
-function renderImage() {
-    img.src = undoStack[undoStack.length - 1];
-
-    img.onload = () => {
-        resizeCanvas();
-        
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(img, 0, 0);
-    }
-
-    if (undoStack.length > 1) {
-        undoBtn.disabled = false;
-    } else {
-        undoBtn.disabled = true;
-    }
-
-    if (redoStack.length > 0) {
-        redoBtn.disabled = false;
-    } else {
-        redoBtn.disabled = true;
-    }
-}
+const history = new History(canvas, ctx, undoBtn, redoBtn);
 
 // ===================== TOOLS =====================
 
@@ -246,7 +188,7 @@ const clearBtn = document.getElementById("clear-btn");
 
 clearBtn.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    addCanvasToHistory();
+    history.addCanvasToHistory();
 });
 
 // ======== INCREASE/DECREASE BRUSH SIZE ========
@@ -328,7 +270,7 @@ function load_image() {
         
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-    addCanvasToHistory();
+    history.addCanvasToHistory();
 }
 
 // ======== EXIT ALERT ========
