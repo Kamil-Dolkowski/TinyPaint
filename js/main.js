@@ -326,6 +326,8 @@ function scrollHandler(e) {
         } else {
             currentTool.zoomIn(e);
         }
+
+        return;
     }
 
     // Other Tools
