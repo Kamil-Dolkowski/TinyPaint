@@ -1,8 +1,10 @@
 export default class Canvas {
-    constructor(checkerboard, canvas, cursorCanvas) {
+    constructor(checkerboard, canvas, cursorCanvas, drawingStatus) {
         this.checkerboard = checkerboard;
         this.canvas = canvas;
         this.cursorCanvas = cursorCanvas;
+
+        this.drawingStatus = drawingStatus;
 
         this.width = 256;
         this.height = 256;
@@ -48,6 +50,9 @@ export default class Canvas {
         this.cursorCanvas.height = this.height;
 
         this.drawCheckerboard();
+
+        this.drawingStatus.canvasWidth = this.width;
+        this.drawingStatus.canvasHeight = this.height;
     }
 
     zoom(zoomValue) {

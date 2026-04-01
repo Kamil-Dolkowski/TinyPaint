@@ -6,41 +6,19 @@ import Brush from './tools/Brush.js';
 import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 
-import History from './History.js'
+import Canvas from './Canvas.js';
+import History from './History.js';
 
 // ===================== CANVAS =====================
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const checkerboard = document.getElementById("checkerboard");
+
+const canvas1 = document.getElementById("canvas");
+const ctx = canvas1.getContext("2d");
 
 const cursorCanvas = document.getElementById("cursor-canvas");
 const cursorCtx = cursorCanvas.getContext("2d");
 
-function resizeCanvas() {
-    const lineWidth = ctx.lineWidth;
-    const strokeStyle = ctx.strokeStyle;
-    const lineCap = ctx.lineCap;
-    const lineJoin = ctx.lineJoin;
-    // const globalCompositeOperation = ctx.globalCompositeOperation;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    drawingStatus.canvasWidth = canvas.width;
-    drawingStatus.canvasHeight = canvas.height;
-
-    cursorCanvas.width = window.innerWidth;
-    cursorCanvas.height = window.innerHeight;
-
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = strokeStyle;
-    ctx.lineCap = lineCap;
-    ctx.lineJoin = lineJoin;
-    // ctx.globalCompositeOperation = globalCompositeOperation;
-}
-
-resizeCanvas();
-
-// window.addEventListener("resize", renderImage);
+const canvas = new Canvas(checkerboard, canvas1, cursorCanvas, drawingStatus);
 
 // ======== TOOLS INICIALIZATION ========
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
@@ -54,29 +32,33 @@ let currentTool = pencil;
 ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
-canvas.style.touchAction = "none";
+cursorCanvas.style.touchAction = "none";
 
 // ======== CANVAS EVENTS ========
 
 // 1 - pointerdown
-canvas.addEventListener("pointerdown", e => {
+cursorCanvas.addEventListener("pointerdown", e => {
     if (e.button == 0) {
+        const rect = cursorCanvas.getBoundingClientRect();
+
         drawingStatus.isDrawing = true;
 
-        drawingStatus.lastX = e.offsetX;
-        drawingStatus.lastY = e.offsetY;
+        drawingStatus.lastX = (e.clientX - rect.left) / canvas.currentZoom;
+        drawingStatus.lastY = (e.clientY - rect.top) / canvas.currentZoom;
 
-        drawingStatus.currentX = e.offsetX;
-        drawingStatus.currentY = e.offsetY;
+        drawingStatus.currentX = drawingStatus.lastX
+        drawingStatus.currentY = drawingStatus.lastY;
 
         currentTool?.pointerdown(e);
     }
 });
 
 // 2 - pointermove
-canvas.addEventListener("pointermove", e => {
-    drawingStatus.currentX = e.offsetX;
-    drawingStatus.currentY = e.offsetY;
+window.addEventListener("pointermove", e => {
+    const rect = cursorCanvas.getBoundingClientRect();
+
+    drawingStatus.currentX = (e.clientX - rect.left) / canvas.currentZoom;
+    drawingStatus.currentY = (e.clientY - rect.top) / canvas.currentZoom;
 
     currentTool?.drawCursor();
 
@@ -86,13 +68,13 @@ canvas.addEventListener("pointermove", e => {
 });
 
 // 3 - pointerup
-canvas.addEventListener("pointerup", e => {
+window.addEventListener("pointerup", e => {
     stopDraw(e);
 });
 
 // 3 - pointerout
-canvas.addEventListener("pointerout", e => {
-    stopDraw(e);
+window.addEventListener("pointerout", e => {
+    // stopDraw(e);
 });
 
 function stopDraw(e) {
@@ -103,8 +85,10 @@ function stopDraw(e) {
 
     drawingStatus.isDrawing = false;
 
-    drawingStatus.currentX = e.offsetX;
-    drawingStatus.currentY = e.offsetY;
+    const rect = cursorCanvas.getBoundingClientRect();
+
+    drawingStatus.currentX = (e.clientX - rect.left) / canvas.currentZoom;
+    drawingStatus.currentY = (e.clientY - rect.top) / canvas.currentZoom;
 
     currentTool?.pointerup(e);
 
@@ -127,7 +111,7 @@ drawToolAnimation();
 const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
 
-const history = new History(canvas, ctx, undoBtn, redoBtn);
+const history = new History(canvas1, ctx, undoBtn, redoBtn);
 
 // ===================== TOOLS =====================
 

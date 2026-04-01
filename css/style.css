@@ -22,13 +22,13 @@ html, body {
 }
 
 #canvas {
+    pointer-events: none;
     image-rendering: pixelated;
     position: absolute;
     z-index: 1;
 }
 
 #cursor-canvas {
-    pointer-events: none;
     image-rendering: pixelated;
     position: absolute;
     z-index: 2;
