@@ -57,6 +57,7 @@ html, body {
     gap: 5px;
     bottom: 2vh;
     left: 2vw;
+    z-index: 9999;
 }
 
 #color-picker {
