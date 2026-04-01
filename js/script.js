@@ -66,10 +66,9 @@ window.addEventListener("pointermove", e => {
 function drawCursor() {
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
 
-    cursorCtx.save();
     cursorCtx.lineWidth = 1;
     cursorCtx.strokeStyle = "black"
-    cursorCtx.restore();
+    cursorCtx.imageSmoothingEnabled = false;
 
     cursorCtx.beginPath();
     cursorCtx.arc(mouseX, mouseY, ctx.lineWidth / 2, 0, 2 * Math.PI);
@@ -101,7 +100,7 @@ let lastMoveY = null;
 let currentMoveX = null;
 let currentMoveY = null;
 
-window.addEventListener("pointerdown", e => {
+canvas1.addEventListener("pointerdown", e => {
     if (e.button == 0) {
         const rect = canvas1.getBoundingClientRect();
 
@@ -304,7 +303,7 @@ function renderImage() {
     img.src = undoStack[undoStack.length - 1];
 
     img.onload = () => {
-        resizeCanvas();
+        // resizeCanvas();
         
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(img, 0, 0);
@@ -490,7 +489,7 @@ function load_image() {
 const settingsBtn = document.getElementById("settings-btn");
 
 settingsBtn.addEventListener("click", () => {
-    canvas.move(20, 20);
+    
 });
 
 // ======== EXIT ALERT ========
