@@ -7,28 +7,33 @@ export default class Pencil extends ToolBase {
     }
 
     setTool() {
-        this.ctx.lineWidth = 1;
-        this.ctx.lineCap = "square";
         this.ctx.globalCompositeOperation = "source-over";
     }
 
     pointerdown(e) {
-        this.ctx.beginPath();
-        this.ctx.fillRect(this.drawingStatus.currentX, this.drawingStatus.currentY, 1, 1);
-        this.ctx.stroke();
+        const currentX = Math.floor(this.drawingStatus.currentX);
+        const currentY = Math.floor(this.drawingStatus.currentY);
+
+        this.ctx.fillRect(currentX, currentY, 1, 1);
     }
 
     pointermove(e) {
-        this.ctx.save();
+        const left = this.drawingStatus.currentX;
+        const top = this.drawingStatus.currentY;
 
-        this.ctx.lineWidth = 1;
+        const imageData = this.ctx.getImageData(left, top, 1, 1);
+        const data = imageData.data;
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
-        this.ctx.stroke();
+        const {r,g,b} = this.hashToRGB(this.ctx.strokeStyle);
 
-        this.ctx.restore();
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = r;
+            data[i+1] = g;
+            data[i+2] = b;
+            data[i+3] = 255;
+        }
+
+        this.ctx.putImageData(imageData, left, top);
 
         this.drawingStatus.lastX = this.drawingStatus.currentX;
         this.drawingStatus.lastY = this.drawingStatus.currentY;
@@ -41,17 +46,67 @@ export default class Pencil extends ToolBase {
     drawCursor() {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
-        this.cursorCtx.save();
-        this.cursorCtx.lineWidth = 1;
-        this.cursorCtx.strokeStyle = "black"
-        this.cursorCtx.restore();
+        const currentX = Math.floor(this.drawingStatus.currentX);
+        const currentY = Math.floor(this.drawingStatus.currentY);
 
-        this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
-        this.cursorCtx.stroke();
+        this.cursorCtx.fillStyle = this.ctx.strokeStyle;
+
+        this.cursorCtx.fillRect(currentX, currentY, 1, 1);
     }
 
     drawAnimationFrame() {
         
     }
+
+    setPixel(x, y, rgb) {
+
+    }
+
+    interpolation(x, x0, y0, x1, y1) {
+        return y0 + ((y1 - y0)/(x1 - x0)) * (x - x0);
+    }
+
+    // #ffffff -> 255, 255, 255
+    hashToRGB(hash) {
+        // 1. delete '#' on front
+        hash = hash.slice(1); 
+
+        // 2. divide into 3 parts (RGB)
+        const rStr = hash.slice(0,2);
+        const gStr = hash.slice(2,4);
+        const bStr = hash.slice(4,6);
+
+        // 3. calculate RGB [hexadecimal to decimal]
+        const r = this.hexToDec(rStr[1]) + 16 * this.hexToDec(rStr[0]);
+        const g = this.hexToDec(gStr[1]) + 16 * this.hexToDec(gStr[0]);
+        const b = this.hexToDec(bStr[1]) + 16 * this.hexToDec(bStr[0]);
+
+        return {r: r, g: g, b: b};
+    }
+
+    hexToDec(hex) {
+        switch(hex) {
+                case 'a':
+                    return 10;
+                case 'b':
+                    return 11;
+                case 'c':
+                    return 12;
+                case 'd':
+                    return 13;
+                case 'e':
+                    return 14;
+                case 'f':
+                    return 15;
+                default:
+                    if (!Number.isInteger(Number(hex))) return null;
+
+                    const number = Number(hex);
+                    if (number < 0 || number > 9) return null;
+
+                    return number;
+            }
+    }
+
+
 }
