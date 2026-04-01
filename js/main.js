@@ -185,7 +185,7 @@ moveZoomBtn.addEventListener("click", () => {
     currentTool.setTool();
 });
 
-// ======== INCREASE/DECREASE BRUSH SIZE ========
+// ======== INCREASE/DECREASE DRAW SIZE ========
 
 // -- BUTTONS --
 const increaseBtn = document.getElementById("increase-btn");
@@ -208,22 +208,6 @@ decreaseBtn.addEventListener("click", () => {
     ctx.lineWidth -= 1;
     drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
-});
-
-// -- MOUSE SCROLL --
-window.addEventListener("wheel", e => {
-    if (currentTool.tool == Tool.PENCIL) return;
-    
-    if (e.deltaY > 0) {
-        ctx.lineWidth -= 1;
-        sizeLbl.innerText = ctx.lineWidth;
-    } else {
-        ctx.lineWidth += 1;
-        sizeLbl.innerText = ctx.lineWidth;
-    }
-
-    drawingStatus.drawSize = ctx.lineWidth;
-    currentTool?.drawCursor();
 });
 
 // ======== COLOR PICKER ========
@@ -273,27 +257,68 @@ window.addEventListener("beforeunload", e => {
     e.returnValue = '';
 });
 
+let tempTool = null;
+
 // ======== SHORTCUT KEYS ========
 function shortcutKeysHandler(e) {
+    // UNDO
     if (e.ctrlKey && e.key === 'z') {
         e.preventDefault(); 
         history.undo();
+        return;
     }
+
+    // REDO
     if (e.ctrlKey && e.key === 'y') {
         e.preventDefault(); 
         history.redo();
+        return;
+    }
+
+    // Move Zoom
+    if (e.ctrlKey) {
+        tempTool = currentTool;
+        currentTool = moveZoom;
+
+        // Clear cursor canvas
+        cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+    }
+}
+
+function keyup(e) {
+    if (!e.ctrlKey) {
+        currentTool = tempTool;
+        tempTool = null;
     }
 }
 
 function scrollHandler(e) {
+    // Move Zoom
     if (currentTool.tool == Tool.MOVE_ZOOM) {
+        e.preventDefault();
+
         if (e.deltaY > 0) {
             currentTool.zoomOut(e);
         } else {
             currentTool.zoomIn(e);
         }
     }
+
+    // Other Tools
+    if (currentTool.tool == Tool.PENCIL) return;
+    
+    if (e.deltaY > 0) {
+        ctx.lineWidth -= 1;
+        sizeLbl.innerText = ctx.lineWidth;
+    } else {
+        ctx.lineWidth += 1;
+        sizeLbl.innerText = ctx.lineWidth;
+    }
+
+    drawingStatus.drawSize = ctx.lineWidth;
+    currentTool?.drawCursor();
 }
 
 window.addEventListener('keydown', shortcutKeysHandler);
-window.addEventListener('wheel', scrollHandler);
+window.addEventListener('keyup', keyup);
+window.addEventListener('wheel', scrollHandler, { passive: false });
