@@ -5,6 +5,7 @@ import Pencil from './tools/Pencil.js';
 import Brush from './tools/Brush.js';
 import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
+import MoveZoom from './tools/MoveZoom.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
@@ -25,6 +26,7 @@ const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
 const brush = new Brush(ctx, cursorCtx, drawingStatus);
 const line = new Line(ctx, cursorCtx, drawingStatus);
 const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
+const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
 
 let currentTool = pencil;
 
@@ -175,6 +177,14 @@ clearBtn.addEventListener("click", () => {
     history.addCanvasToHistory();
 });
 
+// ======== MOVE_ZOOM ========
+const moveZoomBtn = document.getElementById("move-zoom-btn");
+
+moveZoomBtn.addEventListener("click", () => {
+    currentTool = moveZoom;
+    currentTool.setTool();
+});
+
 // ======== INCREASE/DECREASE BRUSH SIZE ========
 
 // -- BUTTONS --
@@ -275,4 +285,15 @@ function shortcutKeysHandler(e) {
     }
 }
 
+function scrollHandler(e) {
+    if (currentTool.tool == Tool.MOVE_ZOOM) {
+        if (e.deltaY > 0) {
+            currentTool.zoomOut(e);
+        } else {
+            currentTool.zoomIn(e);
+        }
+    }
+}
+
 window.addEventListener('keydown', shortcutKeysHandler);
+window.addEventListener('wheel', scrollHandler);
