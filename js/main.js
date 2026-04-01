@@ -29,6 +29,7 @@ const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
 
 let currentTool = pencil;
+let tempTool = null;
 
 // ======== DRAW INITIAL SETTINGS ========
 ctx.lineWidth = 1;
@@ -52,6 +53,25 @@ cursorCanvas.addEventListener("pointerdown", e => {
         drawingStatus.currentY = drawingStatus.lastY;
 
         currentTool?.pointerdown(e);
+    }
+
+    // scroll button -> switch on move-zoom
+    if (e.button == 1) {
+        const rect = cursorCanvas.getBoundingClientRect();
+
+        drawingStatus.isDrawing = true;
+
+        drawingStatus.lastX = (e.clientX - rect.left) / canvas.currentZoom;
+        drawingStatus.lastY = (e.clientY - rect.top) / canvas.currentZoom;
+
+        drawingStatus.currentX = drawingStatus.lastX
+        drawingStatus.currentY = drawingStatus.lastY;
+
+        tempTool = currentTool;
+        currentTool = moveZoom;
+
+        // Clear cursor canvas
+        cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
     }
 });
 
@@ -80,6 +100,12 @@ window.addEventListener("pointerout", e => {
 });
 
 function stopDraw(e) {
+    // scroll button -> switch off move-zoom
+    if (e.button == 1) {
+        currentTool = tempTool;
+        tempTool = null;
+    }
+
     // Clear cursor canvas
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
 
@@ -256,8 +282,6 @@ window.addEventListener("beforeunload", e => {
     e.preventDefault();
     e.returnValue = '';
 });
-
-let tempTool = null;
 
 // ======== SHORTCUT KEYS ========
 function shortcutKeysHandler(e) {
