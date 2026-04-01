@@ -1,0 +1,513 @@
+import Canvas from './Canvas.js';
+
+const Tool = Object.freeze({
+    PENCIL: 'pencil',
+    BRUSH: 'brush',
+    ERASER: 'eraser',
+    LINE: 'line',
+    FILL: 'fill',
+    MOVE: 'move',
+    ZOOM: 'zoom',
+    COLOR_PICKER: 'color_picker'
+});
+
+// ======== CANVAS ========
+let canvas1 = document.getElementById("canvas");
+let ctx = canvas1.getContext("2d");
+
+const checkerboard = document.getElementById("checkerboard");
+
+let cursorCanvas = document.getElementById("cursor-canvas");
+let cursorCtx = cursorCanvas.getContext("2d");
+
+const canvas = new Canvas(checkerboard, canvas1, cursorCanvas);
+
+function resizeCanvas() {
+    const lineWidth = ctx.lineWidth;
+    const strokeStyle = ctx.strokeStyle;
+    const lineCap = ctx.lineCap;
+    const lineJoin = ctx.lineJoin;
+    // const globalCompositeOperation = ctx.globalCompositeOperation;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    cursorCanvas.width = window.innerWidth;
+    cursorCanvas.height = window.innerHeight;
+
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineCap = lineCap;
+    ctx.lineJoin = lineJoin;
+    // ctx.globalCompositeOperation = globalCompositeOperation;
+}
+
+// resizeCanvas();
+
+// window.addEventListener("resize", renderImage);
+
+// Cursor
+
+var mouseX = null;
+var mouseY = null;
+
+window.addEventListener("pointermove", e => {
+    const rect = canvas1.getBoundingClientRect();
+
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+
+    mouseX /= canvas.currentZoom;
+    mouseY /= canvas.currentZoom;
+
+    drawCursor();
+});
+
+function drawCursor() {
+    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+
+    cursorCtx.lineWidth = 1;
+    cursorCtx.strokeStyle = "black"
+    cursorCtx.imageSmoothingEnabled = false;
+
+    cursorCtx.beginPath();
+    cursorCtx.arc(mouseX, mouseY, ctx.lineWidth / 2, 0, 2 * Math.PI);
+    cursorCtx.stroke();
+}
+
+window.addEventListener("pointerout", e => {
+    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+});
+
+// ======== DRAWING ========
+ctx.lineWidth = 5;
+ctx.strokeStyle = "black";
+
+canvas1.style.touchAction = "none";
+
+var tool = Tool.BRUSH;
+var drawing = false;
+
+var lastX = null;
+var lastY = null;
+
+var currentX = null;
+var currentY = null;
+
+let lastMoveX = null;
+let lastMoveY = null;
+
+let currentMoveX = null;
+let currentMoveY = null;
+
+canvas1.addEventListener("pointerdown", e => {
+    if (e.button == 0) {
+        const rect = canvas1.getBoundingClientRect();
+
+        drawing = true;
+
+        lastX = e.clientX - rect.left;
+        lastY = e.clientY - rect.top;
+
+        lastX /= canvas.currentZoom;
+        lastY /= canvas.currentZoom;
+
+        currentX = lastX;
+        currentY = lastY;
+
+        lastMoveX = e.clientX;
+        lastMoveY = e.clientY;
+
+        currentMoveX = lastMoveX;
+        currentMoveY = lastMoveY;
+
+        if (tool == Tool.BRUSH) {
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
+        if (tool == Tool.MOVE) {
+            document.body.style.cursor = "grabbing";
+        } else {
+            document.body.style.cursor = "auto";
+        }
+    }
+});
+
+window.addEventListener("pointermove", e => {
+    if (!drawing) return;
+
+    const rect = canvas1.getBoundingClientRect();
+
+    currentX = e.clientX - rect.left;
+    currentY = e.clientY - rect.top;
+
+    currentX /= canvas.currentZoom;
+    currentY /= canvas.currentZoom;
+
+    currentMoveX = e.clientX;
+    currentMoveY = e.clientY;
+
+    if (tool == Tool.PENCIL || tool == Tool.BRUSH || tool == Tool.ERASER) {
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(currentX, currentY)
+        ctx.stroke();
+
+        lastX = currentX;
+        lastY = currentY;
+    }
+
+    if (tool == Tool.LINE) {
+        if (e.shiftKey) {
+            ({x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY));
+        }
+    }
+
+    if (tool == Tool.MOVE) {
+        const x = currentMoveX - lastMoveX;
+        const y = currentMoveY - lastMoveY;
+
+        canvas.move(x,y);
+
+        lastMoveX = currentMoveX;
+        lastMoveY = currentMoveY;
+    }
+});
+
+window.addEventListener("pointerup", e => {
+    stopDraw(e);
+});
+
+window.addEventListener("pointerout", e => {
+    // stopDraw(e);
+});
+
+function stopDraw(e) {
+    if (!drawing) return;
+    const rect = canvas1.getBoundingClientRect();
+
+    drawing = false;
+
+    currentX = e.clientX - rect.left;
+    currentY = e.clientY - rect.top;
+
+    currentX /= canvas.currentZoom;
+    currentY /= canvas.currentZoom;
+    
+    if (tool == Tool.LINE) {
+        if (e.shiftKey) {
+            var {x: currentX, y: currentY} = getPerpendicularLineCoords(lastX, lastY, currentX, currentY);
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(currentX, currentY)
+        ctx.stroke();
+    }
+
+    if (tool == Tool.MOVE) {
+        document.body.style.cursor = "grab";
+    } else {
+        document.body.style.cursor = "auto";
+    }
+
+    addCanvasToHistory();
+}
+
+function getPerpendicularLineCoords(originX, originY, currentX, currentY) {
+    // 1. create 2 points by crossing coordinates
+    // 2. select the closest point to the current point
+
+    const current = {x: currentX, y: currentY};
+    const point1 = {x: originX, y: currentY};
+    const point2 = {x: currentX, y: originY};
+
+    const distance1 = (point1.x - current.x) ** 2 + (point1.y - current.y) ** 2
+    const distance2 = (point2.x - current.x) ** 2 + (point2.y - current.y) ** 2
+
+    if (distance1 < distance2) {
+        return {x: point1.x, y: point1.y};
+    } else {
+        return {x: point2.x, y: point2.y};
+    }
+}
+
+function drawLineVisualization() {
+    if (drawing && tool == Tool.LINE) {
+        cursorCtx.save();
+
+        cursorCtx.lineWidth = ctx.lineWidth;
+        cursorCtx.lineCap = "round";
+        cursorCtx.strokeStyle = ctx.strokeStyle;
+
+        cursorCtx.beginPath();
+        cursorCtx.moveTo(lastX, lastY);
+        cursorCtx.lineTo(currentX, currentY)
+        cursorCtx.stroke();
+
+        cursorCtx.restore();
+    }
+
+    requestAnimationFrame(drawLineVisualization);
+}
+
+drawLineVisualization();
+
+// ======== UNDO/REDO ========
+
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
+
+// Drawing History
+let undoStack = [canvas1.toDataURL()];
+let redoStack = [];
+
+let img = new Image;
+
+function addCanvasToHistory() {
+    undoStack.push(canvas1.toDataURL());
+    redoStack = [];
+
+    if (undoStack.length > 30) {
+        undoStack.shift();
+    }
+
+    undoBtn.disabled = false;
+    redoBtn.disabled = true;
+}
+
+function undo() {
+    if (undoStack.length > 1) {
+        const currentSource = undoStack.pop();
+        redoStack.push(currentSource);
+
+        renderImage();
+    }
+}
+
+function redo() {
+    if (redoStack.length > 0) {
+        const currentSource = redoStack.pop();
+        undoStack.push(currentSource);
+
+        renderImage();
+    }
+}
+
+undoBtn.addEventListener("click", undo);
+redoBtn.addEventListener("click", redo);
+
+function renderImage() {
+    img.src = undoStack[undoStack.length - 1];
+
+    img.onload = () => {
+        // resizeCanvas();
+        
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0);
+    }
+
+    if (undoStack.length > 1) {
+        undoBtn.disabled = false;
+    } else {
+        undoBtn.disabled = true;
+    }
+
+    if (redoStack.length > 0) {
+        redoBtn.disabled = false;
+    } else {
+        redoBtn.disabled = true;
+    }
+}
+
+// ======== TOOLS RADIO ========
+const toolBtns = document.querySelectorAll("#toolbox-tools button")
+
+toolBtns.forEach(toolBtn => {
+    toolBtn.addEventListener("click", e => {
+        toolBtns.forEach(toolBtn => {
+            toolBtn.dataset.state = "off";
+        });
+
+        toolBtn.dataset.state = "on";
+    });
+});
+
+// ======== PENCIL ========
+const pencilBtn = document.getElementById("pencil-btn");
+
+pencilBtn.addEventListener("click", () => {
+    tool = Tool.PENCIL;
+    ctx.lineCap = "square";
+    ctx.globalCompositeOperation = "source-over";
+});
+
+// ======== BRUSH ========
+const brushBtn = document.getElementById("brush-btn");
+
+brushBtn.addEventListener("click", () => {
+    tool = Tool.BRUSH;
+    ctx.lineCap = "round";
+    ctx.globalCompositeOperation = "source-over";
+});
+
+// ======== LINE ========
+const lineBtn = document.getElementById("line-btn");
+
+lineBtn.addEventListener("click", () => {
+    tool = Tool.LINE;
+    ctx.lineCap = "round";
+    ctx.globalCompositeOperation = "source-over";
+});
+
+// ======== ERASER ========
+const eraserBtn = document.getElementById("eraser-btn");
+
+eraserBtn.addEventListener("click", () => {
+    tool = Tool.ERASER;
+    ctx.globalCompositeOperation = "destination-out";
+});
+
+// ======== BACKGROUND COLOR ========
+// const bgColorBtn = document.getElementById("bgcolor-btn");
+
+// bgColorBtn.addEventListener("click", () => {
+
+// });
+
+// ======== CLEAR ========
+const clearBtn = document.getElementById("clear-btn");
+
+clearBtn.addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas1.width, canvas1.height);
+    addCanvasToHistory();
+});
+
+// ======== ZOOM ========
+const zoomBtn = document.getElementById("zoom-btn");
+
+zoomBtn.addEventListener("click", () => {
+    tool = Tool.ZOOM;
+});
+
+// ======== MOVE ========
+const moveBtn = document.getElementById("move-btn");
+
+moveBtn.addEventListener("click", () => {
+    tool = Tool.MOVE;
+    document.body.style.cursor = "grab";
+});
+
+
+// ======== INCREASE/DECREASE BRUSH SIZE ========
+
+// -- BUTTONS --
+const increaseBtn = document.getElementById("increase-btn");
+const decreaseBtn = document.getElementById("decrease-btn");
+const sizeLbl = document.getElementById("size-lbl");
+
+sizeLbl.innerText = ctx.lineWidth / 5;
+
+increaseBtn.addEventListener("click", () => {
+    ctx.lineWidth += 5;
+    sizeLbl.innerText = ctx.lineWidth / 5;
+});
+
+decreaseBtn.addEventListener("click", () => {
+    ctx.lineWidth -= 5;
+    sizeLbl.innerText = ctx.lineWidth / 5;
+});
+
+// -- MOUSE SCROLL --
+window.addEventListener("wheel", e => {
+    if (e.deltaY > 0) {
+        if (tool == Tool.ZOOM) {
+            canvas.zoom(0.5);
+        } else {
+            ctx.lineWidth -= 5;
+            sizeLbl.innerText = ctx.lineWidth / 5;
+        }
+
+    } else {
+        if (tool == Tool.ZOOM) {
+            canvas.zoom(2);
+        } else {
+            ctx.lineWidth += 5;
+            sizeLbl.innerText = ctx.lineWidth / 5;
+        }
+    }
+
+    drawCursor();
+});
+
+// ======== COLOR PICKER ========
+const colorPicker = document.getElementById("color-picker");
+
+colorPicker.addEventListener("input", () => {
+    ctx.strokeStyle = colorPicker.value;
+});
+
+// ======== DOWNLOAD ========
+const downloadBtn = document.getElementById("download-btn");
+
+downloadBtn.addEventListener("click", () => {
+    const canvasUrl = canvas1.toDataURL("image/png", 0.5);
+    const createEl = document.createElement('a');
+    createEl.href = canvasUrl;
+    createEl.download = "new_picture";
+    createEl.click();
+    createEl.remove();
+});
+
+// ======== UPLOAD ========
+const uploadBtn = document.getElementById("upload-btn");
+
+uploadBtn.addEventListener("click", () => {
+    upload.click();
+});
+
+const upload = document.getElementById("upload");
+
+upload.onchange = function(e) {
+    img.onload = load_image;
+    img.src = URL.createObjectURL(this.files[0]);
+};
+
+function load_image() {
+    resizeCanvas();
+        
+    ctx.imageSmoothingEnabled = false;
+    // canvas.width = this.width;
+    // canvas.height = this.height;
+    ctx.drawImage(this, 0, 0, canvas1.width, canvas1.height);
+    addCanvasToHistory();
+}
+
+// ======== SETTINGS ========
+const settingsBtn = document.getElementById("settings-btn");
+
+settingsBtn.addEventListener("click", () => {
+    
+});
+
+// ======== EXIT ALERT ========
+window.addEventListener("beforeunload", e => {
+    // e.preventDefault();
+    // e.returnValue = '';
+});
+
+// ======== SHORTCUT KEYS ========
+function shortcutKeysHandler(e) {
+    if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault(); 
+        undo();
+    }
+    if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault(); 
+        redo();
+    }
+}
+
+window.addEventListener('keydown', shortcutKeysHandler);
