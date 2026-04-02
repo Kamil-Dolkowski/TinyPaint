@@ -7,28 +7,23 @@ export default class Pencil extends ToolBase {
     }
 
     setTool() {
-        this.ctx.lineWidth = 1;
-        this.ctx.lineCap = "square";
         this.ctx.globalCompositeOperation = "source-over";
     }
 
     pointerdown(e) {
-        this.ctx.beginPath();
-        this.ctx.fillRect(this.drawingStatus.currentX, this.drawingStatus.currentY, 1, 1);
-        this.ctx.stroke();
+        const currentX = Math.floor(this.drawingStatus.currentX);
+        const currentY = Math.floor(this.drawingStatus.currentY);
+
+        this.ctx.fillRect(currentX, currentY, 1, 1);
     }
 
     pointermove(e) {
-        this.ctx.save();
+        const x0 = this.drawingStatus.lastX;
+        const y0 = this.drawingStatus.lastY;
+        const x1 = this.drawingStatus.currentX;
+        const y1 = this.drawingStatus.currentY;
 
-        this.ctx.lineWidth = 1;
-
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
-        this.ctx.stroke();
-
-        this.ctx.restore();
+        this.drawLine(x0, y0, x1, y1);
 
         this.drawingStatus.lastX = this.drawingStatus.currentX;
         this.drawingStatus.lastY = this.drawingStatus.currentY;
@@ -41,17 +36,90 @@ export default class Pencil extends ToolBase {
     drawCursor() {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
-        this.cursorCtx.save();
-        this.cursorCtx.lineWidth = 1;
-        this.cursorCtx.strokeStyle = "black"
-        this.cursorCtx.restore();
+        const currentX = Math.floor(this.drawingStatus.currentX);
+        const currentY = Math.floor(this.drawingStatus.currentY);
 
-        this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
-        this.cursorCtx.stroke();
+        this.cursorCtx.fillStyle = this.ctx.strokeStyle;
+
+        this.cursorCtx.fillRect(currentX, currentY, 1, 1);
     }
 
     drawAnimationFrame() {
         
+    }
+
+    drawLine(x0, y0, x1, y1) {
+        const points = this.bresenham(x0, y0, x1, y1);
+
+        points.forEach(p => {
+            this.ctx.fillRect(p.x, p.y, 1, 1);
+        });
+    }
+
+    // Bresenham Algorithm - line drawing algorithm
+    // source [pl]: https://eduinf.waw.pl/inf/prg/011_sdl2/0009.php
+    bresenham(x0, y0, x1, y1) {
+        let result = [];
+
+        // points must be integers and they are at the middle of pixel
+        x0 = Math.floor(x0);
+        y0 = Math.floor(y0);
+        x1 = Math.floor(x1);
+        y1 = Math.floor(y1);
+
+        // x and y steps (steps direction)
+        let sx = 1;
+        let sy = 1;
+
+        if (x0 > x1) {
+            sx = -1;
+        }
+        if (y0 > y1) {
+            sy = -1;
+        }
+
+        // deltas
+        const dx = Math.abs(x1 - x0);
+        const dy = Math.abs(y1 - y0);
+
+        result.push({x: x0, y: y0});
+
+        if (dx < dy) {
+            // for angles > 45 degrees to X Axis
+            let err = dy/2;
+
+            for (let i = 0; i < dy; i++) {
+                y0 = y0 + sy;
+                err = err - dx;
+
+                if (err < 0) {
+                    x0 = x0 + sx;
+                    err = err + dy;
+
+                    result.push({x: x0, y: y0});
+                } else {
+                    result.push({x: x0, y: y0});
+                }
+            } 
+        } else {
+            // for angles <= 45 degrees to X Axis
+            let err = dx/2;
+
+            for (let i = 0; i < dx; i++) {
+                x0 = x0 + sx;
+                err = err - dy;
+
+                if (err < 0) {
+                    y0 = y0 + sy;
+                    err = err + dx;
+
+                    result.push({x: x0, y: y0});
+                } else {
+                    result.push({x: x0, y: y0});
+                }
+            } 
+        }
+
+        return result;
     }
 }

@@ -14,7 +14,7 @@ import History from './History.js';
 const checkerboard = document.getElementById("checkerboard");
 
 const canvas1 = document.getElementById("canvas");
-const ctx = canvas1.getContext("2d");
+const ctx = canvas1.getContext("2d", { willReadFrequently: true });
 
 const cursorCanvas = document.getElementById("cursor-canvas");
 const cursorCtx = cursorCanvas.getContext("2d");
@@ -241,6 +241,7 @@ const colorPicker = document.getElementById("color-picker");
 
 colorPicker.addEventListener("input", () => {
     ctx.strokeStyle = colorPicker.value;
+    ctx.fillStyle = colorPicker.value;
 });
 
 // ======== DOWNLOAD ========
