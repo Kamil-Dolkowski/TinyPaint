@@ -1,17 +1,27 @@
 export default class Canvas {
-    constructor(checkerboard, canvas, cursorCanvas, drawingStatus) {
+    constructor(workspace, checkerboard, canvas, cursorCanvas, drawingStatus) {
+        this.workspace = workspace;
+
+        // this.checkerboard = this.workspace.querySelector("#checkerboard");
+        // this.canvas = this.workspace.querySelector("#canvas");
+        // this.cursorCanvas = this.workspace.querySelector("#cursor-canvas");
+
         this.checkerboard = checkerboard;
         this.canvas = canvas;
         this.cursorCanvas = cursorCanvas;
 
         this.drawingStatus = drawingStatus;
 
-        this.width = 256;
-        this.height = 256;
+        this.width = 800;
+        this.height = 600;
+
+        this.cssWidth = this.width;
+        this.cssHeight = this.height;
 
         this.currentZoom = 1;
 
         this.resize();
+        this.autoZoom();
     }
 
     drawCheckerboard() {
@@ -33,10 +43,19 @@ export default class Canvas {
     }
 
     setSize(width, height) {
+        // 1. change physical size
         this.width = width;
         this.height = height;
 
         this.resize();
+
+        // 2. change visual size
+        // reset zoom
+        this.currentZoom = 1;
+        this.cssWidth = this.width * this.currentZoom;
+        this.cssHeight = this.height * this.currentZoom;
+
+        this.autoZoom();
     }
 
     resize() {
@@ -58,17 +77,28 @@ export default class Canvas {
     zoom(zoomValue) {
         this.currentZoom *= zoomValue;
 
-        const width = this.width * this.currentZoom;
-        const height = this.height * this.currentZoom;
+        this.cssWidth = this.width * this.currentZoom;
+        this.cssHeight = this.height * this.currentZoom;
 
-        this.checkerboard.style.width = width + 'px';
-        this.checkerboard.style.height = height + 'px';
+        this.checkerboard.style.width = this.cssWidth + 'px';
+        this.checkerboard.style.height = this.cssHeight + 'px';
 
-        this.canvas.style.width = width + 'px';
-        this.canvas.style.height = height + 'px';
+        this.canvas.style.width = this.cssWidth + 'px';
+        this.canvas.style.height = this.cssHeight + 'px';
 
-        this.cursorCanvas.style.width = width + 'px';
-        this.cursorCanvas.style.height = height + 'px';
+        this.cursorCanvas.style.width = this.cssWidth + 'px';
+        this.cursorCanvas.style.height = this.cssHeight + 'px';
+    }
+
+    autoZoom() {
+        const margin = 50;
+
+        const workspaceWidth = this.workspace.offsetWidth;
+        const workspaceHeight = this.workspace.offsetHeight;
+
+        const zoomValue = Math.min(workspaceWidth / (this.cssWidth + margin), workspaceHeight / (this.cssHeight + margin));
+
+        this.zoom(zoomValue);
     }
 
     move(x, y) {

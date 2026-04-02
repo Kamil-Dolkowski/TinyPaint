@@ -11,6 +11,8 @@ import Canvas from './Canvas.js';
 import History from './History.js';
 
 // ===================== CANVAS =====================
+const workspace = document.getElementById("workspace");
+
 const checkerboard = document.getElementById("checkerboard");
 
 const canvas1 = document.getElementById("canvas");
@@ -19,7 +21,7 @@ const ctx = canvas1.getContext("2d", { willReadFrequently: true });
 const cursorCanvas = document.getElementById("cursor-canvas");
 const cursorCtx = cursorCanvas.getContext("2d");
 
-const canvas = new Canvas(checkerboard, canvas1, cursorCanvas, drawingStatus);
+const canvas = new Canvas(workspace, checkerboard, canvas1, cursorCanvas, drawingStatus);
 
 // ======== TOOLS INICIALIZATION ========
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
