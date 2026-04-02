@@ -197,6 +197,14 @@ eraserBtn.addEventListener("click", () => {
 
 // });
 
+// ======== MOVE_ZOOM ========
+const moveZoomBtn = document.getElementById("move-zoom-btn");
+
+moveZoomBtn.addEventListener("click", () => {
+    currentTool = moveZoom;
+    currentTool.setTool();
+});
+
 // ======== CLEAR ========
 const clearBtn = document.getElementById("clear-btn");
 
@@ -205,12 +213,11 @@ clearBtn.addEventListener("click", () => {
     history.addCanvasToHistory();
 });
 
-// ======== MOVE_ZOOM ========
-const moveZoomBtn = document.getElementById("move-zoom-btn");
+// ======== RESET_ZOOM ========
+const resetZoomBtn = document.getElementById("reset-zoom-btn");
 
-moveZoomBtn.addEventListener("click", () => {
-    currentTool = moveZoom;
-    currentTool.setTool();
+resetZoomBtn.addEventListener("click", () => {
+    canvas.autoZoom();
 });
 
 // ======== INCREASE/DECREASE DRAW SIZE ========
