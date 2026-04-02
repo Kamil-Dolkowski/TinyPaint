@@ -18,22 +18,12 @@ export default class Pencil extends ToolBase {
     }
 
     pointermove(e) {
-        const left = this.drawingStatus.currentX;
-        const top = this.drawingStatus.currentY;
+        const x0 = this.drawingStatus.lastX;
+        const y0 = this.drawingStatus.lastY;
+        const x1 = this.drawingStatus.currentX;
+        const y1 = this.drawingStatus.currentY;
 
-        const imageData = this.ctx.getImageData(left, top, 1, 1);
-        const data = imageData.data;
-
-        const {r,g,b} = this.hashToRGB(this.ctx.strokeStyle);
-
-        for (let i = 0; i < data.length; i += 4) {
-            data[i] = r;
-            data[i+1] = g;
-            data[i+2] = b;
-            data[i+3] = 255;
-        }
-
-        this.ctx.putImageData(imageData, left, top);
+        this.drawLine(x0, y0, x1, y1);
 
         this.drawingStatus.lastX = this.drawingStatus.currentX;
         this.drawingStatus.lastY = this.drawingStatus.currentY;
@@ -58,55 +48,78 @@ export default class Pencil extends ToolBase {
         
     }
 
-    setPixel(x, y, rgb) {
+    drawLine(x0, y0, x1, y1) {
+        const points = this.bresenham(x0, y0, x1, y1);
 
+        points.forEach(p => {
+            this.ctx.fillRect(p.x, p.y, 1, 1);
+        });
     }
 
-    interpolation(x, x0, y0, x1, y1) {
-        return y0 + ((y1 - y0)/(x1 - x0)) * (x - x0);
+    // Bresenham Algorithm - line drawing algorithm
+    // source [pl]: https://eduinf.waw.pl/inf/prg/011_sdl2/0009.php
+    bresenham(x0, y0, x1, y1) {
+        let result = [];
+
+        // points must be integers and they are at the middle of pixel
+        x0 = Math.floor(x0);
+        y0 = Math.floor(y0);
+        x1 = Math.floor(x1);
+        y1 = Math.floor(y1);
+
+        // x and y steps (steps direction)
+        let sx = 1;
+        let sy = 1;
+
+        if (x0 > x1) {
+            sx = -1;
+        }
+        if (y0 > y1) {
+            sy = -1;
+        }
+
+        // deltas
+        const dx = Math.abs(x1 - x0);
+        const dy = Math.abs(y1 - y0);
+
+        result.push({x: x0, y: y0});
+
+        if (dx < dy) {
+            // for angles > 45 degrees to X Axis
+            let err = dy/2;
+
+            for (let i = 0; i < dy; i++) {
+                y0 = y0 + sy;
+                err = err - dx;
+
+                if (err < 0) {
+                    x0 = x0 + sx;
+                    err = err + dy;
+
+                    result.push({x: x0, y: y0});
+                } else {
+                    result.push({x: x0, y: y0});
+                }
+            } 
+        } else {
+            // for angles <= 45 degrees to X Axis
+            let err = dx/2;
+
+            for (let i = 0; i < dx; i++) {
+                x0 = x0 + sx;
+                err = err - dy;
+
+                if (err < 0) {
+                    y0 = y0 + sy;
+                    err = err + dx;
+
+                    result.push({x: x0, y: y0});
+                } else {
+                    result.push({x: x0, y: y0});
+                }
+            } 
+        }
+
+        return result;
     }
-
-    // #ffffff -> 255, 255, 255
-    hashToRGB(hash) {
-        // 1. delete '#' on front
-        hash = hash.slice(1); 
-
-        // 2. divide into 3 parts (RGB)
-        const rStr = hash.slice(0,2);
-        const gStr = hash.slice(2,4);
-        const bStr = hash.slice(4,6);
-
-        // 3. calculate RGB [hexadecimal to decimal]
-        const r = this.hexToDec(rStr[1]) + 16 * this.hexToDec(rStr[0]);
-        const g = this.hexToDec(gStr[1]) + 16 * this.hexToDec(gStr[0]);
-        const b = this.hexToDec(bStr[1]) + 16 * this.hexToDec(bStr[0]);
-
-        return {r: r, g: g, b: b};
-    }
-
-    hexToDec(hex) {
-        switch(hex) {
-                case 'a':
-                    return 10;
-                case 'b':
-                    return 11;
-                case 'c':
-                    return 12;
-                case 'd':
-                    return 13;
-                case 'e':
-                    return 14;
-                case 'f':
-                    return 15;
-                default:
-                    if (!Number.isInteger(Number(hex))) return null;
-
-                    const number = Number(hex);
-                    if (number < 0 || number > 9) return null;
-
-                    return number;
-            }
-    }
-
-
 }
