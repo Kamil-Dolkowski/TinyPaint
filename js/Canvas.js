@@ -74,8 +74,8 @@ export default class Canvas {
         this.drawingStatus.canvasHeight = this.height;
     }
 
-    zoom(zoomValue) {
-        this.currentZoom *= zoomValue;
+    setZoom(value) {
+        this.currentZoom = value;
 
         this.cssWidth = this.width * this.currentZoom;
         this.cssHeight = this.height * this.currentZoom;
@@ -90,18 +90,32 @@ export default class Canvas {
         this.cursorCanvas.style.height = this.cssHeight + 'px';
     }
 
+    zoomBy(factor) {
+        this.setZoom(this.currentZoom * factor);
+    }
+
     autoZoom() {
         const margin = 50;
 
         const workspaceWidth = this.workspace.offsetWidth;
         const workspaceHeight = this.workspace.offsetHeight;
 
-        const zoomValue = Math.min(workspaceWidth / (this.cssWidth + margin), workspaceHeight / (this.cssHeight + margin));
+        // zoom
+        const newCssWidth = workspaceWidth - 2*margin;
+        const newCssHeight = workspaceHeight - 2*margin;
 
-        this.zoom(zoomValue);
+        const zoomValue = Math.min(newCssWidth / this.width, newCssHeight / this.height);
+
+        this.setZoom(zoomValue);
+
+        // move
+        const left = (workspaceWidth - this.cssWidth) / 2;
+        const top = (workspaceHeight - this.cssHeight) / 2;
+
+        this.moveAbsolute(left, top);
     }
 
-    move(x, y) {
+    moveRelative(x, y) {
         const rect = this.checkerboard.getBoundingClientRect();
 
         this.checkerboard.style.left = rect.left + x + 'px';
@@ -112,5 +126,16 @@ export default class Canvas {
 
         this.cursorCanvas.style.left = rect.left + x + 'px';
         this.cursorCanvas.style.top = rect.top + y + 'px';
+    }
+
+    moveAbsolute(x, y) {
+        this.checkerboard.style.left = x + 'px';
+        this.checkerboard.style.top = y + 'px';
+
+        this.canvas.style.left = x + 'px';
+        this.canvas.style.top = y + 'px';
+
+        this.cursorCanvas.style.left = x + 'px';
+        this.cursorCanvas.style.top = y + 'px';
     }
 }
