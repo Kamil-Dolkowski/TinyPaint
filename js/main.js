@@ -122,7 +122,9 @@ function stopDraw(e) {
 
     currentTool?.pointerup(e);
 
-    history.addCanvasToHistory();
+    if (currentTool.tool != Tool.MOVE_ZOOM) {
+        history.addCanvasToHistory();
+    }
 }
 
 // 4 - tool animation
