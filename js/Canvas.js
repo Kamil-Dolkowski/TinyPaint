@@ -18,10 +18,12 @@ export default class Canvas {
         this.cssWidth = this.width;
         this.cssHeight = this.height;
 
-        this.currentZoom = 1;
+        this.currentZoom = 1; // current canvas css scale
+        this.fitZoom = 1; // fit-to-screen zoom
+        this.maxZoom = 100; // zoom in limit
 
         this.resize();
-        this.autoZoom();
+        this.fitToScreen();
     }
 
     drawCheckerboard() {
@@ -52,10 +54,8 @@ export default class Canvas {
         // 2. change visual size
         // reset zoom
         this.currentZoom = 1;
-        this.cssWidth = this.width * this.currentZoom;
-        this.cssHeight = this.height * this.currentZoom;
 
-        this.autoZoom();
+        this.fitToScreen();
     }
 
     resize() {
@@ -74,9 +74,14 @@ export default class Canvas {
         this.drawingStatus.canvasHeight = this.height;
     }
 
-    zoom(zoomValue) {
-        this.currentZoom *= zoomValue;
+    setZoom(value) {
+        // check if zoom limit
+        if (value > this.maxZoom || value < this.fitZoom / 3) return false;
 
+        // update currentZoom
+        this.currentZoom = value;
+
+        // update canvases css size 
         this.cssWidth = this.width * this.currentZoom;
         this.cssHeight = this.height * this.currentZoom;
 
@@ -88,20 +93,36 @@ export default class Canvas {
 
         this.cursorCanvas.style.width = this.cssWidth + 'px';
         this.cursorCanvas.style.height = this.cssHeight + 'px';
+
+        return true;
     }
 
-    autoZoom() {
+    zoomBy(factor) {
+        return this.setZoom(this.currentZoom * factor);
+    }
+
+    fitToScreen() {
         const margin = 50;
 
         const workspaceWidth = this.workspace.offsetWidth;
         const workspaceHeight = this.workspace.offsetHeight;
 
-        const zoomValue = Math.min(workspaceWidth / (this.cssWidth + margin), workspaceHeight / (this.cssHeight + margin));
+        // zoom
+        const newCssWidth = workspaceWidth - 2*margin;
+        const newCssHeight = workspaceHeight - 2*margin;
 
-        this.zoom(zoomValue);
+        this.fitZoom = Math.min(newCssWidth / this.width, newCssHeight / this.height);
+        
+        this.setZoom(this.fitZoom);
+
+        // move
+        const left = (workspaceWidth - this.cssWidth) / 2;
+        const top = (workspaceHeight - this.cssHeight) / 2;
+
+        this.moveAbsolute(left, top);
     }
 
-    move(x, y) {
+    moveRelative(x, y) {
         const rect = this.checkerboard.getBoundingClientRect();
 
         this.checkerboard.style.left = rect.left + x + 'px';
@@ -112,5 +133,16 @@ export default class Canvas {
 
         this.cursorCanvas.style.left = rect.left + x + 'px';
         this.cursorCanvas.style.top = rect.top + y + 'px';
+    }
+
+    moveAbsolute(x, y) {
+        this.checkerboard.style.left = x + 'px';
+        this.checkerboard.style.top = y + 'px';
+
+        this.canvas.style.left = x + 'px';
+        this.canvas.style.top = y + 'px';
+
+        this.cursorCanvas.style.left = x + 'px';
+        this.cursorCanvas.style.top = y + 'px';
     }
 }

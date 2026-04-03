@@ -217,7 +217,7 @@ clearBtn.addEventListener("click", () => {
 const resetZoomBtn = document.getElementById("reset-zoom-btn");
 
 resetZoomBtn.addEventListener("click", () => {
-    canvas.autoZoom();
+    canvas.fitToScreen();
 });
 
 // ======== INCREASE/DECREASE DRAW SIZE ========

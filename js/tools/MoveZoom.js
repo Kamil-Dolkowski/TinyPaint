@@ -21,7 +21,7 @@ export default class MoveZoom extends ToolBase {
         const deltaX = (this.drawingStatus.currentX - this.drawingStatus.lastX) * this.canvas.currentZoom;
         const deltaY = (this.drawingStatus.currentY - this.drawingStatus.lastY) * this.canvas.currentZoom;
 
-        this.canvas.move(deltaX, deltaY);
+        this.canvas.moveRelative(deltaX, deltaY);
     } 
 
     pointerup(e) {
@@ -37,6 +37,11 @@ export default class MoveZoom extends ToolBase {
     }
 
     zoomIn(e) {
+        // ==== zoom ====
+        const isZoomDone = this.canvas.zoomBy(this.zoomValue);
+
+        if (isZoomDone == false) return;
+
         // ==== move canvas to zoom to the cursor position ====
 
         // 1. calculate distances between: canvas (before zoom) top left point and cursor point
@@ -54,13 +59,15 @@ export default class MoveZoom extends ToolBase {
         deltaY = deltaY - zoomY;
 
         // 4. move
-        this.canvas.move(deltaX, deltaY);
-
-        // ==== zoom ====
-        this.canvas.zoom(this.zoomValue);
+        this.canvas.moveRelative(deltaX, deltaY);
     }
 
     zoomOut(e) {
+        // ==== zoom ====
+        const isZoomDone = this.canvas.zoomBy(1/this.zoomValue);
+
+        if (isZoomDone == false) return;
+
         // ==== move canvas to zoom to the cursor position ====
 
         // 1. calculate distances between: canvas (before zoom) top left point and cursor point
@@ -78,9 +85,6 @@ export default class MoveZoom extends ToolBase {
         deltaY = deltaY - zoomY;
 
         // 4. move
-        this.canvas.move(deltaX, deltaY);
-
-        // ==== zoom ====
-        this.canvas.zoom(1/this.zoomValue);
+        this.canvas.moveRelative(deltaX, deltaY);
     }
 }
