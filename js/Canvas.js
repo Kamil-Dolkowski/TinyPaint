@@ -23,7 +23,7 @@ export default class Canvas {
         this.maxZoom = 100; // zoom in limit
 
         this.resize();
-        this.autoZoom();
+        this.fitToScreen();
     }
 
     drawCheckerboard() {
@@ -55,7 +55,7 @@ export default class Canvas {
         // reset zoom
         this.currentZoom = 1;
 
-        this.autoZoom();
+        this.fitToScreen();
     }
 
     resize() {
@@ -101,7 +101,7 @@ export default class Canvas {
         return this.setZoom(this.currentZoom * factor);
     }
 
-    autoZoom() {
+    fitToScreen() {
         const margin = 50;
 
         const workspaceWidth = this.workspace.offsetWidth;
