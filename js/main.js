@@ -322,7 +322,7 @@ function shortcutKeysHandler(e) {
 }
 
 function keyup(e) {
-    if (!e.ctrlKey) {
+    if (e.key == 'Control') {
         currentTool = tempTool;
         tempTool = null;
     }
