@@ -37,6 +37,11 @@ export default class MoveZoom extends ToolBase {
     }
 
     zoomIn(e) {
+        // ==== zoom ====
+        const isZoomDone = this.canvas.zoomBy(this.zoomValue);
+
+        if (isZoomDone == false) return;
+
         // ==== move canvas to zoom to the cursor position ====
 
         // 1. calculate distances between: canvas (before zoom) top left point and cursor point
@@ -55,12 +60,14 @@ export default class MoveZoom extends ToolBase {
 
         // 4. move
         this.canvas.moveRelative(deltaX, deltaY);
-
-        // ==== zoom ====
-        this.canvas.zoomBy(this.zoomValue);
     }
 
     zoomOut(e) {
+        // ==== zoom ====
+        const isZoomDone = this.canvas.zoomBy(1/this.zoomValue);
+
+        if (isZoomDone == false) return;
+
         // ==== move canvas to zoom to the cursor position ====
 
         // 1. calculate distances between: canvas (before zoom) top left point and cursor point
@@ -79,8 +86,5 @@ export default class MoveZoom extends ToolBase {
 
         // 4. move
         this.canvas.moveRelative(deltaX, deltaY);
-
-        // ==== zoom ====
-        this.canvas.zoomBy(1/this.zoomValue);
     }
 }

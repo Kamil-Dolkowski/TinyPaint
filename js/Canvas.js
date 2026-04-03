@@ -18,7 +18,9 @@ export default class Canvas {
         this.cssWidth = this.width;
         this.cssHeight = this.height;
 
-        this.currentZoom = 1;
+        this.currentZoom = 1; // current canvas css scale
+        this.fitZoom = 1; // fit-to-screen zoom
+        this.maxZoom = 100; // zoom in limit
 
         this.resize();
         this.autoZoom();
@@ -52,8 +54,6 @@ export default class Canvas {
         // 2. change visual size
         // reset zoom
         this.currentZoom = 1;
-        this.cssWidth = this.width * this.currentZoom;
-        this.cssHeight = this.height * this.currentZoom;
 
         this.autoZoom();
     }
@@ -75,8 +75,13 @@ export default class Canvas {
     }
 
     setZoom(value) {
+        // check if zoom limit
+        if (value > this.maxZoom || value < this.fitZoom / 3) return false;
+
+        // update currentZoom
         this.currentZoom = value;
 
+        // update canvases css size 
         this.cssWidth = this.width * this.currentZoom;
         this.cssHeight = this.height * this.currentZoom;
 
@@ -88,10 +93,12 @@ export default class Canvas {
 
         this.cursorCanvas.style.width = this.cssWidth + 'px';
         this.cursorCanvas.style.height = this.cssHeight + 'px';
+
+        return true;
     }
 
     zoomBy(factor) {
-        this.setZoom(this.currentZoom * factor);
+        return this.setZoom(this.currentZoom * factor);
     }
 
     autoZoom() {
@@ -104,9 +111,9 @@ export default class Canvas {
         const newCssWidth = workspaceWidth - 2*margin;
         const newCssHeight = workspaceHeight - 2*margin;
 
-        const zoomValue = Math.min(newCssWidth / this.width, newCssHeight / this.height);
-
-        this.setZoom(zoomValue);
+        this.fitZoom = Math.min(newCssWidth / this.width, newCssHeight / this.height);
+        
+        this.setZoom(this.fitZoom);
 
         // move
         const left = (workspaceWidth - this.cssWidth) / 2;
