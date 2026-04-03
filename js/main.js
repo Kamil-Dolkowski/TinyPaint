@@ -6,6 +6,7 @@ import Brush from './tools/Brush.js';
 import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 import MoveZoom from './tools/MoveZoom.js';
+import Eyedropper from './tools/Eyedropper.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
@@ -24,11 +25,14 @@ const cursorCtx = cursorCanvas.getContext("2d");
 const canvas = new Canvas(workspace, checkerboard, canvas1, cursorCanvas, drawingStatus);
 
 // ======== TOOLS INICIALIZATION ========
+let colorPicker = document.getElementById("color-picker");
+
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
 const brush = new Brush(ctx, cursorCtx, drawingStatus);
 const line = new Line(ctx, cursorCtx, drawingStatus);
 const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
+const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, canvas, colorPicker);
 
 let currentTool = pencil;
 let tempTool = null;
@@ -207,6 +211,14 @@ moveZoomBtn.addEventListener("click", () => {
     currentTool.setTool();
 });
 
+// ======== EYEDROPPER ========
+const eyedropperBtn = document.getElementById("eyedropper-btn");
+
+eyedropperBtn.addEventListener("click", () => {
+    currentTool = eyedropper;
+    currentTool.setTool();
+});
+
 // ======== CLEAR ========
 const clearBtn = document.getElementById("clear-btn");
 
@@ -248,7 +260,7 @@ decreaseBtn.addEventListener("click", () => {
 });
 
 // ======== COLOR PICKER ========
-const colorPicker = document.getElementById("color-picker");
+// const colorPicker = document.getElementById("color-picker");
 
 colorPicker.addEventListener("input", () => {
     ctx.strokeStyle = colorPicker.value;
