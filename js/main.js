@@ -225,10 +225,10 @@ resetZoomBtn.addEventListener("click", () => {
 
 // ======== PALETTE ========
 const paletteBtn = document.getElementById("palette-btn");
-const paletteDiv = document.getElementById("palette");
+const paletteWindow = document.getElementById("palette-window");
 const currentColor = document.getElementById("current-color");
 
-const palette = new Palette(paletteDiv, paletteBtn, currentColor, canvas);
+const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
 
 paletteBtn.addEventListener("click", () => {
     palette.isPaletteVisible = !palette.isPaletteVisible;

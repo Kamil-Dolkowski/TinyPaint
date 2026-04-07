@@ -1,62 +1,75 @@
 export default class Palette {
-    constructor(paletteDiv, paletteBtn, currentColor, canvas) {
-        this.paletteDiv = paletteDiv;
+    constructor(paletteWindow, paletteBtn, currentColor, canvas) {
+        this.paletteWindow = paletteWindow;
         this.paletteBtn = paletteBtn;
         this.currentColor = currentColor;
         this.canvas = canvas;
 
-        this.isPaletteVisible = false;
-        this.colors = ["#000000", "#ffffff", "#ff0000", "#0000ff", "#00ff00", "#ffff00", "#ff00ff", "#ff4000"];
+        this.colorPalette = this.paletteWindow.querySelector("#color-palette");
+        this.colorPicker = this.paletteWindow.querySelector("#color-picker");
 
-        this.initBasicColors();
+        this.isPaletteVisible = false;
+        this.basicColors = ["#000000", "#ffffff", "#ff0000", "#0000ff", "#00ff00", "#ffff00", "#ff00ff", "#ff4000"];
+
+        this.initColorButtons();
 
         window.addEventListener("resize", this.updatePosition.bind(this));
+        
     }
 
-    initBasicColors() {
-        this.colors.forEach(color => {
+    initColorButtons() {
+        // color buttons dataset:
+        // data-focus = "true" / "false"
+        // data-color = "#ffffff" / "none"
+
+        const count = 48;
+
+        for(let i = 0; i < count; i++) {
+            const color = this.basicColors[i] ?? "none";
+
             const button = document.createElement("button");
 
             button.className = "color-button";
+            button.dataset.id = i;
             button.dataset.color = color;
-            button.dataset.state = "off";
+            button.dataset.focus = "false";
             button.style.backgroundColor = color;
 
             button.addEventListener("click", () => {
-                const buttons = this.paletteDiv.querySelectorAll("button");
+                const buttons = this.colorPalette.querySelectorAll("button");
 
                 buttons.forEach(btn => {
-                    btn.dataset.state = "off";
+                    btn.dataset.focus = "false";
                 });
 
-                button.dataset.state = "on";
+                button.dataset.focus = "true";
 
                 this.changeColor(button.dataset.color);
             });
 
-            this.paletteDiv.appendChild(button);
-        });
+            this.colorPalette.appendChild(button);
+        }
 
         // init first button color
-        const firstBtn = this.paletteDiv.querySelector("button");
-        
+        const firstBtn = this.colorPalette.querySelector("button");
+
         this.changeColor(firstBtn.dataset.color);
-        firstBtn.dataset.state = "on";
+        firstBtn.dataset.focus = "true";
     }
 
     updatePosition() {
         const rect = this.paletteBtn.getBoundingClientRect();
 
-        this.paletteDiv.style.left = rect.right + 15 + "px";
-        this.paletteDiv.style.top = rect.bottom - this.paletteDiv.height + "px";
+        this.paletteWindow.style.left = rect.right + 15 + "px";
+        this.paletteWindow.style.top = rect.bottom - this.paletteWindow.height + "px";
     }
 
     show() {
-        this.paletteDiv.style.display = "grid";
+        this.paletteWindow.style.display = "block";
     }
 
     hide() {
-        this.paletteDiv.style.display = "none";
+        this.paletteWindow.style.display = "none";
     }
 
     changeColor(color) {
