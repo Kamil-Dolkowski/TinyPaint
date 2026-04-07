@@ -19,7 +19,7 @@
     margin: 10px;
 }
 
-#color-palette {
+#color-palette-content {
     display: grid;
     width: fit-content;
     margin: auto;
@@ -50,6 +50,10 @@
 .color-button[data-color="none"] {
     border-style: none;
     background-color: #585858;
+}
+
+#delete-color {
+    margin: 10px;
 }
 
 #current-color {

@@ -5,7 +5,7 @@ export default class Palette {
         this.currentColor = currentColor;
         this.canvas = canvas;
 
-        this.colorPalette = this.paletteWindow.querySelector("#color-palette");
+        this.colorPalette = this.paletteWindow.querySelector("#color-palette-content");
         this.colorPicker = this.paletteWindow.querySelector("#color-picker");
 
         this.isPaletteVisible = false;
