@@ -9,6 +9,7 @@ import MoveZoom from './tools/MoveZoom.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
+import Palette from './Palette.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -220,6 +221,24 @@ const resetZoomBtn = document.getElementById("reset-zoom-btn");
 
 resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
+});
+
+// ======== PALETTE ========
+const paletteBtn = document.getElementById("palette-btn");
+const paletteDiv = document.getElementById("palette");
+
+const palette = new Palette(paletteDiv, paletteBtn, canvas);
+
+paletteBtn.addEventListener("click", () => {
+    palette.isPaletteVisible = !palette.isPaletteVisible;
+    palette.updatePosition();
+
+    if (palette.isPaletteVisible) {
+        palette.show();
+    } else {
+        palette.hide();
+    }
+    
 });
 
 // ======== INCREASE/DECREASE DRAW SIZE ========
