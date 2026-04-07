@@ -226,8 +226,9 @@ resetZoomBtn.addEventListener("click", () => {
 // ======== PALETTE ========
 const paletteBtn = document.getElementById("palette-btn");
 const paletteDiv = document.getElementById("palette");
+const currentColor = document.getElementById("current-color");
 
-const palette = new Palette(paletteDiv, paletteBtn, canvas);
+const palette = new Palette(paletteDiv, paletteBtn, currentColor, canvas);
 
 paletteBtn.addEventListener("click", () => {
     palette.isPaletteVisible = !palette.isPaletteVisible;
@@ -264,14 +265,6 @@ decreaseBtn.addEventListener("click", () => {
     ctx.lineWidth -= 1;
     drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
-});
-
-// ======== COLOR PICKER ========
-const colorPicker = document.getElementById("color-picker");
-
-colorPicker.addEventListener("input", () => {
-    ctx.strokeStyle = colorPicker.value;
-    ctx.fillStyle = colorPicker.value;
 });
 
 // ======== DOWNLOAD ========

@@ -1,13 +1,16 @@
 export default class Palette {
-    constructor(paletteDiv, paletteBtn, canvas) {
+    constructor(paletteDiv, paletteBtn, currentColor, canvas) {
         this.paletteDiv = paletteDiv;
         this.paletteBtn = paletteBtn;
+        this.currentColor = currentColor;
         this.canvas = canvas;
 
         this.isPaletteVisible = false;
         this.colors = ["#000000", "#ffffff", "#ff0000", "#0000ff", "#00ff00", "#ffff00", "#ff00ff", "#ff4000"];
 
         this.initBasicColors();
+
+        window.addEventListener("resize", this.updatePosition.bind(this));
     }
 
     initBasicColors() {
@@ -27,13 +30,18 @@ export default class Palette {
                 });
 
                 button.dataset.state = "on";
-                // button.style.borderColor = button.dataset.color;
 
                 this.changeColor(button.dataset.color);
             });
 
             this.paletteDiv.appendChild(button);
         });
+
+        // init first button color
+        const firstBtn = this.paletteDiv.querySelector("button");
+        
+        this.changeColor(firstBtn.dataset.color);
+        firstBtn.dataset.state = "on";
     }
 
     updatePosition() {
@@ -56,6 +64,8 @@ export default class Palette {
 
         ctx.strokeStyle = color;
         ctx.fillStyle = color;
+
+        this.currentColor.style.backgroundColor = color;
     }
 
 
