@@ -5,29 +5,65 @@ export default class Palette {
         this.currentColorDiv = currentColorDiv;
         this.canvas = canvas;
 
-        this.colorPalette = new ColorPalette(this.paletteWindow.querySelector("#color-palette"), this.changeColor.bind(this));
-        this.colorPicker = new ColorPicker(this.paletteWindow.querySelector("#color-picker"), this.changeColor.bind(this));
+        this.colorPalette = this.paletteWindow.querySelector("#color-palette-content");
+        this.colorPicker = this.paletteWindow.querySelector("#color-picker");
 
         this.isPaletteVisible = false;
-        this.isColorPalette = true;
 
-        this.currentColor = this.colorPalette.basicColors[0];
+        this.basicColors = ["#000000", "#ffffff", "#ff0000", "#0000ff", "#00ff00", "#ffff00", "#ff00ff", "#ff4000"];
+        this.colorButtons = [];
+        this.currentColorBtnId = 0;
 
-        // init/events
-        this.paletteBtn.addEventListener("click", () => {
-            this.isPaletteVisible = !this.isPaletteVisible;
-            this.updatePosition();
+        this.currentColor = this.basicColors[0];
 
-            if (this.isPaletteVisible) {
-                this.show();
-            } else {
-                this.hide();
-            }
-            
-        });
+        this.initColorButtons();
 
         window.addEventListener("resize", this.updatePosition.bind(this));
         
+    }
+
+    initColorButtons() {
+        // color buttons dataset:
+        // data-id = "1"
+        // data-focus = "true" / "false"
+        // data-color = "#ffffff" / "none"
+
+        const count = 48;
+
+        for(let i = 0; i < count; i++) {
+            const color = this.basicColors[i] ?? "none";
+
+            const button = document.createElement("button");
+
+            button.className = "color-button";
+            button.dataset.id = i;
+            button.dataset.focus = "false";
+            button.dataset.color = color;
+            button.style.backgroundColor = (color === "none") ? "transparent" : color;
+
+            button.addEventListener("click", () => {
+                if (button.dataset.color === "none") return;
+
+                this.colorButtons.forEach(btn => {
+                    btn.dataset.focus = "false";
+                });
+
+                button.dataset.focus = "true";
+                this.currentColorBtnId = Number(button.dataset.id);
+
+                this.changeColor(button.dataset.color);
+            });
+
+            this.colorButtons.push(button);
+            this.colorPalette.appendChild(button);
+        }
+
+        // init first button color
+        const firstBtn = this.colorButtons[0];
+
+        this.changeColor(firstBtn.dataset.color);
+        this.currentColorBtnId = 0;
+        firstBtn.dataset.focus = "true";
     }
 
     // Window
@@ -58,73 +94,8 @@ export default class Palette {
         this.currentColorDiv.style.backgroundColor = color;
         this.currentColor = color;
     }
-}
 
-class ColorPalette {
-    constructor(content, changeColorCallback) {
-        this.content = content;
-        this.changeColorCallback = changeColorCallback;
-
-        // elements in content div
-        this.colorPalette = this.content.querySelector("#color-palette-content");
-        this.deleteColorBtn = this.content.querySelector("#delete-color-btn");
-
-        // other variables
-        this.colorCount = 48;
-        this.basicColors = ["#000000", "#ffffff", "#ff0000", "#0000ff", "#00ff00", "#ffff00", "#ff00ff", "#ff4000"];
-        this.colorButtons = [];
-        this.currentColorBtnId = 0;
-
-        // init/events
-        this.initColorButtons();
-
-        this.deleteColorBtn.addEventListener("click", () => {
-            this.deleteCurrentColorFromPalette();
-        });
-    }
-
-    initColorButtons() {
-        // color buttons dataset:
-        // data-id = "1"
-        // data-focus = "true" / "false"
-        // data-color = "#ffffff" / "none"
-
-        for(let i = 0; i < this.colorCount; i++) {
-            const color = this.basicColors[i] ?? "none";
-
-            const button = document.createElement("button");
-
-            button.className = "color-button";
-            button.dataset.id = i;
-            button.dataset.focus = "false";
-            button.dataset.color = color;
-            button.style.backgroundColor = (color === "none") ? "transparent" : color;
-
-            button.addEventListener("click", () => {
-                if (button.dataset.color === "none") return;
-
-                this.colorButtons.forEach(btn => {
-                    btn.dataset.focus = "false";
-                });
-
-                button.dataset.focus = "true";
-                this.currentColorBtnId = Number(button.dataset.id);
-
-                this.changeColorCallback?.(button.dataset.color);
-            });
-
-            this.colorButtons.push(button);
-            this.colorPalette.appendChild(button);
-        }
-
-        // init first button color
-        const firstBtn = this.colorButtons[0];
-
-        this.changeColorCallback?.(firstBtn.dataset.color);
-        this.currentColorBtnId = 0;
-        firstBtn.dataset.focus = "true";
-    }
-
+    // Color Palette
     deleteColorFromPalette(buttonId) {
         if (buttonId < 0 || buttonId >= this.colorButtons.length) return;
 
@@ -133,7 +104,7 @@ class ColorPalette {
             this.swapButtons(i, i+1);
         }
 
-        // reset last button -> "delete" color
+        // reset last button
         const lastButton = this.colorButtons[this.colorButtons.length-1];
         lastButton.dataset.focus = "false";
         lastButton.dataset.color = "none";
@@ -152,7 +123,6 @@ class ColorPalette {
     addColorToPalette() {
         let button = null;
 
-        // find first button with color == "none"
         for (let i = 0; i < this.colorButtons.length; i++) {
             const btn = this.colorButtons[i];
 
@@ -162,7 +132,6 @@ class ColorPalette {
             }
         }
 
-        // change button color
         button.dataset.color = this.currentColor;
         button.style.backgroundColor = this.currentColor;
     }
@@ -182,15 +151,22 @@ class ColorPalette {
     }
 }
 
-class ColorPicker {
-    constructor(content, changeColorCallback) {
+class ColorPalette {
+    constructor(content) {
         this.content = content;
-        this.changeColorCallback = changeColorCallback;
 
-        // elements in content div
-        this.colorPalette = this.content.querySelector("#color-palette-content");
-        this.deleteColorBtn = this.content.querySelector("#delete-color-btn");
+        this.colorPalette = this.paletteWindow.querySelector("#color-palette-content");
 
-        // other variables
+        this.basicColors = ["#000000", "#ffffff", "#ff0000", "#0000ff", "#00ff00", "#ffff00", "#ff00ff", "#ff4000"];
+        this.colorButtons = [];
+        this.currentColorBtnId = 0;
+
+        this.currentColor = this.basicColors[0];
+
+        this.initColorButtons();
     }
+}
+
+class ColorPicker {
+
 }

@@ -230,24 +230,6 @@ const currentColor = document.getElementById("current-color");
 
 const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
 
-paletteBtn.addEventListener("click", () => {
-    palette.isPaletteVisible = !palette.isPaletteVisible;
-    palette.updatePosition();
-
-    if (palette.isPaletteVisible) {
-        palette.show();
-    } else {
-        palette.hide();
-    }
-    
-});
-
-const deleteColorBtn = document.getElementById("delete-color-btn");
-
-deleteColorBtn.addEventListener("click", () => {
-    palette.deleteCurrentColorFromPalette();
-});
-
 // ======== INCREASE/DECREASE DRAW SIZE ========
 
 // -- BUTTONS --
