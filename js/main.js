@@ -242,6 +242,12 @@ paletteBtn.addEventListener("click", () => {
     
 });
 
+const deleteColorBtn = document.getElementById("delete-color-btn");
+
+deleteColorBtn.addEventListener("click", () => {
+    palette.deleteCurrentColorFromPalette();
+});
+
 // ======== INCREASE/DECREASE DRAW SIZE ========
 
 // -- BUTTONS --
