@@ -5,11 +5,18 @@ export default class Palette {
         this.currentColorDiv = currentColorDiv;
         this.canvas = canvas;
 
-        this.colorPalette = new ColorPalette(this.paletteWindow.querySelector("#color-palette"), this.changeColor.bind(this));
-        this.colorPicker = new ColorPicker(this.paletteWindow.querySelector("#color-picker"), this.changeColor.bind(this));
+        // palette options
+        this.colorPaletteBtn = this.paletteWindow.querySelector("#color-palette-btn");
+        this.colorPickerBtn = this.paletteWindow.querySelector("#color-picker-btn");
 
+        this.colorPaletteContent = this.paletteWindow.querySelector("#color-palette");
+        this.colorPickerContent = this.paletteWindow.querySelector("#color-picker");
+
+        this.colorPalette = new ColorPalette(this.colorPaletteContent, this.changeColor.bind(this));
+        this.colorPicker = new ColorPicker(this.colorPickerContent, this.changeColor.bind(this));
+
+        // other variables
         this.isPaletteVisible = false;
-        this.isColorPalette = true;
 
         this.currentColor = this.colorPalette.basicColors[0];
 
@@ -26,8 +33,15 @@ export default class Palette {
             
         });
 
+        this.colorPaletteBtn.addEventListener("click", () => {
+            this.changeOptionWindow("color-palette");
+        });
+
+        this.colorPickerBtn.addEventListener("click", () => {
+            this.changeOptionWindow("color-picker");
+        });
+
         window.addEventListener("resize", this.updatePosition.bind(this));
-        
     }
 
     // Window
@@ -44,6 +58,18 @@ export default class Palette {
 
     hide() {
         this.paletteWindow.style.display = "none";
+    }
+
+    changeOptionWindow(name) {
+        if (name == "color-palette") {
+            this.colorPaletteContent.style.display = "block";
+            this.colorPickerContent.style.display = "none";
+        }
+
+        if (name == "color-picker") {
+            this.colorPaletteContent.style.display = "none";
+            this.colorPickerContent.style.display = "block";
+        }
     }
 
     // Canvas
@@ -188,9 +214,51 @@ class ColorPicker {
         this.changeColorCallback = changeColorCallback;
 
         // elements in content div
-        this.colorPalette = this.content.querySelector("#color-palette-content");
-        this.deleteColorBtn = this.content.querySelector("#delete-color-btn");
+        this.colorCanvas = this.createColorCanvas();
+        this.colorSlider = this.createColorSlider();
+        this.transparencySlider = this.createTransparencySlider();
+
+        // this.r;
+        // this.g;
+        // this.b;
 
         // other variables
+
+        // init/events
+        this.content.appendChild(this.colorCanvas);
+        this.content.appendChild(this.colorSlider);
+        this.content.appendChild(this.transparencySlider);
+    }
+
+    createColorCanvas() {
+        const colorCanvas = document.createElement("canvas");
+
+        colorCanvas.width = 255;
+        colorCanvas.height = 255;
+        colorCanvas.style.width = 200 + "px";
+        colorCanvas.style.height = 100 + "px";
+        colorCanvas.style.border = "1px solid #000000";
+
+        return colorCanvas;
+    }
+
+    createColorSlider() {
+        const colorSlider = document.createElement("input");
+
+        colorSlider.type = "range";
+        colorSlider.min = 0;
+        colorSlider.max = 255;
+
+        return colorSlider;
+    }
+
+    createTransparencySlider() {
+        const transparencySlider = document.createElement("input");
+
+        transparencySlider.type = "range";
+        transparencySlider.min = 0;
+        transparencySlider.max = 255;
+
+        return transparencySlider;
     }
 }
