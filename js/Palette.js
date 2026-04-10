@@ -213,35 +213,119 @@ class ColorPicker {
         this.content = content;
         this.changeColorCallback = changeColorCallback;
 
+        this.canvasWidth = 255;
+        this.canvasHeight = 255;
+        this.canvasCssWidth = 150;
+        this.canvasCssHeight = 150;
+
+        this.canvasScaleX = this.canvasWidth / this.canvasCssWidth;
+        this.canvasScaleY = this.canvasHeight / this.canvasCssHeight;
+
         // elements in content div
+        this.canvasDiv = this.createCanvasDiv();
         this.colorCanvas = this.createColorCanvas();
+        this.cursorCanvas = this.createCursorCanvas();
         this.colorSlider = this.createColorSlider();
         this.transparencySlider = this.createTransparencySlider();
+
+        this.ctx = this.colorCanvas.getContext("2d", { willReadFrequently: true });
+        this.cursorCtx = this.cursorCanvas.getContext("2d");
 
         // this.r;
         // this.g;
         // this.b;
 
         // other variables
+        this.isPointerPressed = false;
 
         // init/events
-        this.content.appendChild(this.colorCanvas);
+        this.canvasDiv.appendChild(this.colorCanvas);
+        this.canvasDiv.appendChild(this.cursorCanvas);
+
+        this.content.appendChild(this.canvasDiv);
         this.content.appendChild(this.colorSlider);
         this.content.appendChild(this.transparencySlider);
 
         this.renderHsvSquare(0);
+
+        this.colorSlider.addEventListener("input", e => {
+            this.renderHsvSquare(e.target.value);
+        });
+
+        // === CURSOR CANVAS ===
+        this.cursorCanvas.addEventListener("pointerdown", e => {
+            this.isPointerPressed = true;
+
+            this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
+
+            this.cursorCtx.lineWidth = 4;
+            this.cursorCtx.strokeStyle = "black"
+
+            this.cursorCtx.beginPath();
+            this.cursorCtx.arc(e.offsetX * this.canvasScaleX, e.offsetY * this.canvasScaleY, 10, 0, 2 * Math.PI);
+            this.cursorCtx.stroke();
+        });
+
+        window.addEventListener("pointermove", e => {
+            if (!this.isPointerPressed) return;
+
+            const rect = this.cursorCanvas.getBoundingClientRect();
+
+            const x = Math.max(0, Math.min((e.clientX - rect.left) * this.canvasScaleX, this.canvasWidth));
+            const y = Math.max(0, Math.min((e.clientY - rect.top) * this.canvasScaleY, this.canvasHeight));
+            
+            this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
+
+            this.cursorCtx.lineWidth = 4;
+            this.cursorCtx.strokeStyle = "black"
+
+            this.cursorCtx.beginPath();
+            this.cursorCtx.arc(x, y, 10, 0, 2 * Math.PI);
+            this.cursorCtx.stroke();
+        });
+
+        window.addEventListener("pointerup", e => {
+            this.isPointerPressed = false;
+        });
+    }
+
+    createCanvasDiv() {
+        const canvasDiv = document.createElement("div");
+
+        canvasDiv.style.position = "relative";
+
+        return canvasDiv;
     }
 
     createColorCanvas() {
         const colorCanvas = document.createElement("canvas");
 
-        colorCanvas.width = 256;
-        colorCanvas.height = 256;
-        colorCanvas.style.width = 100 + "px";
-        colorCanvas.style.height = 100 + "px";
-        colorCanvas.style.border = "1px solid #000000";
+        colorCanvas.width = this.canvasWidth;
+        colorCanvas.height = this.canvasHeight;
+
+        colorCanvas.style.width = this.canvasCssWidth + "px";
+        colorCanvas.style.height = this.canvasCssHeight + "px";
+
+        colorCanvas.style.outline = "1px solid #000000";
 
         return colorCanvas;
+    }
+
+    createCursorCanvas() {
+        const cursorCanvas = document.createElement("canvas");
+
+        cursorCanvas.width = this.canvasWidth;
+        cursorCanvas.height = this.canvasHeight;
+
+        cursorCanvas.style.width = this.canvasCssWidth + "px";
+        cursorCanvas.style.height = this.canvasCssHeight + "px";
+        cursorCanvas.style.zIndex = parseInt(this.colorCanvas.style.zIndex) + 1;
+
+        cursorCanvas.style.position = "absolute";
+        cursorCanvas.style.left = 0;
+        cursorCanvas.style.top = 0;
+
+        return cursorCanvas;
     }
 
     createColorSlider() {
@@ -249,7 +333,8 @@ class ColorPicker {
 
         colorSlider.type = "range";
         colorSlider.min = 0;
-        colorSlider.max = 255;
+        colorSlider.max = 360;
+        colorSlider.value = 0;
 
         return colorSlider;
     }
@@ -260,18 +345,18 @@ class ColorPicker {
         transparencySlider.type = "range";
         transparencySlider.min = 0;
         transparencySlider.max = 255;
+        transparencySlider.value = 255;
 
         return transparencySlider;
     }
 
     renderHsvSquare(h) {
         // h - hue [0,360]
-        
-        const ctx = this.colorCanvas.getContext("2d");
+
         const width = this.colorCanvas.width;
         const height = this.colorCanvas.height;
 
-        const imageData = ctx.getImageData(0, 0, this.colorCanvas.width, this.colorCanvas. height);
+        const imageData = this.ctx.getImageData(0, 0, this.colorCanvas.width, this.colorCanvas. height);
         const data = imageData.data;
 
         for (let i = 0; i < data.length; i += 4) {
@@ -289,7 +374,7 @@ class ColorPicker {
             data[i+3] = 255;
         }
 
-        ctx.putImageData(imageData, 0, 0);
+        this.ctx.putImageData(imageData, 0, 0);
     }
 
     //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
