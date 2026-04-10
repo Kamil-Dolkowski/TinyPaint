@@ -228,14 +228,16 @@ class ColorPicker {
         this.content.appendChild(this.colorCanvas);
         this.content.appendChild(this.colorSlider);
         this.content.appendChild(this.transparencySlider);
+
+        this.renderHsvSquare(0);
     }
 
     createColorCanvas() {
         const colorCanvas = document.createElement("canvas");
 
-        colorCanvas.width = 255;
-        colorCanvas.height = 255;
-        colorCanvas.style.width = 200 + "px";
+        colorCanvas.width = 256;
+        colorCanvas.height = 256;
+        colorCanvas.style.width = 100 + "px";
         colorCanvas.style.height = 100 + "px";
         colorCanvas.style.border = "1px solid #000000";
 
@@ -260,5 +262,95 @@ class ColorPicker {
         transparencySlider.max = 255;
 
         return transparencySlider;
+    }
+
+    renderHsvSquare(h) {
+        // h - hue [0,360]
+        
+        const ctx = this.colorCanvas.getContext("2d");
+        const width = this.colorCanvas.width;
+        const height = this.colorCanvas.height;
+
+        const imageData = ctx.getImageData(0, 0, this.colorCanvas.width, this.colorCanvas. height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const x = (i/4) % width;
+            const y = Math.floor((i/4) / width);
+
+            const s = x / (width - 1);
+            const v = 1 - (y / (height - 1));
+
+            const {r, g, b} = this.hsvToRgb(h, s, v);
+
+            data[i] = r;
+            data[i+1] = g;
+            data[i+2] = b;
+            data[i+3] = 255;
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+    hsvToRgb(h, s, v) {
+        // h - hue [0,360]
+        // s - saturation [0,1]
+        // v - value [0,1]
+
+        // normalize and clamp values
+        h = ((h % 360) + 360) % 360;
+        s = Math.max(0, Math.min(s, 1));
+        v = Math.max(0, Math.min(v, 1));
+
+        // algorithm
+        const c = v * s;
+        const x = c * (1 - Math.abs((h/60) % 2 - 1));
+        const m = v - c;
+
+        let r = 0;
+        let g = 0;
+        let b = 0;
+
+        const hIndex = Math.trunc(h/60);
+
+        switch(hIndex) {
+            case 0:
+                r = c;
+                g = x;
+                b = 0;
+                break;
+            case 1:
+                r = x;
+                g = c;
+                b = 0;
+                break;
+            case 2:
+                r = 0;
+                g = c;
+                b = x;
+                break;
+            case 3:
+                r = 0;
+                g = x;
+                b = c;
+                break;
+            case 4:
+                r = x;
+                g = 0;
+                b = c;
+                break;
+            case 5:
+                r = c;
+                g = 0;
+                b = x;
+                break;
+        }
+
+        r = (r+m) * 255;
+        g = (g+m) * 255;
+        b = (b+m) * 255;
+
+        return {r: r, g: g, b: b};
     }
 }
