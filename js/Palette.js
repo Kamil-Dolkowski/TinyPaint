@@ -235,6 +235,7 @@ class ColorPicker {
 
         // other variables
         this.isPointerPressed = false;
+        this.isDirty = false;
         this.currentX = 0;
         this.currentY = 255;
 
@@ -271,43 +272,48 @@ class ColorPicker {
 
         this.cursorCanvas.addEventListener("pointerdown", e => {
             this.isPointerPressed = true;
+            this.isDirty = true;
 
             this.currentX = e.offsetX * this.canvasScaleX;
             this.currentY = e.offsetY * this.canvasScaleY;
-
-            this.drawCursor();
         });
 
         window.addEventListener("pointermove", e => {
             if (!this.isPointerPressed) return;
 
+            this.isDirty = true;
+
             const rect = this.cursorCanvas.getBoundingClientRect();
 
             this.currentX = Math.max(0, Math.min((e.clientX - rect.left) * this.canvasScaleX, this.canvasWidth-1));
             this.currentY = Math.max(0, Math.min((e.clientY - rect.top) * this.canvasScaleY, this.canvasHeight-1));
-            
-            const {r,g,b} = this.getRgb();
-            const a = parseInt(this.transparencySlider.value);
-
-            const colorHex = this.rgbaToHex(r,g,b,a);
-
-            this.changeColorCallback?.(colorHex);
-            
-            this.drawCursor();
         });
 
         window.addEventListener("pointerup", e => {
             if (!this.isPointerPressed) return;
 
+            this.isDirty = true;
             this.isPointerPressed = false;
-
-            const {r,g,b} = this.getRgb();
-            const a = parseInt(this.transparencySlider.value);
-
-            const colorHex = this.rgbaToHex(r,g,b,a);
-
-            this.changeColorCallback?.(colorHex);
         });
+
+        const colorPickerLoop = () => {
+            if (this.isDirty) {
+                const {r,g,b} = this.getRgb();
+                const a = parseInt(this.transparencySlider.value);
+
+                const colorHex = this.rgbaToHex(r,g,b,a);
+
+                this.changeColorCallback?.(colorHex);
+
+                this.drawCursor();
+
+                this.isDirty = false;
+            }
+
+            requestAnimationFrame(colorPickerLoop);
+        }
+
+        colorPickerLoop();
     }
 
     createCanvasDiv() {
