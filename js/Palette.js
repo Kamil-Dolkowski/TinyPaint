@@ -5,6 +5,8 @@ export default class Palette {
         this.currentColorDiv = currentColorDiv;
         this.canvas = canvas;
 
+        this.ctx = this.canvas.canvas.getContext("2d");
+
         // palette options
         this.colorPaletteBtn = this.paletteWindow.querySelector("#color-palette-btn");
         this.colorPickerBtn = this.paletteWindow.querySelector("#color-picker-btn");
@@ -76,10 +78,8 @@ export default class Palette {
     changeColor(color) {
         if (color === "none") color = "#000000";
 
-        const ctx = this.canvas.canvas.getContext("2d");
-
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
+        this.ctx.strokeStyle = color;
+        this.ctx.fillStyle = color;
 
         this.currentColorDiv.style.backgroundColor = color;
         this.currentColor = color;
@@ -213,8 +213,8 @@ class ColorPicker {
         this.content = content;
         this.changeColorCallback = changeColorCallback;
 
-        this.canvasWidth = 255;
-        this.canvasHeight = 255;
+        this.canvasWidth = 256;
+        this.canvasHeight = 256;
         this.canvasCssWidth = 150;
         this.canvasCssHeight = 150;
 
@@ -231,12 +231,12 @@ class ColorPicker {
         this.ctx = this.colorCanvas.getContext("2d", { willReadFrequently: true });
         this.cursorCtx = this.cursorCanvas.getContext("2d");
 
-        // this.r;
-        // this.g;
-        // this.b;
+        this.imageData = this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
 
         // other variables
         this.isPointerPressed = false;
+        this.currentX = 0;
+        this.currentY = 255;
 
         // init/events
         this.canvasDiv.appendChild(this.colorCanvas);
@@ -250,20 +250,32 @@ class ColorPicker {
 
         this.colorSlider.addEventListener("input", e => {
             this.renderHsvSquare(e.target.value);
+
+            const {r,g,b} = this.getRgb();
+            const a = parseInt(this.transparencySlider.value);
+
+            const colorHex = this.rgbaToHex(r,g,b,a);
+            this.changeColorCallback?.(colorHex);
+        });
+
+        this.transparencySlider.addEventListener("input", e => {
+            const {r,g,b} = this.getRgb();
+            const a = parseInt(this.transparencySlider.value);
+
+            const colorHex = this.rgbaToHex(r,g,b,a);
+            this.changeColorCallback?.(colorHex);
         });
 
         // === CURSOR CANVAS ===
+        this.drawCursor();
+
         this.cursorCanvas.addEventListener("pointerdown", e => {
             this.isPointerPressed = true;
 
-            this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
+            this.currentX = e.offsetX * this.canvasScaleX;
+            this.currentY = e.offsetY * this.canvasScaleY;
 
-            this.cursorCtx.lineWidth = 4;
-            this.cursorCtx.strokeStyle = "black"
-
-            this.cursorCtx.beginPath();
-            this.cursorCtx.arc(e.offsetX * this.canvasScaleX, e.offsetY * this.canvasScaleY, 10, 0, 2 * Math.PI);
-            this.cursorCtx.stroke();
+            this.drawCursor();
         });
 
         window.addEventListener("pointermove", e => {
@@ -271,21 +283,30 @@ class ColorPicker {
 
             const rect = this.cursorCanvas.getBoundingClientRect();
 
-            const x = Math.max(0, Math.min((e.clientX - rect.left) * this.canvasScaleX, this.canvasWidth));
-            const y = Math.max(0, Math.min((e.clientY - rect.top) * this.canvasScaleY, this.canvasHeight));
+            this.currentX = Math.max(0, Math.min((e.clientX - rect.left) * this.canvasScaleX, this.canvasWidth-1));
+            this.currentY = Math.max(0, Math.min((e.clientY - rect.top) * this.canvasScaleY, this.canvasHeight-1));
             
-            this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
+            const {r,g,b} = this.getRgb();
+            const a = parseInt(this.transparencySlider.value);
 
-            this.cursorCtx.lineWidth = 4;
-            this.cursorCtx.strokeStyle = "black"
+            const colorHex = this.rgbaToHex(r,g,b,a);
 
-            this.cursorCtx.beginPath();
-            this.cursorCtx.arc(x, y, 10, 0, 2 * Math.PI);
-            this.cursorCtx.stroke();
+            this.changeColorCallback?.(colorHex);
+            
+            this.drawCursor();
         });
 
         window.addEventListener("pointerup", e => {
+            if (!this.isPointerPressed) return;
+
             this.isPointerPressed = false;
+
+            const {r,g,b} = this.getRgb();
+            const a = parseInt(this.transparencySlider.value);
+
+            const colorHex = this.rgbaToHex(r,g,b,a);
+
+            this.changeColorCallback?.(colorHex);
         });
     }
 
@@ -350,14 +371,24 @@ class ColorPicker {
         return transparencySlider;
     }
 
+    drawCursor() {
+        this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
+
+        this.cursorCtx.lineWidth = 4;
+        this.cursorCtx.strokeStyle = "black"
+
+        this.cursorCtx.beginPath();
+        this.cursorCtx.arc(this.currentX, this.currentY, 10, 0, 2 * Math.PI);
+        this.cursorCtx.stroke();
+    }
+
     renderHsvSquare(h) {
         // h - hue [0,360]
 
         const width = this.colorCanvas.width;
         const height = this.colorCanvas.height;
 
-        const imageData = this.ctx.getImageData(0, 0, this.colorCanvas.width, this.colorCanvas. height);
-        const data = imageData.data;
+        const data = this.imageData.data;
 
         for (let i = 0; i < data.length; i += 4) {
             const x = (i/4) % width;
@@ -374,7 +405,7 @@ class ColorPicker {
             data[i+3] = 255;
         }
 
-        this.ctx.putImageData(imageData, 0, 0);
+        this.ctx.putImageData(this.imageData, 0, 0);
     }
 
     //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
@@ -432,10 +463,35 @@ class ColorPicker {
                 break;
         }
 
-        r = (r+m) * 255;
-        g = (g+m) * 255;
-        b = (b+m) * 255;
+        r = Math.round((r+m) * 255);
+        g = Math.round((g+m) * 255);
+        b = Math.round((b+m) * 255);
 
         return {r: r, g: g, b: b};
+    }
+
+    rgbaToHex(r, g, b, a) {
+        return "#" + this.decimalToHex(r) + this.decimalToHex(g) + this.decimalToHex(b) + this.decimalToHex(a);
+    }
+
+    decimalToHex(decimal) {
+        return decimal.toString(16).padStart(2, '0');
+    }
+
+    // slower
+    getRgbFromImageData() {
+        const data = this.imageData.data;
+        const i = (parseInt(this.currentY) * this.canvasWidth + parseInt(this.currentX)) * 4;
+
+        return {r: data[i], g: data[i+1], b: data[i+2]};
+    }
+
+    // faster
+    getRgb() {
+        const h = this.colorSlider.value;
+        const s = this.currentX / (this.canvasWidth - 1);
+        const v = 1 - (this.currentY / (this.canvasHeight - 1));
+
+        return this.hsvToRgb(h, s, v);
     }
 }

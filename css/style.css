@@ -73,6 +73,8 @@ html, body {
 
 /* https://getcssscan.com/css-buttons-examples */
 .button-22 {
+    width: 58px;
+    height: 36px;
     align-items: center;
     appearance: button;
     background-color: #0276FF;

@@ -61,9 +61,17 @@
 }
 
 #current-color {
-    height: 35px;
     border-style: solid;
     border-width: 5px;
     border-color: #0276FF;
-    background-color: #ffffff;
+}
+
+#current-color-checkerboard {
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+
+    background:
+        repeating-conic-gradient(#555 0% 25%, #aaa 0% 50%);
+    background-size: 20px 20px;
 }
