@@ -510,11 +510,14 @@ class ColorPicker {
 }
 
 class Slider {
-    constructor(min = 0, max = 100, value = min) {
+    constructor(min = 0, max = 100, value = min, id = null, className = "custom-slider") {
         // variables
         this.min = min;
         this.max = max;
         this.value = value;
+
+        this.id = id;
+        this.className = className;
 
         this.width = 150;
         this.height = 10;
@@ -552,7 +555,9 @@ class Slider {
     createSlider() {
         const slider = document.createElement("div");
 
-        slider.className = "custom-slider";
+        // id and class
+        if (this.id != null) slider.id = this.id;
+        if (this.className != null) slider.className = this.className;
 
         // size
         slider.style.width = this.width + "px";
@@ -567,6 +572,7 @@ class Slider {
     createTrack() {
         const track = document.createElement("div");
 
+        // class
         track.className = "track";
 
         // size
@@ -585,6 +591,7 @@ class Slider {
     createThumb() {
         const thumb = document.createElement("div");
 
+        // class
         thumb.className = "thumb";
 
         // size
