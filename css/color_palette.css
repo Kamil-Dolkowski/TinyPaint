@@ -24,6 +24,7 @@
 
 #color-picker-content {
     justify-content: center;
+    gap: 10px;
 }
 
 #color-palette-content {
