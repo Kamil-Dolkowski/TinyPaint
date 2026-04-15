@@ -385,7 +385,15 @@ class ColorPicker {
 
         addToPaletteBtn.id = "add-to-palette-btn";
         addToPaletteBtn.className = "button-22-small";
-        addToPaletteBtn.textContent = "Dodaj do palety";
+
+        const icon = document.createElement("i");
+        icon.className = "fa-solid fa-plus";
+        icon.style.margin = "2px 10px 2px 0px";
+
+        const text = document.createTextNode("Dodaj do palety");
+
+        addToPaletteBtn.appendChild(icon);
+        addToPaletteBtn.appendChild(text);
 
         return addToPaletteBtn;
     }

@@ -129,6 +129,7 @@ html, body {
 }
 
 .button-22-small {
+    height: 25px;
     align-items: center;
     appearance: button;
     background-color: #0276FF;
