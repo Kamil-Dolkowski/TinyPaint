@@ -45,6 +45,10 @@ export default class Palette {
             this.changeOptionWindow("color-picker");
         });
 
+        this.colorPicker.addToPaletteBtn.addEventListener("click", () => {
+            this.colorPalette.addColorToPalette(this.currentColor);
+        });
+
         window.addEventListener("resize", this.updatePosition.bind(this));
     }
 
@@ -179,7 +183,7 @@ class ColorPalette {
         this.deleteColorFromPalette(this.currentColorBtnId);
     }
 
-    addColorToPalette() {
+    addColorToPalette(color) {
         let button = null;
 
         // find first button with color == "none"
@@ -193,8 +197,9 @@ class ColorPalette {
         }
 
         // change button color
-        button.dataset.color = this.currentColor;
-        button.style.backgroundColor = this.currentColor;
+        this.currentColor = color;
+        button.dataset.color = color;
+        button.style.backgroundColor = color;
     }
 
     swapButtons(id1, id2) {
@@ -226,11 +231,16 @@ class ColorPicker {
         this.canvasScaleY = this.canvasHeight / this.canvasCssHeight;
 
         // elements in content div
+        // -- color picker content
+        this.colorPickerContent = this.createColorPickerContent();
+        // -- canvases
         this.canvasDiv = this.createCanvasDiv();
         this.colorCanvas = this.createColorCanvas();
         this.cursorCanvas = this.createCursorCanvas();
+        // -- slider
         this.colorSlider = this.createColorSlider();
-        this.transparencySlider = this.createTransparencySlider();
+        // -- button
+        this.addToPaletteBtn = this.createAddToPaletteBtn();
 
         // canvas
         this.ctx = this.colorCanvas.getContext("2d", { willReadFrequently: true });
@@ -247,32 +257,25 @@ class ColorPicker {
         // init/events
         this.canvasDiv.appendChild(this.colorCanvas);
         this.canvasDiv.appendChild(this.cursorCanvas);
+        this.colorPickerContent.appendChild(this.canvasDiv);
 
-        this.content.appendChild(this.canvasDiv);
-        this.colorSlider.mount(this.content);
-        this.content.appendChild(this.transparencySlider);
+        this.colorSlider.mount(this.colorPickerContent);
+        this.content.appendChild(this.colorPickerContent);
+        this.content.appendChild(this.addToPaletteBtn);
 
         this.renderHsvSquare(0);
         this.colorSlider.thumb.style.backgroundColor = `hsl(${this.colorSlider.value}, 100%, 50%)`;
 
+        // === SLIDER ===
         this.colorSlider.slider.addEventListener("change", e => {
             this.renderHsvSquare(e.detail.value);
 
             const {r,g,b} = this.getRgb();
-            const a = parseInt(this.transparencySlider.value);
 
-            const colorHex = this.rgbaToHex(r,g,b,a);
+            const colorHex = this.rgbToHex(r,g,b);
             this.changeColorCallback?.(colorHex);
 
             this.colorSlider.thumb.style.backgroundColor = `hsl(${e.detail.value}, 100%, 50%)`;
-        });
-
-        this.transparencySlider.addEventListener("input", e => {
-            const {r,g,b} = this.getRgb();
-            const a = parseInt(this.transparencySlider.value);
-
-            const colorHex = this.rgbaToHex(r,g,b,a);
-            this.changeColorCallback?.(colorHex);
         });
 
         // === CURSOR CANVAS ===
@@ -307,9 +310,8 @@ class ColorPicker {
         const colorPickerLoop = () => {
             if (this.isDirty) {
                 const {r,g,b} = this.getRgb();
-                const a = parseInt(this.transparencySlider.value);
 
-                const colorHex = this.rgbaToHex(r,g,b,a);
+                const colorHex = this.rgbToHex(r,g,b);
 
                 this.changeColorCallback?.(colorHex);
 
@@ -322,6 +324,15 @@ class ColorPicker {
         }
 
         colorPickerLoop();
+    }
+
+    createColorPickerContent() {
+        const colorPickerContent = document.createElement("div");
+
+        colorPickerContent.id = "color-picker-content";
+        colorPickerContent.style.display = "flex";
+
+        return colorPickerContent;
     }
 
     createCanvasDiv() {
@@ -364,21 +375,19 @@ class ColorPicker {
     }
 
     createColorSlider() {
-        const colorSlider = new Slider(0, 360, 0, null, "color-slider");
+        const colorSlider = new Slider(0, 360, 0, "color-slider");
 
         return colorSlider;
     }
 
-    createTransparencySlider() {
-        const transparencySlider = document.createElement("input");
+    createAddToPaletteBtn() {
+        const addToPaletteBtn = document.createElement("button");
 
-        transparencySlider.id = "transparency-slider"
-        transparencySlider.type = "range";
-        transparencySlider.min = 0;
-        transparencySlider.max = 255;
-        transparencySlider.value = 255;
+        addToPaletteBtn.id = "add-to-palette-btn";
+        addToPaletteBtn.className = "button-22-small";
+        addToPaletteBtn.textContent = "Dodaj do palety";
 
-        return transparencySlider;
+        return addToPaletteBtn;
     }
 
     drawCursor() {
@@ -480,8 +489,8 @@ class ColorPicker {
         return {r: r, g: g, b: b};
     }
 
-    rgbaToHex(r, g, b, a) {
-        return "#" + this.decimalToHex(r) + this.decimalToHex(g) + this.decimalToHex(b) + this.decimalToHex(a);
+    rgbToHex(r, g, b) {
+        return "#" + this.decimalToHex(r) + this.decimalToHex(g) + this.decimalToHex(b);
     }
 
     decimalToHex(decimal) {
