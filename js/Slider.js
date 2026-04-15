@@ -1,5 +1,5 @@
 export default class Slider {
-    constructor(min = 0, max = 100, value = min, id = null, className = "custom-slider") {
+    constructor(min = 0, max = 100, value = min, id = null, className = null) {
         // variables
         this.min = min;
         this.max = max;
@@ -8,10 +8,7 @@ export default class Slider {
         this.id = id;
         this.className = className;
 
-        this.width = 150;
-        this.height = 10;
-        this.isHorizontal = this.width > this.height;
-
+        this.isHorizontal = true;
         this.isPointerPressed = false;
 
         // elements
@@ -25,12 +22,22 @@ export default class Slider {
 
             this.pointerDownAndMoveHandler(e);
             this.track.setPointerCapture(e.pointerId);
+
+            this.slider.dispatchEvent(new CustomEvent("change", {
+                detail: { value: this.value },
+                bubbles: true
+            }));
         });
 
         this.track.addEventListener("pointermove", e => {
             if (!this.isPointerPressed) return;
 
             this.pointerDownAndMoveHandler(e);
+
+            this.slider.dispatchEvent(new CustomEvent("change", {
+                detail: { value: this.value },
+                bubbles: true
+            }));
         });
 
         this.track.addEventListener("pointerup", e => {
@@ -38,7 +45,29 @@ export default class Slider {
 
             this.isPointerPressed = false;
             this.track.releasePointerCapture(e.pointerId);
+
+            this.slider.dispatchEvent(new CustomEvent("change", {
+                detail: { value: this.value },
+                bubbles: true
+            }));
         });
+    }
+
+    mount(parent) {
+        parent.appendChild(this.slider);
+    }
+
+    updateLayout() {
+        this.isHorizontal = this.slider.offsetWidth > this.slider.offsetHeight;
+
+        // update thumb position
+        const pos = this.denormalize(this.value);
+
+        if (this.isHorizontal) {
+            this.thumb.style.transform = `translateX(${pos - this.thumb.offsetWidth / 2}px)`;
+        } else {
+            this.thumb.style.transform = `translateY(${pos - this.thumb.offsetHeight / 2}px)`;
+        }
     }
 
     createSlider() {
@@ -46,14 +75,9 @@ export default class Slider {
 
         // id and class
         if (this.id != null) slider.id = this.id;
-        if (this.className != null) slider.className = this.className;
 
-        // size
-        slider.style.width = this.width + "px";
-        slider.style.height = this.height + "px";
-
-        slider.style.margin = "10px";
-        slider.style.position = "relative";
+        slider.classList.add("slider"); // base class
+        if (this.className != null) slider.classList.add(this.className); // additional class
 
         return slider;
     }
@@ -63,14 +87,6 @@ export default class Slider {
 
         // class
         track.className = "track";
-
-        // size
-        track.style.width = this.width + "px";
-        track.style.height = this.height + "px";
-
-        // look
-        track.style.borderRadius = "5px";
-        track.style.backgroundColor = "#006AE8";
 
         this.slider.appendChild(track);
 
@@ -83,25 +99,6 @@ export default class Slider {
         // class
         thumb.className = "thumb";
 
-        // size
-        const size = Math.min(this.width, this.height);
-        thumb.style.width = size + "px";
-        thumb.style.height = size + "px";
-
-        // position
-        thumb.style.position = "absolute";
-        
-        if (this.isHorizontal) {
-            thumb.style.left = "0px";
-        } else {
-            thumb.style.top = "0px";
-        }
-
-        // look
-        thumb.style.borderRadius = "10px";
-        thumb.style.boxShadow = "0 0 0 3px #213d5f";
-        thumb.style.backgroundColor = "#006AE8";
-
         this.track.appendChild(thumb);
 
         return thumb;
@@ -113,25 +110,36 @@ export default class Slider {
 
         if (this.isHorizontal) {
             let pos = e.clientX - rect.left;
-            pos = Math.max(0, Math.min(pos, this.width));
+            pos = Math.max(0, Math.min(pos, this.slider.offsetWidth));
 
             this.value = (this.normalize(pos));
-            this.thumb.style.left = pos - this.height/2 + "px";
+            this.thumb.style.transform = `translateX(${pos - this.thumb.offsetWidth / 2}px)`;
         } else {
             let pos = e.clientY - rect.top;
-            pos = Math.max(0, Math.min(pos, this.height));
+            pos = Math.max(0, Math.min(pos, this.slider.offsetHeight));
 
             this.value = (this.normalize(pos));
-            this.thumb.style.top = pos - this.width/2 + "px";
+            this.thumb.style.transform = `translateY(${pos - this.thumb.offsetHeight / 2}px)`;
         }
     }
 
     normalize(x) {
-        // range: [a, b]
+        // pos -> value
+        // value range: [a, b] -> [this.min, this.max]
         // norm = (x - min) / (max - min) * (b - a) + a
-        // min = 0, max = Math.max(this.width, this.height)
+        // min = 0, max = Math.max(this.slider.style.width, this.slider.style.height)
 
-        const max = Math.max(this.width, this.height);
+        const max = Math.max(this.slider.offsetWidth, this.slider.offsetHeight);
         return (x / max) * (this.max - this.min) + this.min;
+    }
+
+    denormalize(x) {
+        // value -> pos
+        // pos range: [a, b] -> [0, maxSize]
+        // denorm = (x - min) / (max - min) * (b - a) + a
+        // min = this.min, max = this.max
+
+        const maxSize = Math.max(this.slider.offsetWidth, this.slider.offsetHeight);
+        return (x - this.min) / (this.max - this.min) * maxSize;
     }
 }

@@ -1,3 +1,5 @@
+import Slider from './Slider.js';
+
 export default class Palette {
     constructor(paletteWindow, paletteBtn, currentColorDiv, canvas) {
         this.paletteWindow = paletteWindow;
@@ -71,6 +73,8 @@ export default class Palette {
         if (name == "color-picker") {
             this.colorPaletteContent.style.display = "none";
             this.colorPickerContent.style.display = "block";
+
+            requestAnimationFrame(() => this.colorPicker.colorSlider.updateLayout());
         }
     }
 
@@ -228,10 +232,6 @@ class ColorPicker {
         this.colorSlider = this.createColorSlider();
         this.transparencySlider = this.createTransparencySlider();
 
-        this.customColorSlider = new Slider();
-
-        content.appendChild(this.customColorSlider.slider);
-
         // canvas
         this.ctx = this.colorCanvas.getContext("2d", { willReadFrequently: true });
         this.cursorCtx = this.cursorCanvas.getContext("2d");
@@ -249,19 +249,22 @@ class ColorPicker {
         this.canvasDiv.appendChild(this.cursorCanvas);
 
         this.content.appendChild(this.canvasDiv);
-        this.content.appendChild(this.colorSlider);
+        this.colorSlider.mount(this.content);
         this.content.appendChild(this.transparencySlider);
 
         this.renderHsvSquare(0);
+        this.colorSlider.thumb.style.backgroundColor = `hsl(${this.colorSlider.value}, 100%, 50%)`;
 
-        this.colorSlider.addEventListener("input", e => {
-            this.renderHsvSquare(e.target.value);
+        this.colorSlider.slider.addEventListener("change", e => {
+            this.renderHsvSquare(e.detail.value);
 
             const {r,g,b} = this.getRgb();
             const a = parseInt(this.transparencySlider.value);
 
             const colorHex = this.rgbaToHex(r,g,b,a);
             this.changeColorCallback?.(colorHex);
+
+            this.colorSlider.thumb.style.backgroundColor = `hsl(${e.detail.value}, 100%, 50%)`;
         });
 
         this.transparencySlider.addEventListener("input", e => {
@@ -361,13 +364,7 @@ class ColorPicker {
     }
 
     createColorSlider() {
-        const colorSlider = document.createElement("input");
-
-        colorSlider.id = "color-slider"
-        colorSlider.type = "range";
-        colorSlider.min = 0;
-        colorSlider.max = 360;
-        colorSlider.value = 0;
+        const colorSlider = new Slider(0, 360, 0, null, "color-slider");
 
         return colorSlider;
     }

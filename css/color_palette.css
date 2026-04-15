@@ -51,11 +51,6 @@
     transform: scale(1.2);
 }
 
-/* .color-button[data-color="none"] {
-    border-style: none;
-    background-color: #585858;
-} */
-
 #delete-color-btn {
     margin: 10px;
 }
@@ -74,4 +69,33 @@
     background:
         repeating-conic-gradient(#555 0% 25%, #aaa 0% 50%);
     background-size: 20px 20px;
+}
+
+.color-slider {
+    /* width: 10px;
+    height: 200px; */
+}
+
+.color-slider .track {
+    border-radius: 5px;
+    background: linear-gradient(
+        to right,
+        hsl(0, 100%, 50%),
+        hsl(30, 100%, 50%),
+        hsl(60, 100%, 50%),
+        hsl(90, 100%, 50%),
+        hsl(120, 100%, 50%),
+        hsl(150, 100%, 50%),
+        hsl(180, 100%, 50%),
+        hsl(210, 100%, 50%),
+        hsl(240, 100%, 50%),
+        hsl(270, 100%, 50%),
+        hsl(300, 100%, 50%),
+        hsl(330, 100%, 50%),
+        hsl(360, 100%, 50%)
+    );
+}
+
+.color-slider .thumb {
+    box-shadow: 0 0 0 3px #000;
 }
