@@ -11,6 +11,7 @@ import Eyedropper from './tools/Eyedropper.js';
 import Canvas from './Canvas.js';
 import History from './History.js';
 import Palette from './colors//Palette.js';
+import ImageExport from './io/ImageExport.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -267,16 +268,9 @@ decreaseBtn.addEventListener("click", () => {
 });
 
 // ======== DOWNLOAD ========
-const downloadBtn = document.getElementById("download-btn");
+const exportBtn = document.getElementById("export-btn");
 
-downloadBtn.addEventListener("click", () => {
-    const canvasUrl = canvas.toDataURL("image/png", 0.5);
-    const createEl = document.createElement('a');
-    createEl.href = canvasUrl;
-    createEl.download = "new_picture";
-    createEl.click();
-    createEl.remove();
-});
+const imageExport = new ImageExport(exportBtn, canvas.canvas);
 
 // ======== UPLOAD ========
 const uploadBtn = document.getElementById("upload-btn");
