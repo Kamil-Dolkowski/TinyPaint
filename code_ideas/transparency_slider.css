@@ -1,0 +1,25 @@
+#transparency-slider {
+    width: 10px;
+    height: 130px;
+}
+
+#transparency-slider .track {
+    border-radius: 5px;
+    background:
+        linear-gradient(
+            to bottom,
+            hsla(200, 100%, 0%, 0),
+            hsla(200, 100%, 0%, 1)
+        ),
+        linear-gradient(45deg, #ddd 25%, transparent 25%),
+        linear-gradient(-45deg, #ddd 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ddd 75%),
+        linear-gradient(-45deg, transparent 75%, #ddd 75%);
+
+    background-size: 100% 100%, 10px 10px, 10px 10px, 10px 10px, 10px 10px;
+    background-position: 0 0, 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+#transparency-slider .thumb {
+    box-shadow: 0 0 0 3px #000;
+}

@@ -1,0 +1,110 @@
+#palette-window {
+    display: none;
+    position: absolute;
+    background-color: #c7c7c7; /* #0276FF */
+    border-radius: 8px;
+    outline: 5px solid #006AE8;
+    outline-offset: -5px;
+    width: 250px;
+    height: 250px;
+    padding: 5px;
+    z-index: 9999;
+    bottom: 2vh;
+    left: 8vw;
+}
+
+#palette-options {
+    display: flex;
+    margin: 10px;
+}
+
+#palette-content {
+    margin: 10px;
+}
+
+#color-picker-content {
+    justify-content: center;
+    gap: 10px;
+}
+
+#color-palette-content {
+    display: grid;
+    width: fit-content;
+    margin: auto;
+    grid-template-columns: repeat(8, 24px);
+    gap: 0;
+    background-color: #585858;
+    outline: 5px solid #006AE8;
+}
+
+.color-button {
+    width: 24px;
+    height: 24px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.color-button[data-focus="false"] {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(31, 29, 37);
+}
+
+.color-button[data-focus="true"] {
+    border-style: solid;
+    border-width: 3px;
+    transform: scale(1.2);
+}
+
+#delete-color-btn {
+    margin: 10px;
+}
+
+#current-color {
+    border-style: solid;
+    border-width: 5px;
+    border-color: #0276FF;
+}
+
+#current-color-checkerboard {
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+
+    background:
+        repeating-conic-gradient(#555 0% 25%, #aaa 0% 50%);
+    background-size: 20px 20px;
+}
+
+#color-slider {
+    width: 10px;
+    height: 130px;
+}
+
+#color-slider .track {
+    border-radius: 5px;
+    background: linear-gradient(
+        to bottom,
+        hsl(0, 100%, 50%),
+        hsl(30, 100%, 50%),
+        hsl(60, 100%, 50%),
+        hsl(90, 100%, 50%),
+        hsl(120, 100%, 50%),
+        hsl(150, 100%, 50%),
+        hsl(180, 100%, 50%),
+        hsl(210, 100%, 50%),
+        hsl(240, 100%, 50%),
+        hsl(270, 100%, 50%),
+        hsl(300, 100%, 50%),
+        hsl(330, 100%, 50%),
+        hsl(360, 100%, 50%)
+    );
+}
+
+#color-slider .thumb {
+    box-shadow: 0 0 0 3px #000;
+}
+
+#add-to-palette-btn {
+    margin: 10px;
+}

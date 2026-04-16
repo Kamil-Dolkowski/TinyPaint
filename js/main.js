@@ -9,6 +9,7 @@ import MoveZoom from './tools/MoveZoom.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
+import Palette from './colors//Palette.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -222,6 +223,13 @@ resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
 });
 
+// ======== PALETTE ========
+const paletteBtn = document.getElementById("palette-btn");
+const paletteWindow = document.getElementById("palette-window");
+const currentColor = document.getElementById("current-color");
+
+const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+
 // ======== INCREASE/DECREASE DRAW SIZE ========
 
 // -- BUTTONS --
@@ -245,14 +253,6 @@ decreaseBtn.addEventListener("click", () => {
     ctx.lineWidth -= 1;
     drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
-});
-
-// ======== COLOR PICKER ========
-const colorPicker = document.getElementById("color-picker");
-
-colorPicker.addEventListener("input", () => {
-    ctx.strokeStyle = colorPicker.value;
-    ctx.fillStyle = colorPicker.value;
 });
 
 // ======== DOWNLOAD ========
