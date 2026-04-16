@@ -31,7 +31,6 @@ const brush = new Brush(ctx, cursorCtx, drawingStatus);
 const line = new Line(ctx, cursorCtx, drawingStatus);
 const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
-const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, canvas, colorPicker);
 
 let currentTool = pencil;
 let tempTool = null;
@@ -239,6 +238,8 @@ const paletteWindow = document.getElementById("palette-window");
 const currentColor = document.getElementById("current-color");
 
 const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+
+const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, palette);
 
 // ======== INCREASE/DECREASE DRAW SIZE ========
 

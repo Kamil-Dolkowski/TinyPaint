@@ -2,10 +2,10 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Eyedropper extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus, colorPicker) {
+    constructor(ctx, cursorCtx, drawingStatus, palette) {
         super(Tool.EYEDROPPER, ctx, cursorCtx, drawingStatus);
 
-        this.colorPicker = colorPicker;
+        this.palette = palette;
     }
 
     setTool() {
@@ -18,9 +18,7 @@ export default class Eyedropper extends ToolBase {
 
         const hex = this.rgbToHex(data[0], data[1], data[2]);
 
-        this.colorPicker.value = hex;
-        this.ctx.strokeStyle = hex;
-        this.ctx.fillStyle = hex;
+        this.palette.changeColor(hex);
     }
 
     pointermove(e) {
