@@ -70,9 +70,11 @@ export default class ColorPicker {
 
             this.currentX = e.offsetX * this.canvasScaleX;
             this.currentY = e.offsetY * this.canvasScaleY;
+
+            this.cursorCanvas.setPointerCapture(e.pointerId);
         });
 
-        window.addEventListener("pointermove", e => {
+        this.cursorCanvas.addEventListener("pointermove", e => {
             if (!this.isPointerPressed) return;
 
             this.isDirty = true;
@@ -83,11 +85,13 @@ export default class ColorPicker {
             this.currentY = Math.max(0, Math.min((e.clientY - rect.top) * this.canvasScaleY, this.canvasHeight-1));
         });
 
-        window.addEventListener("pointerup", e => {
+        this.cursorCanvas.addEventListener("pointerup", e => {
             if (!this.isPointerPressed) return;
 
             this.isDirty = true;
             this.isPointerPressed = false;
+
+            this.cursorCanvas.releasePointerCapture(e.pointerId);
         });
 
         const colorPickerLoop = () => {
