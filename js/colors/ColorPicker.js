@@ -1,4 +1,4 @@
-import Slider from '../ui/Slider.js';
+import Slider from '../../ui/Slider.js';
 
 export default class ColorPicker {
     constructor(content, changeColorCallback) {
