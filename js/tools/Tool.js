@@ -5,7 +5,7 @@ const Tool = Object.freeze({
     LINE: 'line',
     FILL: 'fill',
     MOVE_ZOOM: 'move_zoom',
-    COLOR_PICKER: 'color_picker'
+    EYEDROPPER: 'eyedropper'
 });
 
 export default Tool;

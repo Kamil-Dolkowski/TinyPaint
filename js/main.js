@@ -6,6 +6,7 @@ import Brush from './tools/Brush.js';
 import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 import MoveZoom from './tools/MoveZoom.js';
+import Eyedropper from './tools/Eyedropper.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
@@ -208,6 +209,14 @@ moveZoomBtn.addEventListener("click", () => {
     currentTool.setTool();
 });
 
+// ======== EYEDROPPER ========
+const eyedropperBtn = document.getElementById("eyedropper-btn");
+
+eyedropperBtn.addEventListener("click", () => {
+    currentTool = eyedropper;
+    currentTool.setTool();
+});
+
 // ======== CLEAR ========
 const clearBtn = document.getElementById("clear-btn");
 
@@ -229,6 +238,8 @@ const paletteWindow = document.getElementById("palette-window");
 const currentColor = document.getElementById("current-color");
 
 const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+
+const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, palette);
 
 // ======== INCREASE/DECREASE DRAW SIZE ========
 
