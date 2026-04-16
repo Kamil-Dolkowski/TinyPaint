@@ -10,6 +10,7 @@ import Eyedropper from './tools/Eyedropper.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
+import Palette from './colors//Palette.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -25,8 +26,6 @@ const cursorCtx = cursorCanvas.getContext("2d");
 const canvas = new Canvas(workspace, checkerboard, canvas1, cursorCanvas, drawingStatus);
 
 // ======== TOOLS INICIALIZATION ========
-let colorPicker = document.getElementById("color-picker");
-
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
 const brush = new Brush(ctx, cursorCtx, drawingStatus);
 const line = new Line(ctx, cursorCtx, drawingStatus);
@@ -234,6 +233,13 @@ resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
 });
 
+// ======== PALETTE ========
+const paletteBtn = document.getElementById("palette-btn");
+const paletteWindow = document.getElementById("palette-window");
+const currentColor = document.getElementById("current-color");
+
+const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+
 // ======== INCREASE/DECREASE DRAW SIZE ========
 
 // -- BUTTONS --
@@ -257,14 +263,6 @@ decreaseBtn.addEventListener("click", () => {
     ctx.lineWidth -= 1;
     drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
-});
-
-// ======== COLOR PICKER ========
-// const colorPicker = document.getElementById("color-picker");
-
-colorPicker.addEventListener("input", () => {
-    ctx.strokeStyle = colorPicker.value;
-    ctx.fillStyle = colorPicker.value;
 });
 
 // ======== DOWNLOAD ========
