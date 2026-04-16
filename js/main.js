@@ -9,7 +9,7 @@ import MoveZoom from './tools/MoveZoom.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
-import Palette from './Palette.js';
+import Palette from './colors//Palette.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
