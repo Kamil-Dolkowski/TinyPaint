@@ -1,0 +1,15 @@
+#canvas-size-modal .modal-body {
+    display: flex;
+    gap: 10px;
+}
+
+#canvas-size-modal label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#canvas-size-modal input {
+    width: 60px;
+    margin: auto;
+}

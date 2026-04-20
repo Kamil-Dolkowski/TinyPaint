@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/slider.css">
     <link rel="stylesheet" href="css/color_palette.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,7 +15,7 @@
 <body>
     <div id="toolbox">
         <div class="toolbox-group">
-            <button disabled id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
+            <button id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
         </div>
         <div class="toolbox-group">
             <button disabled id="undo-btn" title="Cofnij" class="button-22"><i class="fa-solid fa-arrow-rotate-left"></i></button>
@@ -66,6 +68,35 @@
                 <button id="delete-color-btn" class="button-22-small"><i class="fa-solid fa-trash" style="margin: 2px 10px 2px 0px;"></i>Usuń kolor</button>
             </div>
             <div id="color-picker" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="settings-window">
+        <button>Rozmiar płótna</button>
+        <button>Kolor tła</button>
+    </div>
+
+    <div id="canvas-size-modal" class="modal">
+        <span class="modal-close">&times;</span>
+
+        <div class="modal-header">
+            <h3>Rozmiar płótna</h3>
+        </div>
+
+        <div class="modal-body">
+            <label>
+                Szerokość [px]
+                <input type="number" id="canvas-size-width" min="1" value="800">
+            </label>
+            <p>x</p>
+            <label>
+                Wysokość [px]
+                <input type="number" id="canvas-size-height" min="1" value="600">
+            </label>
+        </div>
+        
+        <div class="modal-footer">
+            <button id="canvas-size-submit-btn" class="button-22-small">Zmień</button>
         </div>
     </div>
 
