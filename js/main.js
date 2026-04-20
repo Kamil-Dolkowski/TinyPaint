@@ -11,6 +11,8 @@ import Eyedropper from './tools/Eyedropper.js';
 import Canvas from './Canvas.js';
 import History from './History.js';
 import Palette from './colors//Palette.js';
+import ImageExport from './io/ImageExport.js';
+import ImageImport from './io/ImageImport.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -267,38 +269,14 @@ decreaseBtn.addEventListener("click", () => {
 });
 
 // ======== DOWNLOAD ========
-const downloadBtn = document.getElementById("download-btn");
+const exportBtn = document.getElementById("export-btn");
 
-downloadBtn.addEventListener("click", () => {
-    const canvasUrl = canvas.toDataURL("image/png", 0.5);
-    const createEl = document.createElement('a');
-    createEl.href = canvasUrl;
-    createEl.download = "new_picture";
-    createEl.click();
-    createEl.remove();
-});
+const imageExport = new ImageExport(exportBtn, canvas.canvas);
 
 // ======== UPLOAD ========
-const uploadBtn = document.getElementById("upload-btn");
+const importBtn = document.getElementById("import-btn");
 
-uploadBtn.addEventListener("click", () => {
-    upload.click();
-});
-
-const upload = document.getElementById("upload");
-
-upload.onchange = function(e) {
-    img.onload = load_image;
-    img.src = URL.createObjectURL(this.files[0]);
-};
-
-function load_image() {
-    resizeCanvas();
-        
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-    history.addCanvasToHistory();
-}
+const imageImport = new ImageImport(importBtn, canvas, history);
 
 // ======== EXIT ALERT ========
 window.addEventListener("beforeunload", e => {
