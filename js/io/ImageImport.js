@@ -23,6 +23,9 @@ export default class ImageImport {
                 ctx.imageSmoothingEnabled = false;
                 ctx.drawImage(img, 0, 0);
                 this.history.addCanvasToHistory();
+
+                // reset value
+                e.target.value = "";
             };
 
             img.src = URL.createObjectURL(file);
