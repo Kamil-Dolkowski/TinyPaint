@@ -25,6 +25,26 @@ modal.addEventListener("pointerdown", e => {
     }
 });
 
+widthInput.addEventListener("blur", () => {
+    let value = Number(widthInput.value);
+
+    if (isNaN(value)) value = 1;
+
+    value = Math.max(1, Math.min(value, 10000));
+
+    widthInput.value = value;
+});
+
+heightInput.addEventListener("blur", () => {
+    let value = Number(heightInput.value);
+
+    if (isNaN(value)) value = 1;
+
+    value = Math.max(1, Math.min(value, 10000));
+
+    heightInput.value = value;
+});
+
 saveBtn.addEventListener("click", () => {
     save();
 });
