@@ -27,6 +27,8 @@ const cursorCtx = cursorCanvas.getContext("2d");
 
 const canvas = new Canvas(workspace, checkerboard, canvas1, cursorCanvas, drawingStatus);
 
+initSettingsModal(canvas);
+
 // ======== TOOLS INICIALIZATION ========
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
 const brush = new Brush(ctx, cursorCtx, drawingStatus);
