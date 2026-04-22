@@ -30,7 +30,7 @@ widthInput.addEventListener("blur", () => {
 
     if (isNaN(value)) value = 1;
 
-    value = Math.max(1, Math.min(value, 10000));
+    value = Math.max(1, Math.min(value, 3840));
 
     widthInput.value = value;
 });
@@ -40,7 +40,7 @@ heightInput.addEventListener("blur", () => {
 
     if (isNaN(value)) value = 1;
 
-    value = Math.max(1, Math.min(value, 10000));
+    value = Math.max(1, Math.min(value, 2160));
 
     heightInput.value = value;
 });
