@@ -1,15 +1,16 @@
-#canvas-size-modal .modal-body {
+/* ====== CANVAS SIZE ====== */
+
+#canvas-size-inputs {
     display: flex;
-    gap: 10px;
 }
 
-#canvas-size-modal label {
+#canvas-size-settings label {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-#canvas-size-modal input {
+#canvas-size-settings input {
     width: 60px;
     margin: auto;
 }

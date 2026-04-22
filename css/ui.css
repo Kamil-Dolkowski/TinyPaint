@@ -1,7 +1,6 @@
 /* =============== WINDOW =============== */
 
 .window {
-    display: none;
     position: absolute;
     background-color: #c7c7c7;
     border-radius: 8px;
@@ -13,18 +12,48 @@
 
 /* =============== MODAL =============== */
 
-/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal2 */
-.modal {
+/*
+Structure:
+- modal:
+    - modal-content:
+        - modal-close
+        - modal-header
+        - modal-body
+        - modal-footer
+*/
+
+.modal.hidden {
     display: none;
-    position: absolute;
+}
+
+/* The Modal (background) */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    position: relative;
     background-color: #c7c7c7;
     border-radius: 8px;
     outline: 5px solid #006AE8;
     outline-offset: -5px;
     padding: 10px;
-    width: 20vw;
-    height: 30vh;
-    z-index: 9999;
+
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
 .modal-close {
@@ -43,28 +72,28 @@
   cursor: pointer;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 20%;
-    width: 100%;
+.modal-header,
+.modal-footer {
+    flex-shrink: 0;
 }
 
 .modal-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60%;
-    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
 }
 
-.modal-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 20%;
-    width: 100%;
+.modal-body ul {
+    padding-inline-start: 0;
+}
+
+.modal-body li {
+    padding-bottom: 12px;
+    border-top: 1px solid #000;
+}
+
+.modal-body li:last-child {
+    border-bottom: 1px solid #000;
 }
 
 /* =============== BUTTONS =============== */
