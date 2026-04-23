@@ -11,6 +11,33 @@ The application has only polish interface now, but I plan to add english interfa
 
 # Changelog
 
+## [1.0.0] - 2026-04-23
+
+### Added
+- new canvas system
+- new tools: move-zoom, fit-to-screen, eyedropper, palette (color-palette and color-picker)
+- new settings options (change canvas size)
+- move-zoom: holding CTRL switches current tool to move-zoom
+- move-zoom: holding SCROLL switches current tool to move-zoom
+- add new 'Roboto' font
+- ToolBase class - the base of tool classes
+- 'code_ideas' directory for unused and experimental code ideas
+- Slider class - custom slider
+
+### Changed
+- canvas has size, it's not fullscreen now
+- color button was changed to current color button and now is non-interactive
+- new import/export functions
+- pencil: pencil now draws true 1 px line (thanks to Bresenham algorithm)
+- improved code structure: division code into multiple files/modules and directories, better OOP
+ 
+### Fixed
+- shortcuts for undo/redo
+- undo after changing eraser bug
+- can draw on space between buttons
+- canvas border (offset) bug
+
+
 ## [0.5.0] - 2026-03-30
 The first changes after uploading the project to GitHub.
 
@@ -23,6 +50,7 @@ The first changes after uploading the project to GitHub.
 ### Fixed
 - hidden unimplemented buttons (fill, text, move, zoom, pick color, select, background)
 - fixed line color visualization - now visualization has the same color as drawing line
+
 
 
 ## [0.4.0] - 2026-03-26
