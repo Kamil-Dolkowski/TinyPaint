@@ -42,7 +42,7 @@ html, body {
     top: 2vh;
     left: 2vw;
     overflow-x: auto;
-    width: auto;
+    width: 98vw;
     z-index: 9999;
     pointer-events: none;
 }
