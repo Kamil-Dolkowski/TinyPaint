@@ -1,75 +1,106 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
+.hidden {
+    display: none;
 }
 
-#workspace {
-    display: grid;
-    place-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #585858;
-}
+/* =============== WINDOW =============== */
 
-#checkerboard {
-    outline: 3px solid #000000;
-    pointer-events: none;
-    image-rendering: pixelated;
+.window {
     position: absolute;
-    z-index: 0;
-}
-
-#canvas {
-    pointer-events: none;
-    image-rendering: pixelated;
-    position: absolute;
-    z-index: 1;
-}
-
-#cursor-canvas {
-    image-rendering: pixelated;
-    position: absolute;
-    z-index: 2;
-}
-
-#toolbox {
-    display: flex;
-    position: absolute;
-    top: 2vh;
-    left: 2vw;
-    overflow-x: auto;
-    width: auto;
+    background-color: #c7c7c7;
+    border-radius: 8px;
+    outline: 5px solid #006AE8;
+    outline-offset: -5px;
+    padding: 10px;
     z-index: 9999;
-    pointer-events: none;
 }
 
-.toolbox-group {
-    display: flex;
-    margin: 10px;
+/* =============== MODAL =============== */
+
+/*
+Structure:
+- modal:
+    - modal-content:
+        - modal-close
+        - modal-header
+        - modal-body
+        - modal-footer
+*/
+
+.modal.hidden {
+    display: none;
 }
 
-#brush-settings {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-    bottom: 2vh;
-    left: 2vw;
-    z-index: 9999;
-    pointer-events: none;
-}
+/* The Modal (background) */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
 
-#size-lbl {
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    font-size: x-large;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    justify-content: center;
+
+    background: rgba(0,0,0,0.4);
 }
+
+.modal-content {
+    position: relative;
+    background-color: #c7c7c7;
+    border-radius: 8px;
+    outline: 5px solid #006AE8;
+    outline-offset: -5px;
+    padding: 20px;
+
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.modal-close {
+  color: #000;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header,
+.modal-footer {
+    flex-shrink: 0;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.modal-body ul {
+    padding-inline-start: 0;
+}
+
+.modal-body li {
+    padding-bottom: 12px;
+    border-top: 1px solid #000;
+}
+
+.modal-body li:last-child {
+    border-bottom: 1px solid #000;
+}
+
+/* =============== BUTTONS =============== */
 
 /* https://getcssscan.com/css-buttons-examples */
 .button-22 {

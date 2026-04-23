@@ -20,7 +20,7 @@ export default class Canvas {
 
         this.currentZoom = 1; // current canvas css scale
         this.fitZoom = 1; // fit-to-screen zoom
-        this.maxZoom = 100; // zoom in limit
+        this.maxZoom = 1000; // zoom in limit
 
         this.resize();
         this.fitToScreen();

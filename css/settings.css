@@ -1,0 +1,16 @@
+/* ====== CANVAS SIZE ====== */
+
+#canvas-size-inputs {
+    display: flex;
+}
+
+#canvas-size-settings label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#canvas-size-settings input {
+    width: 60px;
+    margin: auto;
+}

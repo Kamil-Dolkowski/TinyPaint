@@ -5,15 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
+
+    <!-- css -->
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/slider.css">
     <link rel="stylesheet" href="css/color_palette.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Toolbox -->
     <div id="toolbox">
         <div class="toolbox-group">
-            <button disabled id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
+            <button id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
         </div>
         <div class="toolbox-group">
             <button disabled id="undo-btn" title="Cofnij" class="button-22"><i class="fa-solid fa-arrow-rotate-left"></i></button>
@@ -44,6 +52,7 @@
         </div>
     </div>
 
+    <!-- Brush Settings -->
     <div id="brush-settings">
         <div id="size-lbl">1</div>
         <button id="increase-btn" class="button-22"><i class="fa-solid fa-plus"></i></button>
@@ -55,6 +64,7 @@
         <button id="palette-btn" title="Paleta" class="button-22"><i class="fa-solid fa-palette"></i></button>
     </div>
 
+    <!-- Palette -->
     <div id="palette-window">
         <div id="palette-options">
             <button id="color-palette-btn" class="button-22-small"><!--<i class="fa-solid fa-palette"></i>-->Paleta kolorów</button>
@@ -69,6 +79,47 @@
         </div>
     </div>
 
+    <!-- Settings -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span class="modal-close">&times;</span>
+                <h2>Ustawienia</h2>
+            </div>
+            
+            <div class="modal-body">
+                <ul>
+                    <li id="canvas-size-settings">
+                        <h3>Rozmiar płótna</h3>
+
+                        <div id="canvas-size-inputs">
+                            <label>
+                                Szerokość [px]
+                                <input type="number" id="canvas-size-width-input" min="1" value="800">
+                            </label>
+                            <p>x</p>
+                            <label>
+                                Wysokość [px]
+                                <input type="number" id="canvas-size-height-input" min="1" value="600">
+                            </label>
+                        </div>
+                    </li>
+                    <li class="hidden">
+                        <h3>Kolor tła</h3>
+
+                        <input type="color" id="background-input">
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-footer">
+                <button id="settings-save" class="button-22-small">Zapisz zmiany</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workspace -->
     <div id="workspace">
         <canvas id="cursor-canvas"></canvas>
         <canvas id="canvas"></canvas>
@@ -78,4 +129,5 @@
     </div>
 
     <script type="module" src="js/main.js"></script>
+    <script src="js/settings.js"></script>
 </body>
