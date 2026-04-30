@@ -11,6 +11,8 @@ class DrawingStatus {
 
     canvasWidth = null;
     canvasHeight = null;
+
+    currentTool = null;
 }
 
 export default new DrawingStatus();
