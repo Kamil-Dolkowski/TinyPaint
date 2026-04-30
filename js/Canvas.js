@@ -97,8 +97,9 @@ export default class Canvas {
         return true;
     }
 
-    zoomBy(factor) {
-        return this.setZoom(this.currentZoom * factor);
+    zoomBy(factor, baseZoom = this.currentZoom) {
+        if (baseZoom === null) baseZoom = this.currentZoom;
+        return this.setZoom(baseZoom * factor);
     }
 
     fitToScreen() {

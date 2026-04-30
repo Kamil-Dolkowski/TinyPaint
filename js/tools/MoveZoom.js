@@ -36,49 +36,44 @@ export default class MoveZoom extends ToolBase {
         
     }
 
-    zoomIn(e) {
+    zoomIn(zoomPoint, zoomValue = this.zoomValue, firstZoom = null) {
         // ==== zoom ====
-        const isZoomDone = this.canvas.zoomBy(this.zoomValue);
-
+        const lastZoom = this.canvas.currentZoom;
+        const isZoomDone = this.canvas.zoomBy(zoomValue, firstZoom);
+        const currentZoom = this.canvas.currentZoom;
+        
         if (isZoomDone == false) return;
-
-        // ==== move canvas to zoom to the cursor position ====
-
-        // 1. calculate distances between: canvas (before zoom) top left point and cursor point
-        const rect = this.canvas.cursorCanvas.getBoundingClientRect();
-
-        let deltaX = e.clientX - rect.left;
-        let deltaY = e.clientY - rect.top;
-
-        // 2. calculate zoom distances = distance * zoomValue
-        const zoomX = deltaX * this.zoomValue;
-        const zoomY = deltaY * this.zoomValue;
-
-        // 3. calculate deltas to move
-        deltaX = deltaX - zoomX;
-        deltaY = deltaY - zoomY;
-
-        // 4. move
-        this.canvas.moveRelative(deltaX, deltaY);
+        
+        // ==== move ====
+        const deltaZoomValue = (currentZoom/lastZoom);
+        this.moveCanvasAfterZoom(zoomPoint, deltaZoomValue);
     }
 
-    zoomOut(e) {
+    zoomOut(zoomPoint, zoomValue = 1/this.zoomValue, firstZoom = null) {
         // ==== zoom ====
-        const isZoomDone = this.canvas.zoomBy(1/this.zoomValue);
+        const lastZoom = this.canvas.currentZoom;
+        const isZoomDone = this.canvas.zoomBy(zoomValue, firstZoom);
+        const currentZoom = this.canvas.currentZoom;
 
         if (isZoomDone == false) return;
+        
+        // ==== move ====
+        const deltaZoomValue = (currentZoom/lastZoom);
+        this.moveCanvasAfterZoom(zoomPoint, deltaZoomValue);
+    }
 
-        // ==== move canvas to zoom to the cursor position ====
+    moveCanvasAfterZoom(zoomPoint, deltaZoomValue) {
+        // ==== move canvas after zoom to zoom to the point (cursor/middle point of touch) position ====
 
         // 1. calculate distances between: canvas (before zoom) top left point and cursor point
         const rect = this.canvas.cursorCanvas.getBoundingClientRect();
 
-        let deltaX = e.clientX - rect.left;
-        let deltaY = e.clientY - rect.top;
+        let deltaX = zoomPoint.x - rect.left;
+        let deltaY = zoomPoint.y - rect.top;
 
-        // 2. calculate zoom distances = distance * zoomValue
-        const zoomX = deltaX / this.zoomValue;
-        const zoomY = deltaY / this.zoomValue;
+        // 2. calculate zoom distances = distance * deltaZoomValue
+        const zoomX = deltaX * deltaZoomValue;
+        const zoomY = deltaY * deltaZoomValue;
 
         // 3. calculate deltas to move
         deltaX = deltaX - zoomX;

@@ -10,6 +10,7 @@ import Eyedropper from './tools/Eyedropper.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
+import Gesture from './Gesture.js';
 import Palette from './colors//Palette.js';
 import ImageExport from './io/ImageExport.js';
 import ImageImport from './io/ImageImport.js';
@@ -47,8 +48,14 @@ cursorCanvas.style.touchAction = "none";
 
 // ======== CANVAS EVENTS ========
 
+const gesture = new Gesture(moveZoom, canvas);
+
 // 1 - pointerdown
 cursorCanvas.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch") {
+        gesture.addPointer(e);
+    }
+
     if (e.button == 0) {
         const rect = cursorCanvas.getBoundingClientRect();
 
@@ -85,6 +92,10 @@ cursorCanvas.addEventListener("pointerdown", e => {
 
 // 2 - pointermove
 window.addEventListener("pointermove", e => {
+    if (e.pointerType === "touch") {
+        gesture.pointermove(e);
+    }
+
     const rect = cursorCanvas.getBoundingClientRect();
 
     drawingStatus.currentX = (e.clientX - rect.left) / canvas.currentZoom;
@@ -108,6 +119,8 @@ window.addEventListener("pointerout", e => {
 });
 
 function stopDraw(e) {
+    gesture.deletePointer(e);
+
     // scroll button -> switch off move-zoom
     if (e.button == 1) {
         currentTool = tempTool;
@@ -324,10 +337,12 @@ function scrollHandler(e) {
     if (currentTool.tool == Tool.MOVE_ZOOM) {
         e.preventDefault();
 
+        const zoomPoint = {x: e.clientX, y: e.clientY};
+
         if (e.deltaY > 0) {
-            currentTool.zoomOut(e);
+            currentTool.zoomOut(zoomPoint);
         } else {
-            currentTool.zoomIn(e);
+            currentTool.zoomIn(zoomPoint);
         }
 
         return;
