@@ -48,7 +48,7 @@ cursorCanvas.style.touchAction = "none";
 
 // ======== CANVAS EVENTS ========
 
-const gesture = new Gesture(moveZoom, canvas);
+const gesture = new Gesture(moveZoom, canvas, drawingStatus);
 
 // 1 - pointerdown
 cursorCanvas.addEventListener("pointerdown", e => {
@@ -88,10 +88,12 @@ cursorCanvas.addEventListener("pointerdown", e => {
         // Clear cursor canvas
         cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
     }
+
+    cursorCanvas.setPointerCapture(e.pointerId);
 });
 
 // 2 - pointermove
-window.addEventListener("pointermove", e => {
+cursorCanvas.addEventListener("pointermove", e => {
     if (e.pointerType === "touch") {
         gesture.pointermove(e);
     }
@@ -109,16 +111,18 @@ window.addEventListener("pointermove", e => {
 });
 
 // 3 - pointerup
-window.addEventListener("pointerup", e => {
+cursorCanvas.addEventListener("pointerup", e => {
     stopDraw(e);
 });
 
 // 3 - pointerout
-window.addEventListener("pointerout", e => {
+cursorCanvas.addEventListener("pointerout", e => {
     // stopDraw(e);
 });
 
 function stopDraw(e) {
+    cursorCanvas.releasePointerCapture(e.pointerId);
+    
     gesture.deletePointer(e);
 
     // scroll button -> switch off move-zoom
