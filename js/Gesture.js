@@ -19,40 +19,10 @@ export default class Gesture {
         // update pointer coords
         this.activePointers.set(e.pointerId, {x: e.clientX, y: e.clientY});
 
-        // ==== zoom and move ====
+        // ==== gestures ====
         if (this.activePointers.size == 2) {
-            // ==== zoom ====
-            const currentDistance = this.calcDistance();
-
-            if (this.lastDistance === null) {
-                this.firstDistance = currentDistance;
-                this.lastDistance = currentDistance;
-                this.firstZoom = this.canvas.currentZoom;
-                this.middlePoint = this.getMiddlePoint();
-                return;
-            }
-
-            const zoomValue = currentDistance / this.firstDistance;
-
-            if (currentDistance > this.lastDistance) {
-                this.moveZoom.zoomIn(this.middlePoint, zoomValue, this.firstZoom);
-            } else {
-                this.moveZoom.zoomOut(this.middlePoint, zoomValue, this.firstZoom);
-            }
-
-            this.lastDistance = currentDistance;
-
-            // ==== move ====
-            const newMiddlePoint = this.getMiddlePoint();
-
-            if (this.calcDistance(newMiddlePoint, this.middlePoint) > 1) {
-                const dx = newMiddlePoint.x - this.middlePoint.x;
-                const dy = newMiddlePoint.y - this.middlePoint.y;
-
-                this.canvas.moveRelative(dx, dy);
-
-                this.middlePoint = newMiddlePoint;
-            }
+            this.pinchZoom();
+            this.move();
         }
     }
 
@@ -70,6 +40,45 @@ export default class Gesture {
             this.middlePoint = null;
         }
     }
+
+    // ========= GESTURES =========
+
+    pinchZoom() {
+        const currentDistance = this.calcDistance();
+
+        if (this.lastDistance === null) {
+            this.firstDistance = currentDistance;
+            this.lastDistance = currentDistance;
+            this.firstZoom = this.canvas.currentZoom;
+            this.middlePoint = this.getMiddlePoint();
+            return;
+        }
+
+        const zoomValue = currentDistance / this.firstDistance;
+
+        if (currentDistance > this.lastDistance) {
+            this.moveZoom.zoomIn(this.middlePoint, zoomValue, this.firstZoom);
+        } else {
+            this.moveZoom.zoomOut(this.middlePoint, zoomValue, this.firstZoom);
+        }
+
+        this.lastDistance = currentDistance;
+    }
+
+    move() {
+        const newMiddlePoint = this.getMiddlePoint();
+
+        if (this.calcDistance(newMiddlePoint, this.middlePoint) > 1) {
+            const dx = newMiddlePoint.x - this.middlePoint.x;
+            const dy = newMiddlePoint.y - this.middlePoint.y;
+
+            this.canvas.moveRelative(dx, dy);
+
+            this.middlePoint = newMiddlePoint;
+        }
+    }
+
+    // ========= OTHER METHODS =========
 
     calcDistance(p1 = null, p2 = null) {
         if (this.activePointers.size != 2) return null;
