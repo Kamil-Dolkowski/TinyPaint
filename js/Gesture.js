@@ -22,7 +22,7 @@ export default class Gesture {
         // ==== gestures ====
         if (this.activePointers.size == 2) {
             this.pinchZoom();
-            this.move();
+            this.pinchMove();
         }
     }
 
@@ -65,7 +65,7 @@ export default class Gesture {
         this.lastDistance = currentDistance;
     }
 
-    move() {
+    pinchMove() {
         const newMiddlePoint = this.getMiddlePoint();
 
         if (this.calcDistance(newMiddlePoint, this.middlePoint) > 1) {
