@@ -29,7 +29,11 @@ export default class PointerManager {
         //     }
         // }
     }
-    
+
+    getPointerCount() {
+        return this.activePointers.size;
+    }
+
     // ========= POINTER EVENTS =========
 
     pointerdown(e) {
@@ -64,7 +68,7 @@ export default class PointerManager {
         this.activePointers.set(e.pointerId, pointerData);
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
-        this.interactionController.onInput(pointerData, gestureData);
+        this.interactionController.onInput(pointerData, gestureData, this.getPointerCount());
     }
 
     pointermove(e) {
@@ -93,7 +97,7 @@ export default class PointerManager {
         pointerData.client = {x: e.clientX, y: e.clientY};
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
-        this.interactionController.onInput(pointerData, gestureData);
+        this.interactionController.onInput(pointerData, gestureData, this.getPointerCount());
     }
     
     pointerup(e) {
@@ -127,6 +131,6 @@ export default class PointerManager {
         this.activePointers.delete(e.pointerId);
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
-        this.interactionController.onInput(pointerData, gestureData);
+        this.interactionController.onInput(pointerData, gestureData, this.getPointerCount());
     }
 }
