@@ -1,0 +1,88 @@
+export default class GestureManager {
+    constructor(canvas) {
+        this.canvas = canvas;
+
+        // Touch Gestures Variables
+        this.lastDistance = null;
+        this.firstDistance = null;
+        this.firstZoom = null;
+        this.middlePoint = null;
+    }
+
+    update(activePointers) {
+        if (activePointers.length != 2) {
+            this.reset();
+            return null;
+        }
+
+        const gestureData = this.getGestureData(activePointers);
+
+        return gestureData;
+    }
+
+    reset() {
+        this.lastDistance = null;
+        this.firstDistance = null;
+        this.firstZoom = null;
+        this.middlePoint = null;
+    }
+
+    // ========= GESTURES =========
+
+    // transform - zoom and move
+    getGestureData(activePointers) {
+        if (activePointers.length != 2) return null;
+
+        const [p1, p2] = activePointers;
+        const currentDistance = this.calcDistance(p1.client, p2.client);
+
+        if (this.lastDistance === null) {
+            this.firstDistance = currentDistance;
+            this.lastDistance = currentDistance;
+            this.firstZoom = this.canvas.currentZoom;
+            this.middlePoint = this.getMiddlePoint(p1.client, p2.client);
+
+            const gestureData = {
+                gesture: "transform",
+                middlePoint: this.middlePoint,
+                zoomValue: 1,
+                firstZoom: this.firstZoom,
+                delta: {x: 0, y: 0}
+            };
+
+            return gestureData;
+        }
+
+        // pinch / zoom
+        const zoomValue = currentDistance / this.firstDistance;
+
+        // pan / move
+        const newMiddlePoint = this.getMiddlePoint(p1.client, p2.client);
+
+        const dx = newMiddlePoint.x - this.middlePoint.x;
+        const dy = newMiddlePoint.y - this.middlePoint.y;
+
+        const gestureData = {
+            gesture: "transform",
+            middlePoint: newMiddlePoint,
+            zoomValue: zoomValue,
+            firstZoom: this.firstZoom,
+            delta: {x: dx, y: dy}
+        };
+
+        this.lastDistance = currentDistance;
+        this.middlePoint = newMiddlePoint;
+        
+        return gestureData;
+    }
+
+    // ========= OTHER METHODS =========
+
+    calcDistance(p1, p2) {
+        return Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2);
+    }
+
+    getMiddlePoint(p1, p2) {
+        return {x: (p1.x + p2.x)/2, y: (p1.y + p2.y)/2}
+    }
+}

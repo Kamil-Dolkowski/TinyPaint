@@ -6,6 +6,10 @@ html, body {
     font-family: "Roboto", sans-serif;
 }
 
+canvas {
+    touch-action: none;
+}
+
 #workspace {
     position: relative;
     display: grid;

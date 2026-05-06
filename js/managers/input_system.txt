@@ -1,0 +1,58 @@
+Pointer Event
+ |
+\|/
+PointerManager (mouse, touch, pen) (input unification) [sensor]
+ |
+\|/
+GestureManager (detects gestures) [detection]
+ |
+\|/
+InteractionController (decides which data (pointer or gesture) gives to ToolManager) [decision]
+ |
+\|/
+ToolManager (decides which tool draw) [router]
+ |
+\|/
+Tool (draw logic) [interpreter]
+ |
+\|/
+Canvas (basic canvas operations)
+
+=== === === === === === === === === === === === ===
+
+Pointer Event -> PointerManager
+PointerManager -> GestureManager
+PointerManager + GestureManager -> InteractionController
+InteractionController -> Tool / Gesture
+Tool -> Canvas
+
+
+
+
+## Input System:
+### 1. PointerManager
+- storing, normalization and unification pointer data
+- gives pointerData to InteractionManager
+- gives activePointers array to GestureManager
+
+### 2. GestureManager
+- identifying gestures
+- gives gestureData to InteractionManager
+
+### 3. InteractionController
+- decides if tool or gesture
+
+
+
+[PM] --activePointers-> [GM] --gestureData-> [IC] --> [T]
+  |                                           ^
+  \-------------pointerData-------------------|
+
+
+1 - PointerManager - przechowywanie, normalizacja i unifikacja danych o pointerach; przekazuje pointerData do InteractionManager
+2 - GestureManager - rozpoznawanie gestów; przekazuje gestureData 
+3 - InteractionController - decyduje czy wykonać pointer czy gesture, jeśli pointer (nie ma gestu) to przekazuje pointerData do Tool, 
+a jeśli jest gest to przekazuje gestureData do Gesture, które wie co zrobić z danym gestem 
+4 - Tool - wie co zrobić z pointerData 
+5 - Gesture - wie co zrobić z gestureData
+

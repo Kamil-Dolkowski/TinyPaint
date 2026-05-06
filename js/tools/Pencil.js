@@ -10,14 +10,46 @@ export default class Pencil extends ToolBase {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    pointerdown(e) {
+    onInput(pointerData) {
+        switch (pointerData.eventType) {
+            case "pointerdown":
+                this.pointerdown(pointerData);
+                break;
+            case "pointermove":
+                this.pointermove(pointerData);
+                break;
+        }
+    }
+
+    pointerdown(pointerData) {
+        const currentX = Math.floor(pointerData.current.x);
+        const currentY = Math.floor(pointerData.current.y);
+
+        this.ctx.fillRect(currentX, currentY, 1, 1);
+    }
+
+    pointermove(pointerData) {
+        const x0 = pointerData.last.x;
+        const y0 = pointerData.last.y;
+        const x1 = pointerData.current.x;
+        const y1 = pointerData.current.y;
+
+        this.drawLine(x0, y0, x1, y1);
+    }
+
+
+
+
+
+
+    pointerdown1(e) {
         const currentX = Math.floor(this.drawingStatus.currentX);
         const currentY = Math.floor(this.drawingStatus.currentY);
 
         this.ctx.fillRect(currentX, currentY, 1, 1);
     }
 
-    pointermove(e) {
+    pointermove1(e) {
         const x0 = this.drawingStatus.lastX;
         const y0 = this.drawingStatus.lastY;
         const x1 = this.drawingStatus.currentX;
@@ -29,7 +61,7 @@ export default class Pencil extends ToolBase {
         this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
-    pointerup(e) {
+    pointerup1(e) {
 
     }
 

@@ -36,6 +36,10 @@ export default class MoveZoom extends ToolBase {
         
     }
 
+    move(pointerData) {
+        this.canvas.moveRelative(pointerData.delta.x, pointerData.delta.y);
+    }
+
     zoomIn(zoomPoint, zoomValue = this.zoomValue, firstZoom = null) {
         // ==== zoom ====
         const lastZoom = this.canvas.currentZoom;
