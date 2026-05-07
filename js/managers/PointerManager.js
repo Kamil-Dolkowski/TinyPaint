@@ -68,7 +68,7 @@ export default class PointerManager {
         this.activePointers.set(e.pointerId, pointerData);
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
-        this.interactionController.onInput(pointerData, gestureData, this.getPointerCount());
+        this.interactionController.onInput(pointerData, gestureData);
     }
 
     pointermove(e) {
@@ -97,7 +97,7 @@ export default class PointerManager {
         pointerData.client = {x: e.clientX, y: e.clientY};
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
-        this.interactionController.onInput(pointerData, gestureData, this.getPointerCount());
+        this.interactionController.onInput(pointerData, gestureData);
     }
     
     pointerup(e) {
@@ -131,6 +131,6 @@ export default class PointerManager {
         this.activePointers.delete(e.pointerId);
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
-        this.interactionController.onInput(pointerData, gestureData, this.getPointerCount());
+        this.interactionController.onInput(pointerData, gestureData);
     }
 }

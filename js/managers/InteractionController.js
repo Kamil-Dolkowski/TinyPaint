@@ -4,16 +4,17 @@ export default class InteractionController {
         this.isGesture = false;
     }
 
-    onInput(pointerData, gestureData, pointerCount) {
-        // reset/end gesture
-        if (this.isGesture && pointerCount == 0) {
-            this.isGesture = false;
-        }
-
+    onInput(pointerData, gestureData) {
         if (gestureData) {
             this.isGesture = true;
-            this.toolManager.onInputGesture(gestureData);
+
+            if (gestureData.phase != "end") {
+                this.toolManager.onInputGesture(gestureData);
+            }
         } else {
+            this.isGesture = false;
+
+            // delay for pointerdown
             if (pointerData.eventType == "pointerdown") {
                 setTimeout(() => {
                     if (!this.isGesture) {
@@ -24,9 +25,7 @@ export default class InteractionController {
                 return;
             }
 
-            if (!this.isGesture) {
-                this.toolManager.onInputPointer(pointerData);
-            }
+            this.toolManager.onInputPointer(pointerData);
         }
     }
 }

@@ -2,7 +2,9 @@ export default class GestureManager {
     constructor(canvas) {
         this.canvas = canvas;
 
-        // Touch Gestures Variables
+        this.isGesture = false;
+
+        // Transform Gesture Variables
         this.lastDistance = null;
         this.firstDistance = null;
         this.firstZoom = null;
@@ -10,14 +12,7 @@ export default class GestureManager {
     }
 
     update(activePointers) {
-        if (activePointers.length != 2) {
-            this.reset();
-            return null;
-        }
-
-        const gestureData = this.getGestureData(activePointers);
-
-        return gestureData;
+        return this.getGestureData(activePointers);
     }
 
     reset() {
@@ -31,12 +26,34 @@ export default class GestureManager {
 
     // transform - zoom and move
     getGestureData(activePointers) {
-        if (activePointers.length != 2) return null;
+        if (activePointers.length == 0) {
+            this.isGesture = false;
+        }
+
+        if (activePointers.length != 2) {
+            this.reset();
+
+            if (!this.isGesture) {
+                return null;
+            } else {
+                const gestureData = {
+                    gesture: "transform",
+                    phase: "end",
+                    middlePoint: null,
+                    zoomValue: null,
+                    firstZoom: null,
+                    delta: {x: 0, y: 0}
+                };
+
+                return gestureData;
+            }
+        }
 
         const [p1, p2] = activePointers;
         const currentDistance = this.calcDistance(p1.client, p2.client);
 
         if (this.lastDistance === null) {
+            this.isGesture = true;
             this.firstDistance = currentDistance;
             this.lastDistance = currentDistance;
             this.firstZoom = this.canvas.currentZoom;
@@ -44,6 +61,7 @@ export default class GestureManager {
 
             const gestureData = {
                 gesture: "transform",
+                phase: "start",
                 middlePoint: this.middlePoint,
                 zoomValue: 1,
                 firstZoom: this.firstZoom,
@@ -64,6 +82,7 @@ export default class GestureManager {
 
         const gestureData = {
             gesture: "transform",
+            phase: "update",
             middlePoint: newMiddlePoint,
             zoomValue: zoomValue,
             firstZoom: this.firstZoom,
@@ -72,7 +91,7 @@ export default class GestureManager {
 
         this.lastDistance = currentDistance;
         this.middlePoint = newMiddlePoint;
-        
+
         return gestureData;
     }
 
