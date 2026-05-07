@@ -3,6 +3,7 @@ export default class GestureManager {
         this.canvas = canvas;
 
         this.isGesture = false;
+        this.isGesturePrev = false;
 
         // Transform Gesture Variables
         this.lastDistance = null;
@@ -27,6 +28,7 @@ export default class GestureManager {
     // transform - zoom and move
     getGestureData(activePointers) {
         if (activePointers.length == 0) {
+            if (this.isGesture) this.isGesturePrev = true;
             this.isGesture = false;
         }
 
@@ -34,7 +36,20 @@ export default class GestureManager {
             this.reset();
 
             if (!this.isGesture) {
-                return null;
+                if (!this.isGesturePrev) return null;
+
+                this.isGesturePrev = false;
+
+                const gestureData = {
+                    gesture: "transform",
+                    phase: "end",
+                    middlePoint: null,
+                    zoomValue: null,
+                    firstZoom: null,
+                    delta: {x: 0, y: 0}
+                };
+
+                return gestureData;
             } else {
                 const gestureData = {
                     gesture: "transform",

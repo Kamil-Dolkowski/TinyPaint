@@ -68,7 +68,6 @@ ctx.strokeStyle = "black";
 // 1 - pointerdown
 cursorCanvas.addEventListener("pointerdown", e => {
     pointerManager.pointerdown(e);
-
     cursorCanvas.setPointerCapture(e.pointerId);
 });
 
@@ -79,23 +78,9 @@ cursorCanvas.addEventListener("pointermove", e => {
 
 // 3 - pointerup
 cursorCanvas.addEventListener("pointerup", e => {
-    stopDraw(e);
-});
-
-// 3 - pointerout
-cursorCanvas.addEventListener("pointerout", e => {
-    // stopDraw(e);
-});
-
-function stopDraw(e) {
     cursorCanvas.releasePointerCapture(e.pointerId);
-
     pointerManager.pointerup(e);
-
-    if (toolManager.currentTool.tool != Tool.MOVE_ZOOM) {
-        history.addCanvasToHistory();
-    }
-}
+});
 
 // 4 - tool animation
 function drawToolAnimation() {
@@ -114,6 +99,7 @@ const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
 
 const history = new History(canvas1, ctx, undoBtn, redoBtn);
+toolManager.initHistory(history);
 
 // ===================== TOOLS =====================
 
