@@ -76,7 +76,7 @@ cursorCanvas.addEventListener("pointermove", e => {
     pointerManager.pointermove(e);
 
     const current = pointerManager.clientToCanvasCoords({x: e.clientX, y: e.clientY});
-    toolManager.drawCursor(current);
+    interactionController.drawCursor(current);
 });
 
 // 3 - pointerup

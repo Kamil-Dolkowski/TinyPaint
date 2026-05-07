@@ -28,4 +28,9 @@ export default class InteractionController {
             this.toolManager.onInputPointer(pointerData);
         }
     }
+
+    drawCursor(current) {
+        if (this.isGesture) return;
+        this.toolManager.drawCursor(current);
+    }
 }
