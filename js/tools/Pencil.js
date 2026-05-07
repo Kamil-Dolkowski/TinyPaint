@@ -10,17 +10,6 @@ export default class Pencil extends ToolBase {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    onInput(pointerData) {
-        switch (pointerData.eventType) {
-            case "pointerdown":
-                this.pointerdown(pointerData);
-                break;
-            case "pointermove":
-                this.pointermove(pointerData);
-                break;
-        }
-    }
-
     pointerdown(pointerData) {
         const currentX = Math.floor(pointerData.current.x);
         const currentY = Math.floor(pointerData.current.y);
@@ -35,41 +24,20 @@ export default class Pencil extends ToolBase {
         const y1 = pointerData.current.y;
 
         this.drawLine(x0, y0, x1, y1);
+
+        // this.drawingStatus.lastX = this.drawingStatus.currentX;
+        // this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
-
-
-
-
-
-    pointerdown1(e) {
-        const currentX = Math.floor(this.drawingStatus.currentX);
-        const currentY = Math.floor(this.drawingStatus.currentY);
-
-        this.ctx.fillRect(currentX, currentY, 1, 1);
-    }
-
-    pointermove1(e) {
-        const x0 = this.drawingStatus.lastX;
-        const y0 = this.drawingStatus.lastY;
-        const x1 = this.drawingStatus.currentX;
-        const y1 = this.drawingStatus.currentY;
-
-        this.drawLine(x0, y0, x1, y1);
-
-        this.drawingStatus.lastX = this.drawingStatus.currentX;
-        this.drawingStatus.lastY = this.drawingStatus.currentY;
-    }
-
-    pointerup1(e) {
+    pointerup(pointerData) {
 
     }
 
-    drawCursor() {
+    drawCursor(current) {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
-        const currentX = Math.floor(this.drawingStatus.currentX);
-        const currentY = Math.floor(this.drawingStatus.currentY);
+        const currentX = Math.floor(current.x);
+        const currentY = Math.floor(current.y);
 
         this.cursorCtx.fillStyle = this.ctx.strokeStyle;
 

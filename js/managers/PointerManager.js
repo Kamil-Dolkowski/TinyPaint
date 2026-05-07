@@ -11,6 +11,7 @@ export default class PointerManager {
         //     eventType: [string] ("pointerdown"/"pointermove"/...),
         //     pointerType: [string] ("mouse"/"touch"/"pen"),
         //     button: [int] (e.button),
+        //     shiftKey: e.shiftKey,
         //     current: {
         //         x: [float], 
         //         y: [float]
@@ -32,6 +33,17 @@ export default class PointerManager {
 
     getPointerCount() {
         return this.activePointers.size;
+    }
+
+    clientToCanvasCoords(client) {
+        const rect = this.canvas.canvas.getBoundingClientRect();
+
+        const result = {
+            x: (client.x - rect.left) / this.canvas.currentZoom, 
+            y: (client.y - rect.top) / this.canvas.currentZoom
+        };
+
+        return result;
     }
 
     // ========= POINTER EVENTS =========
@@ -59,6 +71,7 @@ export default class PointerManager {
             eventType: "pointerdown",
             pointerType: e.pointerType,
             button: e.button,
+            shiftKey: e.shiftKey,
             current: current,
             last: last,
             delta: delta,
@@ -79,6 +92,7 @@ export default class PointerManager {
         const rect = this.canvas.canvas.getBoundingClientRect();
         
         pointerData.eventType = "pointermove";
+        pointerData.shiftKey = e.shiftKey;
 
         const last = pointerData.current;
         const current = {
@@ -122,6 +136,7 @@ export default class PointerManager {
             eventType: "pointerup",
             pointerType: e.pointerType,
             button: e.button,
+            shiftKey: e.shiftKey,
             current: current,
             last: last,
             delta: delta,

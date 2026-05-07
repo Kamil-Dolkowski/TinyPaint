@@ -17,6 +17,10 @@ export default class ToolManager {
         this.currentTool?.setTool();
     }
 
+    drawCursor(current) {
+        this.currentTool?.drawCursor(current);
+    }
+
     onInputPointer(pointerData) {
         this.currentTool?.onInput(pointerData);
 

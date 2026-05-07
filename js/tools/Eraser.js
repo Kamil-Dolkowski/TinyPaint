@@ -4,9 +4,6 @@ import Tool from './Tool.js';
 export default class Eraser extends ToolBase {
     constructor(ctx, cursorCtx, drawingStatus) {
         super(Tool.ERASER, ctx, cursorCtx, drawingStatus);
-        // this.ctx = ctx;
-        // this.tool = Tool.ERASER;
-        // this.drawSize = drawSize;
     }
 
     setTool() {
@@ -15,27 +12,27 @@ export default class Eraser extends ToolBase {
         this.ctx.globalCompositeOperation = "destination-out";
     }
 
-    pointerdown(e) {
+    pointerdown(pointerData) {
         this.ctx.beginPath();
-        this.ctx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, 0, 0, 2 * Math.PI);
+        this.ctx.arc(pointerData.current.x, pointerData.current.y, 0, 0, 2 * Math.PI);
         this.ctx.stroke();
     }
 
-    pointermove(e) {
+    pointermove(pointerData) {
         this.ctx.beginPath();
-        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
+        this.ctx.moveTo(pointerData.last.x, pointerData.last.y);
+        this.ctx.lineTo(pointerData.current.x, pointerData.current.y)
         this.ctx.stroke();
 
-        this.drawingStatus.lastX = this.drawingStatus.currentX;
-        this.drawingStatus.lastY = this.drawingStatus.currentY;
+        // this.drawingStatus.lastX = this.drawingStatus.currentX;
+        // this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
-    pointerup(e) {
+    pointerup(pointerData) {
 
     }
 
-    drawCursor() {
+    drawCursor(current) {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
         this.cursorCtx.save();
@@ -44,7 +41,7 @@ export default class Eraser extends ToolBase {
         this.cursorCtx.restore();
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
+        this.cursorCtx.arc(current.x, current.y, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
         this.cursorCtx.stroke();
     }
 

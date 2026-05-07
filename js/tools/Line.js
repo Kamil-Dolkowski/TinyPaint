@@ -12,30 +12,30 @@ export default class Line extends ToolBase {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    pointerdown(e) {
+    pointerdown(pointerData) {
         this.ctx.beginPath();
-        this.ctx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, 0, 0, 2 * Math.PI);
+        this.ctx.arc(pointerData.current.x, pointerData.current.y, 0, 0, 2 * Math.PI);
         this.ctx.stroke();
     }
 
-    pointermove(e) {
-        if (e.shiftKey) {
-            ({x: this.drawingStatus.currentX, y: this.drawingStatus.currentY} = this.getPerpendicularLineCoords(this.drawingStatus.lastX, this.drawingStatus.lastY, this.drawingStatus.currentX, this.drawingStatus.currentY));
+    pointermove(pointerData) {
+        if (pointerData.shiftKey) {
+            ({x: pointerData.current.x, y: pointerData.current.y} = this.getPerpendicularLineCoords(pointerData.last.x, pointerData.last.y, pointerData.current.x, pointerData.current.y));
         }
     }
 
-    pointerup(e) {
-        if (e.shiftKey) {
-            ({x: this.drawingStatus.currentX, y: this.drawingStatus.currentY} = this.getPerpendicularLineCoords(this.drawingStatus.lastX, this.drawingStatus.lastY, this.drawingStatus.currentX, this.drawingStatus.currentY));
+    pointerup(pointerData) {
+        if (pointerData.shiftKey) {
+            ({x: pointerData.current.x, y: pointerData.current.y} = this.getPerpendicularLineCoords(pointerData.last.x, pointerData.last.y, pointerData.current.x, pointerData.current.y));
         }
 
         this.ctx.beginPath();
-        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
+        this.ctx.moveTo(pointerData.last.x, pointerData.last.y);
+        this.ctx.lineTo(pointerData.current.x, pointerData.current.y)
         this.ctx.stroke();
     }
 
-    drawCursor() {
+    drawCursor(current) {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
         this.cursorCtx.save();
@@ -44,11 +44,11 @@ export default class Line extends ToolBase {
         this.cursorCtx.restore();
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
+        this.cursorCtx.arc(current.x, current.y, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
         this.cursorCtx.stroke();
     }
 
-    drawAnimationFrame() {
+    drawAnimationFrame(pointerData) {
         this.cursorCtx.save();
 
         this.cursorCtx.lineWidth = this.ctx.lineWidth;
@@ -56,8 +56,8 @@ export default class Line extends ToolBase {
         this.cursorCtx.strokeStyle = this.ctx.strokeStyle;
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.cursorCtx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
+        this.cursorCtx.moveTo(pointerData.last.x, pointerData.last.y);
+        this.cursorCtx.lineTo(pointerData.current.x, pointerData.current.y)
         this.cursorCtx.stroke();
 
         this.cursorCtx.restore();
