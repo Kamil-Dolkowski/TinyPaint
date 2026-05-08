@@ -23,9 +23,6 @@ export default class Eraser extends ToolBase {
         this.ctx.moveTo(pointerData.last.x, pointerData.last.y);
         this.ctx.lineTo(pointerData.current.x, pointerData.current.y)
         this.ctx.stroke();
-
-        // this.drawingStatus.lastX = this.drawingStatus.currentX;
-        // this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
     pointerup(pointerData) {

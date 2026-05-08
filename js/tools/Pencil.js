@@ -24,9 +24,6 @@ export default class Pencil extends ToolBase {
         const y1 = pointerData.current.y;
 
         this.drawLine(x0, y0, x1, y1);
-
-        // this.drawingStatus.lastX = this.drawingStatus.currentX;
-        // this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
     pointerup(pointerData) {
