@@ -19,7 +19,7 @@ export default class ToolBase {
                 this.pointermove(pointerData);
                 break;
             case "pointerup":
-                this.pointermove(pointerData);
+                this.pointerup(pointerData);
                 break;
         }
     }
