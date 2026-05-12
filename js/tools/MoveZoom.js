@@ -18,10 +18,7 @@ export default class MoveZoom extends ToolBase {
     } 
 
     pointermove(pointerData) {
-        const deltaX = (pointerData.current.x - pointerData.last.x) * this.canvas.currentZoom;
-        const deltaY = (pointerData.current.y - pointerData.last.y) * this.canvas.currentZoom;
-
-        this.canvas.moveRelative(deltaX, deltaY);
+        this.canvas.moveRelative(pointerData.client.delta.x, pointerData.client.delta.y);
     } 
 
     pointerup(pointerData) {
@@ -36,8 +33,8 @@ export default class MoveZoom extends ToolBase {
         
     }
 
-    move(pointerData) {
-        this.canvas.moveRelative(pointerData.delta.x, pointerData.delta.y);
+    gesturemove(gestureData) {
+        this.canvas.moveRelative(gestureData.delta.x, gestureData.delta.y);
     }
 
     zoomIn(zoomPoint, zoomValue = this.zoomValue, firstZoom = null) {

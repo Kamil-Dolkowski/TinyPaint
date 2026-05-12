@@ -16,6 +16,6 @@ export default class Gesture {
     }
 
     pinchMove(gestureData) {
-        this.moveZoom.move(gestureData);
+        this.moveZoom.gesturemove(gestureData);
     }
 }
