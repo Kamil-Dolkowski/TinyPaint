@@ -15,12 +15,12 @@ export default class Line extends ToolBase {
     }
 
     pointerdown(pointerData) {
-        this.last = pointerData.current;
-        this.current = pointerData.current;
+        this.last = pointerData.canvas.current;
+        this.current = pointerData.canvas.current;
     }
 
     pointermove(pointerData) {
-        this.current = pointerData.current;
+        this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
             ({x: this.current.x, y: this.current.y} = this.getPerpendicularLineCoords(this.last.x, this.last.y, this.current.x, this.current.y));
@@ -28,7 +28,7 @@ export default class Line extends ToolBase {
     }
 
     pointerup(pointerData) {
-        this.current = pointerData.current;
+        this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
             ({x: this.current.x, y: this.current.y} = this.getPerpendicularLineCoords(this.last.x, this.last.y, this.current.x, this.current.y));

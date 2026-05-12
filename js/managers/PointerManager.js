@@ -12,21 +12,33 @@ export default class PointerManager {
         //     pointerType: [string] ("mouse"/"touch"/"pen"),
         //     button: [int] (e.button),
         //     shiftKey: e.shiftKey,
-        //     current: {
-        //         x: [float], 
-        //         y: [float]
-        //     },
-        //     last: {
-        //         x: [float],
-        //         y: [float]
-        //     },
-        //     delta: {
-        //         x: [float],
-        //         y: [float]
+        //     canvas: {
+        //         current: {
+        //             x: [float], 
+        //             y: [float]
+        //         },
+        //         last: {
+        //             x: [float],
+        //             y: [float]
+        //         },
+        //         delta: {
+        //             x: [float],
+        //             y: [float]
+        //         }
         //     },
         //     client: {
-        //         x: [float],
-        //         y: [float]
+        //         current: {
+        //             x: [float], 
+        //             y: [float]
+        //         },
+        //         last: {
+        //             x: [float],
+        //             y: [float]
+        //         },
+        //         delta: {
+        //             x: [float],
+        //             y: [float]
+        //         }
         //     }
         // }
     }
@@ -51,19 +63,9 @@ export default class PointerManager {
     pointerdown(e) {
         const rect = this.canvas.canvas.getBoundingClientRect();
 
-        const current = {
+        const canvasCurrent = {
             x: (e.clientX - rect.left) / this.canvas.currentZoom, 
             y: (e.clientY - rect.top) / this.canvas.currentZoom
-        };
-
-        const last = {
-            x: current.x,
-            y: current.y
-        }
-
-        const delta = {
-            x: 0, 
-            y: 0
         };
 
         const pointerData = {
@@ -72,10 +74,34 @@ export default class PointerManager {
             pointerType: e.pointerType,
             button: e.button,
             shiftKey: e.shiftKey,
-            current: current,
-            last: last,
-            delta: delta,
-            client: {x: e.clientX, y: e.clientY}
+            canvas: {
+                current: {
+                    x: canvasCurrent.x, 
+                    y: canvasCurrent.y
+                },
+                last: {
+                    x: canvasCurrent.x,
+                    y: canvasCurrent.y
+                },
+                delta: {
+                    x: 0, 
+                    y: 0
+                }
+            },
+            client: {
+                current: {
+                    x: e.clientX, 
+                    y: e.clientY
+                },
+                last: {
+                    x: e.clientX,
+                    y: e.clientY
+                },
+                delta: {
+                    x: 0, 
+                    y: 0
+                }
+            }
         }
 
         this.activePointers.set(e.pointerId, pointerData);
@@ -94,55 +120,81 @@ export default class PointerManager {
         pointerData.eventType = "pointermove";
         pointerData.shiftKey = e.shiftKey;
 
-        const last = pointerData.current;
-        const current = {
+        // canvas
+        let last = pointerData.canvas.current;
+        let current = {
             x: (e.clientX - rect.left) / this.canvas.currentZoom, 
             y: (e.clientY - rect.top) / this.canvas.currentZoom
         };
         
-        const delta = {
+        let delta = {
             x: current.x - last.x, 
             y: current.y - last.y
         };
 
-        pointerData.last = last;
-        pointerData.current = current;
-        pointerData.delta = delta;
+        pointerData.canvas.last = last;
+        pointerData.canvas.current = current;
+        pointerData.canvas.delta = delta;
 
-        pointerData.client = {x: e.clientX, y: e.clientY};
+        // client
+        last = pointerData.client.current;
+        current = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        
+        delta = {
+            x: current.x - last.x, 
+            y: current.y - last.y
+        };
+
+        pointerData.client.last = last;
+        pointerData.client.current = current;
+        pointerData.client.delta = delta;
 
         const gestureData = this.gestureManager.update([...this.activePointers.values()]);
         this.interactionController.onInput(pointerData, gestureData);
     }
     
     pointerup(e) {
-        let pointerData = this.activePointers.get(e.pointerId);
+        let pointerData = structuredClone(this.activePointers.get(e.pointerId));
 
         const rect = this.canvas.canvas.getBoundingClientRect();
 
-        const current = {
+        pointerData.eventType = "pointerup";
+        pointerData.shiftKey = e.shiftKey;
+
+        // canvas
+        let last = pointerData.canvas.current;
+        let current = {
             x: (e.clientX - rect.left) / this.canvas.currentZoom, 
             y: (e.clientY - rect.top) / this.canvas.currentZoom
         };
-
-        const last = pointerData.current;
-
-        const delta = {
+        
+        let delta = {
             x: current.x - last.x, 
             y: current.y - last.y
         };
 
-        pointerData = {
-            pointerId: e.pointerId,
-            eventType: "pointerup",
-            pointerType: e.pointerType,
-            button: e.button,
-            shiftKey: e.shiftKey,
-            current: current,
-            last: last,
-            delta: delta,
-            client: {x: e.clientX, y: e.clientY}
-        }
+        pointerData.canvas.last = last;
+        pointerData.canvas.current = current;
+        pointerData.canvas.delta = delta;
+
+        // client
+        last = pointerData.client.current;
+        current = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        
+        delta = {
+            x: current.x - last.x, 
+            y: current.y - last.y
+        };
+
+        pointerData.client.last = last;
+        pointerData.client.current = current;
+        pointerData.client.delta = delta;
 
         this.activePointers.delete(e.pointerId);
 

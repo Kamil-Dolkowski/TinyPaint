@@ -31,10 +31,18 @@ export default class InteractionController {
                         if (!this.isGesture) {
                             if (this.lastPointerData) {
                                 // update this.lastPointerData -> difference between this.lastPointerData and this.pointerdownData
-                                this.lastPointerData.last = this.pointerdownData.current;
-                                this.lastPointerData.delta = {
-                                    x: this.lastPointerData.current.x - this.lastPointerData.last.x,
-                                    y: this.lastPointerData.current.y - this.lastPointerData.last.y
+                                // canvas
+                                this.lastPointerData.canvas.last = this.pointerdownData.canvas.current;
+                                this.lastPointerData.canvas.delta = {
+                                    x: this.lastPointerData.canvas.current.x - this.lastPointerData.canvas.last.x,
+                                    y: this.lastPointerData.canvas.current.y - this.lastPointerData.canvas.last.y
+                                };
+
+                                // client
+                                this.lastPointerData.client.last = this.pointerdownData.client.current;
+                                this.lastPointerData.client.delta = {
+                                    x: this.lastPointerData.client.current.x - this.lastPointerData.client.last.x,
+                                    y: this.lastPointerData.client.current.y - this.lastPointerData.client.last.y
                                 };
 
                                 this.toolManager.onInputPointer(this.pointerdownData);

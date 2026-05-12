@@ -11,17 +11,17 @@ export default class Pencil extends ToolBase {
     }
 
     pointerdown(pointerData) {
-        const currentX = Math.floor(pointerData.current.x);
-        const currentY = Math.floor(pointerData.current.y);
+        const currentX = Math.floor(pointerData.canvas.current.x);
+        const currentY = Math.floor(pointerData.canvas.current.y);
 
         this.ctx.fillRect(currentX, currentY, 1, 1);
     }
 
     pointermove(pointerData) {
-        const x0 = pointerData.last.x;
-        const y0 = pointerData.last.y;
-        const x1 = pointerData.current.x;
-        const y1 = pointerData.current.y;
+        const x0 = pointerData.canvas.last.x;
+        const y0 = pointerData.canvas.last.y;
+        const x1 = pointerData.canvas.current.x;
+        const y1 = pointerData.canvas.current.y;
 
         this.drawLine(x0, y0, x1, y1);
     }

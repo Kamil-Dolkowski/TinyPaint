@@ -14,14 +14,14 @@ export default class Brush extends ToolBase {
 
     pointerdown(pointerData) {
         this.ctx.beginPath();
-        this.ctx.arc(pointerData.current.x, pointerData.current.y, 0, 0, 2 * Math.PI);
+        this.ctx.arc(pointerData.canvas.current.x, pointerData.canvas.current.y, 0, 0, 2 * Math.PI);
         this.ctx.stroke();
     }
 
     pointermove(pointerData) {
         this.ctx.beginPath();
-        this.ctx.moveTo(pointerData.last.x, pointerData.last.y);
-        this.ctx.lineTo(pointerData.current.x, pointerData.current.y)
+        this.ctx.moveTo(pointerData.canvas.last.x, pointerData.canvas.last.y);
+        this.ctx.lineTo(pointerData.canvas.current.x, pointerData.canvas.current.y)
         this.ctx.stroke();
     }
 

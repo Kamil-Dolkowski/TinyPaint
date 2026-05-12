@@ -65,14 +65,14 @@ export default class GestureManager {
         }
 
         const [p1, p2] = activePointers;
-        const currentDistance = this.calcDistance(p1.client, p2.client);
+        const currentDistance = this.calcDistance(p1.client.current, p2.client.current);
 
         if (this.lastDistance === null) {
             this.isGesture = true;
             this.firstDistance = currentDistance;
             this.lastDistance = currentDistance;
             this.firstZoom = this.canvas.currentZoom;
-            this.middlePoint = this.getMiddlePoint(p1.client, p2.client);
+            this.middlePoint = this.getMiddlePoint(p1.client.current, p2.client.current);
 
             const gestureData = {
                 gesture: "transform",
@@ -90,7 +90,7 @@ export default class GestureManager {
         const zoomValue = currentDistance / this.firstDistance;
 
         // pan / move
-        const newMiddlePoint = this.getMiddlePoint(p1.client, p2.client);
+        const newMiddlePoint = this.getMiddlePoint(p1.client.current, p2.client.current);
 
         const dx = newMiddlePoint.x - this.middlePoint.x;
         const dy = newMiddlePoint.y - this.middlePoint.y;
