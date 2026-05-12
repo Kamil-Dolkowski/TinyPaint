@@ -21,6 +21,12 @@ export default class ToolManager {
         this.currentTool?.drawCursor(current);
     }
 
+    drawToolAnimation = () => {
+        this.currentTool?.drawAnimationFrame();
+        
+        requestAnimationFrame(this.drawToolAnimation);
+    }
+
     onInputPointer(pointerData) {
         this.currentTool?.onInput(pointerData);
 

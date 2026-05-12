@@ -91,17 +91,8 @@ cursorCanvas.addEventListener("pointerout", e => {
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
 });
 
-
 // 5 - tool animation
-function drawToolAnimation() {
-    if (drawingStatus.isDrawing) {
-        drawingStatus.currentTool?.drawAnimationFrame();
-    }
-
-    requestAnimationFrame(drawToolAnimation);
-}
-
-drawToolAnimation();
+toolManager.drawToolAnimation();
 
 // ===================== UNDO/REDO =====================
 
