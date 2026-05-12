@@ -99,14 +99,15 @@ export default class PointerManager {
             x: (e.clientX - rect.left) / this.canvas.currentZoom, 
             y: (e.clientY - rect.top) / this.canvas.currentZoom
         };
-
-        pointerData.last = last;
-        pointerData.current = current;
-
-        pointerData.delta = {
+        
+        const delta = {
             x: current.x - last.x, 
             y: current.y - last.y
         };
+
+        pointerData.last = last;
+        pointerData.current = current;
+        pointerData.delta = delta;
 
         pointerData.client = {x: e.clientX, y: e.clientY};
 
