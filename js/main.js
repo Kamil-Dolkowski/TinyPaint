@@ -233,25 +233,6 @@ window.addEventListener("beforeunload", e => {
     e.returnValue = '';
 });
 
-// ======== SHORTCUT KEYS ========
-function shortcutKeysHandler(e) {
-    // Move Zoom
-    if (e.ctrlKey) {
-        tempTool = drawingStatus.currentTool;
-        drawingStatus.currentTool = moveZoom;
-
-        // Clear cursor canvas
-        cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
-    }
-}
-
-function keyup(e) {
-    if (e.key == 'Control') {
-        drawingStatus.currentTool = tempTool;
-        tempTool = null;
-    }
-}
-
 function scrollHandler(e) {
     // Move Zoom
     if (drawingStatus.currentTool.tool == Tool.MOVE_ZOOM) {
