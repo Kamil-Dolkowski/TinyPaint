@@ -19,6 +19,7 @@ The application has only polish interface now, but I plan to add english interfa
 - gesture support
 - gesture: pinch-to-zoom
 - gesture: pinch-to-pan
+- improved mobile user experience
 - new tools: move-zoom, fit-to-screen, eyedropper, palette (color-palette and color-picker)
 - new settings options (change canvas size)
 - move-zoom: holding CTRL switches current tool to move-zoom
