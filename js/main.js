@@ -7,12 +7,19 @@ import Line from './tools/Line.js';
 import Eraser from './tools/Eraser.js';
 import MoveZoom from './tools/MoveZoom.js';
 import Eyedropper from './tools/Eyedropper.js';
+import Gesture from './tools/Gesture.js';
 
 import Canvas from './Canvas.js';
 import History from './History.js';
 import Palette from './colors//Palette.js';
+
 import ImageExport from './io/ImageExport.js';
 import ImageImport from './io/ImageImport.js';
+
+import PointerManager from './managers/PointerManager.js';
+import GestureManager from './managers/GestureManager.js';
+import InteractionController from './managers/InteractionController.js';
+import ToolManager from './managers/ToolManager.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -36,113 +43,56 @@ const line = new Line(ctx, cursorCtx, drawingStatus);
 const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
 
-let currentTool = pencil;
+
+
+const gesture = new Gesture(moveZoom);
+
+const toolManager = new ToolManager(pencil, gesture);
+const interactionController = new InteractionController(toolManager);
+const gestureManager = new GestureManager(canvas);
+const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
+
+
+
+drawingStatus.currentTool = pencil;
 let tempTool = null;
 
 // ======== DRAW INITIAL SETTINGS ========
 ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
-cursorCanvas.style.touchAction = "none";
-
 // ======== CANVAS EVENTS ========
+
+// const gesture = new Gesture(moveZoom, canvas, drawingStatus);
 
 // 1 - pointerdown
 cursorCanvas.addEventListener("pointerdown", e => {
-    if (e.button == 0) {
-        const rect = cursorCanvas.getBoundingClientRect();
-
-        drawingStatus.isDrawing = true;
-
-        drawingStatus.lastX = (e.clientX - rect.left) / canvas.currentZoom;
-        drawingStatus.lastY = (e.clientY - rect.top) / canvas.currentZoom;
-
-        drawingStatus.currentX = drawingStatus.lastX
-        drawingStatus.currentY = drawingStatus.lastY;
-
-        currentTool?.pointerdown(e);
-    }
-
-    // scroll button -> switch on move-zoom
-    if (e.button == 1) {
-        const rect = cursorCanvas.getBoundingClientRect();
-
-        drawingStatus.isDrawing = true;
-
-        drawingStatus.lastX = (e.clientX - rect.left) / canvas.currentZoom;
-        drawingStatus.lastY = (e.clientY - rect.top) / canvas.currentZoom;
-
-        drawingStatus.currentX = drawingStatus.lastX
-        drawingStatus.currentY = drawingStatus.lastY;
-
-        tempTool = currentTool;
-        currentTool = moveZoom;
-
-        // Clear cursor canvas
-        cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
-    }
+    pointerManager.pointerdown(e);
+    cursorCanvas.setPointerCapture(e.pointerId);
 });
 
 // 2 - pointermove
-window.addEventListener("pointermove", e => {
-    const rect = cursorCanvas.getBoundingClientRect();
+cursorCanvas.addEventListener("pointermove", e => {
+    pointerManager.pointermove(e);
 
-    drawingStatus.currentX = (e.clientX - rect.left) / canvas.currentZoom;
-    drawingStatus.currentY = (e.clientY - rect.top) / canvas.currentZoom;
-
-    currentTool?.drawCursor();
-
-    if (!drawingStatus.isDrawing) return;
-
-    currentTool?.pointermove(e);
+    const current = pointerManager.clientToCanvasCoords({x: e.clientX, y: e.clientY});
+    interactionController.drawCursor(current);
 });
 
 // 3 - pointerup
-window.addEventListener("pointerup", e => {
-    stopDraw(e);
+cursorCanvas.addEventListener("pointerup", e => {
+    cursorCanvas.releasePointerCapture(e.pointerId);
+    pointerManager.pointerup(e);
 });
 
-// 3 - pointerout
-window.addEventListener("pointerout", e => {
-    // stopDraw(e);
-});
-
-function stopDraw(e) {
-    // scroll button -> switch off move-zoom
-    if (e.button == 1) {
-        currentTool = tempTool;
-        tempTool = null;
-    }
-
+// 4 - pointerout
+cursorCanvas.addEventListener("pointerout", e => {
     // Clear cursor canvas
     cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+});
 
-    if (!drawingStatus.isDrawing) return;
-
-    drawingStatus.isDrawing = false;
-
-    const rect = cursorCanvas.getBoundingClientRect();
-
-    drawingStatus.currentX = (e.clientX - rect.left) / canvas.currentZoom;
-    drawingStatus.currentY = (e.clientY - rect.top) / canvas.currentZoom;
-
-    currentTool?.pointerup(e);
-
-    if (currentTool.tool != Tool.MOVE_ZOOM) {
-        history.addCanvasToHistory();
-    }
-}
-
-// 4 - tool animation
-function drawToolAnimation() {
-    if (drawingStatus.isDrawing) {
-        currentTool?.drawAnimationFrame();
-    }
-
-    requestAnimationFrame(drawToolAnimation);
-}
-
-drawToolAnimation();
+// 5 - tool animation
+toolManager.drawToolAnimation();
 
 // ===================== UNDO/REDO =====================
 
@@ -150,6 +100,7 @@ const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
 
 const history = new History(canvas1, ctx, undoBtn, redoBtn);
+toolManager.initHistory(history);
 
 // ===================== TOOLS =====================
 
@@ -170,32 +121,28 @@ toolBtns.forEach(toolBtn => {
 const pencilBtn = document.getElementById("pencil-btn");
 
 pencilBtn.addEventListener("click", () => {
-    currentTool = pencil;
-    currentTool.setTool();
+    toolManager.setTool(pencil);
 });
 
 // ======== BRUSH ========
 const brushBtn = document.getElementById("brush-btn");
 
 brushBtn.addEventListener("click", () => {
-    currentTool = brush;
-    currentTool.setTool();
+    toolManager.setTool(brush);
 });
 
 // ======== LINE ========
 const lineBtn = document.getElementById("line-btn");
 
 lineBtn.addEventListener("click", () => {
-    currentTool = line;
-    currentTool.setTool();
+    toolManager.setTool(line);
 });
 
 // ======== ERASER ========
 const eraserBtn = document.getElementById("eraser-btn");
 
 eraserBtn.addEventListener("click", () => {
-    currentTool = eraser;
-    currentTool.setTool();
+    toolManager.setTool(eraser);
 });
 
 // ======== BACKGROUND COLOR ========
@@ -209,16 +156,14 @@ eraserBtn.addEventListener("click", () => {
 const moveZoomBtn = document.getElementById("move-zoom-btn");
 
 moveZoomBtn.addEventListener("click", () => {
-    currentTool = moveZoom;
-    currentTool.setTool();
+    toolManager.setTool(moveZoom);
 });
 
 // ======== EYEDROPPER ========
 const eyedropperBtn = document.getElementById("eyedropper-btn");
 
 eyedropperBtn.addEventListener("click", () => {
-    currentTool = eyedropper;
-    currentTool.setTool();
+    toolManager.setTool(eyedropper);
 });
 
 // ======== CLEAR ========
@@ -255,16 +200,12 @@ const sizeLbl = document.getElementById("size-lbl");
 sizeLbl.innerText = ctx.lineWidth;
 
 increaseBtn.addEventListener("click", () => {
-    if (currentTool.tool == Tool.PENCIL) return;
-
     ctx.lineWidth += 1;
     drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
 });
 
 decreaseBtn.addEventListener("click", () => {
-    if (currentTool.tool == Tool.PENCIL) return;
-
     ctx.lineWidth -= 1;
     drawingStatus.drawSize = ctx.lineWidth;
     sizeLbl.innerText = ctx.lineWidth;
@@ -304,8 +245,8 @@ function shortcutKeysHandler(e) {
 
     // Move Zoom
     if (e.ctrlKey) {
-        tempTool = currentTool;
-        currentTool = moveZoom;
+        tempTool = drawingStatus.currentTool;
+        drawingStatus.currentTool = moveZoom;
 
         // Clear cursor canvas
         cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
@@ -314,27 +255,29 @@ function shortcutKeysHandler(e) {
 
 function keyup(e) {
     if (e.key == 'Control') {
-        currentTool = tempTool;
+        drawingStatus.currentTool = tempTool;
         tempTool = null;
     }
 }
 
 function scrollHandler(e) {
     // Move Zoom
-    if (currentTool.tool == Tool.MOVE_ZOOM) {
+    if (drawingStatus.currentTool.tool == Tool.MOVE_ZOOM) {
         e.preventDefault();
 
+        const zoomPoint = {x: e.clientX, y: e.clientY};
+
         if (e.deltaY > 0) {
-            currentTool.zoomOut(e);
+            drawingStatus.currentTool.zoomOut(zoomPoint);
         } else {
-            currentTool.zoomIn(e);
+            drawingStatus.currentTool.zoomIn(zoomPoint);
         }
 
         return;
     }
 
     // Other Tools
-    if (currentTool.tool == Tool.PENCIL) return;
+    if (drawingStatus.currentTool.tool == Tool.PENCIL) return;
     
     if (e.deltaY > 0) {
         ctx.lineWidth -= 1;
@@ -345,7 +288,7 @@ function scrollHandler(e) {
     }
 
     drawingStatus.drawSize = ctx.lineWidth;
-    currentTool?.drawCursor();
+    drawingStatus.currentTool?.drawCursor();
 }
 
 window.addEventListener('keydown', shortcutKeysHandler);

@@ -1,25 +1,18 @@
 class DrawingStatus {
-    constructor() {
-        if (!DrawingStatus.instance) {
-            DrawingStatus.instance = this;
+    isDrawing = false;
 
-            this.isDrawing = false;
+    lastX = null;
+    lastY = null;
 
-            this.lastX = null;
-            this.lastY = null;
+    currentX = null;
+    currentY = null;
 
-            this.currentX = null;
-            this.currentY = null;
+    drawSize = 5;
 
-            this.drawSize = 5;
+    canvasWidth = null;
+    canvasHeight = null;
 
-            this.canvasWidth = null;
-            this.canvasHeight = null;
-        }
-
-        return DrawingStatus.instance;
-    }
+    currentTool = null;
 }
 
-const drawingStatus = new DrawingStatus();
-export default drawingStatus;
+export default new DrawingStatus();

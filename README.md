@@ -15,11 +15,16 @@ The application has only polish interface now, but I plan to add english interfa
 
 ### Added
 - new canvas system
+- new input system
+- gesture support
+- gesture: pinch-to-zoom
+- gesture: pinch-to-pan
+- improved mobile user experience
 - new tools: move-zoom, fit-to-screen, eyedropper, palette (color-palette and color-picker)
 - new settings options (change canvas size)
 - move-zoom: holding CTRL switches current tool to move-zoom
 - move-zoom: holding SCROLL switches current tool to move-zoom
-- add new 'Roboto' font
+- new 'Roboto' font
 - ToolBase class - the base of tool classes
 - 'code_ideas' directory for unused and experimental code ideas
 - Slider class - custom slider

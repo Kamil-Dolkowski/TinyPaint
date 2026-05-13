@@ -4,6 +4,8 @@ import Tool from './Tool.js';
 export default class Line extends ToolBase {
     constructor(ctx, cursorCtx, drawingStatus) {
         super(Tool.LINE, ctx, cursorCtx, drawingStatus);
+        this.last = null;
+        this.current = null;
     }
 
     setTool() {
@@ -12,30 +14,36 @@ export default class Line extends ToolBase {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    pointerdown(e) {
-        this.ctx.beginPath();
-        this.ctx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, 0, 0, 2 * Math.PI);
-        this.ctx.stroke();
+    pointerdown(pointerData) {
+        this.last = pointerData.canvas.current;
+        this.current = pointerData.canvas.current;
     }
 
-    pointermove(e) {
-        if (e.shiftKey) {
-            ({x: this.drawingStatus.currentX, y: this.drawingStatus.currentY} = this.getPerpendicularLineCoords(this.drawingStatus.lastX, this.drawingStatus.lastY, this.drawingStatus.currentX, this.drawingStatus.currentY));
+    pointermove(pointerData) {
+        this.current = pointerData.canvas.current;
+
+        if (pointerData.shiftKey) {
+            ({x: this.current.x, y: this.current.y} = this.getPerpendicularLineCoords(this.last.x, this.last.y, this.current.x, this.current.y));
         }
     }
 
-    pointerup(e) {
-        if (e.shiftKey) {
-            ({x: this.drawingStatus.currentX, y: this.drawingStatus.currentY} = this.getPerpendicularLineCoords(this.drawingStatus.lastX, this.drawingStatus.lastY, this.drawingStatus.currentX, this.drawingStatus.currentY));
+    pointerup(pointerData) {
+        this.current = pointerData.canvas.current;
+
+        if (pointerData.shiftKey) {
+            ({x: this.current.x, y: this.current.y} = this.getPerpendicularLineCoords(this.last.x, this.last.y, this.current.x, this.current.y));
         }
 
         this.ctx.beginPath();
-        this.ctx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.ctx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
+        this.ctx.moveTo(this.last.x, this.last.y);
+        this.ctx.lineTo(this.current.x, this.current.y);
         this.ctx.stroke();
+
+        this.last = null;
+        this.current = null;
     }
 
-    drawCursor() {
+    drawCursor(current) {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
         this.cursorCtx.save();
@@ -44,11 +52,15 @@ export default class Line extends ToolBase {
         this.cursorCtx.restore();
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.drawingStatus.currentX, this.drawingStatus.currentY, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
+        this.cursorCtx.arc(current.x, current.y, this.ctx.lineWidth / 2, 0, 2 * Math.PI);
         this.cursorCtx.stroke();
     }
 
     drawAnimationFrame() {
+        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        
+        if (this.last == null && this.current == null) return;
+        
         this.cursorCtx.save();
 
         this.cursorCtx.lineWidth = this.ctx.lineWidth;
@@ -56,8 +68,8 @@ export default class Line extends ToolBase {
         this.cursorCtx.strokeStyle = this.ctx.strokeStyle;
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.moveTo(this.drawingStatus.lastX, this.drawingStatus.lastY);
-        this.cursorCtx.lineTo(this.drawingStatus.currentX, this.drawingStatus.currentY)
+        this.cursorCtx.moveTo(this.last.x, this.last.y);
+        this.cursorCtx.lineTo(this.current.x, this.current.y);
         this.cursorCtx.stroke();
 
         this.cursorCtx.restore();

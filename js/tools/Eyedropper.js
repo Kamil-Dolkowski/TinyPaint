@@ -12,8 +12,8 @@ export default class Eyedropper extends ToolBase {
         
     }
 
-    pointerdown(e) {
-        const imageData = this.ctx.getImageData(this.drawingStatus.currentX, this.drawingStatus.currentY, 1, 1);
+    pointerdown(pointerData) {
+        const imageData = this.ctx.getImageData(pointerData.canvas.current.x, pointerData.canvas.current.y, 1, 1);
         const data = imageData.data;
 
         const hex = this.rgbToHex(data[0], data[1], data[2]);
@@ -21,15 +21,15 @@ export default class Eyedropper extends ToolBase {
         this.palette.changeColor(hex);
     }
 
-    pointermove(e) {
+    pointermove(pointerData) {
         
     }
 
-    pointerup(e) {
+    pointerup(pointerData) {
 
     }
 
-    drawCursor() {
+    drawCursor(current) {
         
     }
 
