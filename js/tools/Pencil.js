@@ -10,34 +10,31 @@ export default class Pencil extends ToolBase {
         this.ctx.globalCompositeOperation = "source-over";
     }
 
-    pointerdown(e) {
-        const currentX = Math.floor(this.drawingStatus.currentX);
-        const currentY = Math.floor(this.drawingStatus.currentY);
+    pointerdown(pointerData) {
+        const currentX = Math.floor(pointerData.canvas.current.x);
+        const currentY = Math.floor(pointerData.canvas.current.y);
 
         this.ctx.fillRect(currentX, currentY, 1, 1);
     }
 
-    pointermove(e) {
-        const x0 = this.drawingStatus.lastX;
-        const y0 = this.drawingStatus.lastY;
-        const x1 = this.drawingStatus.currentX;
-        const y1 = this.drawingStatus.currentY;
+    pointermove(pointerData) {
+        const x0 = pointerData.canvas.last.x;
+        const y0 = pointerData.canvas.last.y;
+        const x1 = pointerData.canvas.current.x;
+        const y1 = pointerData.canvas.current.y;
 
         this.drawLine(x0, y0, x1, y1);
-
-        this.drawingStatus.lastX = this.drawingStatus.currentX;
-        this.drawingStatus.lastY = this.drawingStatus.currentY;
     }
 
-    pointerup(e) {
+    pointerup(pointerData) {
 
     }
 
-    drawCursor() {
+    drawCursor(current) {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
 
-        const currentX = Math.floor(this.drawingStatus.currentX);
-        const currentY = Math.floor(this.drawingStatus.currentY);
+        const currentX = Math.floor(current.x);
+        const currentY = Math.floor(current.y);
 
         this.cursorCtx.fillStyle = this.ctx.strokeStyle;
 

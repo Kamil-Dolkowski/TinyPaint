@@ -13,27 +13,28 @@ export default class MoveZoom extends ToolBase {
         
     }
 
-    pointerdown(e) {
+    pointerdown(pointerData) {
         
     } 
 
-    pointermove(e) {
-        const deltaX = (this.drawingStatus.currentX - this.drawingStatus.lastX) * this.canvas.currentZoom;
-        const deltaY = (this.drawingStatus.currentY - this.drawingStatus.lastY) * this.canvas.currentZoom;
-
-        this.canvas.moveRelative(deltaX, deltaY);
+    pointermove(pointerData) {
+        this.canvas.moveRelative(pointerData.client.delta.x, pointerData.client.delta.y);
     } 
 
-    pointerup(e) {
+    pointerup(pointerData) {
         
     } 
 
-    drawCursor() {
+    drawCursor(current) {
         
     }
 
     drawAnimationFrame() {
         
+    }
+
+    gesturemove(gestureData) {
+        this.canvas.moveRelative(gestureData.delta.x, gestureData.delta.y);
     }
 
     zoomIn(zoomPoint, zoomValue = this.zoomValue, firstZoom = null) {

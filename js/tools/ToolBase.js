@@ -10,23 +10,37 @@ export default class ToolBase {
         throw new Error('Method "setTool()" must be implemented');
     }
 
-    pointerdown(e) {
+    onInput(pointerData) {
+        switch (pointerData.eventType) {
+            case "pointerdown":
+                this.pointerdown(pointerData);
+                break;
+            case "pointermove":
+                this.pointermove(pointerData);
+                break;
+            case "pointerup":
+                this.pointerup(pointerData);
+                break;
+        }
+    }
+
+    pointerdown(pointerData) {
         throw new Error('Method "pointerdown()" must be implemented');
     } 
 
-    pointermove(e) {
+    pointermove(pointerData) {
         throw new Error('Method "pointermove()" must be implemented');
     } 
 
-    pointerup(e) {
+    pointerup(pointerData) {
         throw new Error('Method "pointerup()" must be implemented');
     } 
 
-    drawCursor() {
+    drawCursor(current) {
         throw new Error('Method "drawCursor()" must be implemented');
     }
 
-    drawAnimationFrame() {
+    drawAnimationFrame(pointerData) {
         throw new Error('Method "drawAnimationFrame()" must be implemented');
     }
 }
