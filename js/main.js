@@ -21,6 +21,9 @@ import GestureManager from './managers/GestureManager.js';
 import InteractionController from './managers/InteractionController.js';
 import ToolManager from './managers/ToolManager.js';
 
+import KeyboardManager from './managers/KeyboardManager.js';
+import ShortcutManager from './managers/ShortcutManager.js';
+
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
 
@@ -101,6 +104,9 @@ const redoBtn = document.getElementById("redo-btn");
 
 const history = new History(canvas1, ctx, undoBtn, redoBtn);
 toolManager.initHistory(history);
+
+const shortcutManager = new ShortcutManager(history);
+const keyboardManager = new KeyboardManager(shortcutManager);
 
 // ===================== TOOLS =====================
 
@@ -229,20 +235,6 @@ window.addEventListener("beforeunload", e => {
 
 // ======== SHORTCUT KEYS ========
 function shortcutKeysHandler(e) {
-    // UNDO
-    if (e.ctrlKey && e.key === 'z') {
-        e.preventDefault(); 
-        history.undo();
-        return;
-    }
-
-    // REDO
-    if (e.ctrlKey && e.key === 'y') {
-        e.preventDefault(); 
-        history.redo();
-        return;
-    }
-
     // Move Zoom
     if (e.ctrlKey) {
         tempTool = drawingStatus.currentTool;
@@ -291,6 +283,12 @@ function scrollHandler(e) {
     drawingStatus.currentTool?.drawCursor();
 }
 
-window.addEventListener('keydown', shortcutKeysHandler);
-window.addEventListener('keyup', keyup);
+window.addEventListener("keydown", e => {
+    keyboardManager.onKeyDown(e);
+});
+
+window.addEventListener("keyup", e => {
+    keyboardManager.onKeyUp(e);
+});
+
 window.addEventListener('wheel', scrollHandler, { passive: false });
