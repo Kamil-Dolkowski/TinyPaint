@@ -21,8 +21,9 @@ import GestureManager from './managers/GestureManager.js';
 import InteractionController from './managers/InteractionController.js';
 import ToolManager from './managers/ToolManager.js';
 
-import KeyboardManager from './managers/KeyboardManager.js';
-import ShortcutManager from './managers/ShortcutManager.js';
+import KeyboardManager from './managers/keyboard/KeyboardManager.js';
+import ShortcutManager from './managers/keyboard/ShortcutManager.js';
+import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -106,7 +107,8 @@ const history = new History(canvas1, ctx, undoBtn, redoBtn);
 toolManager.initHistory(history);
 
 const shortcutManager = new ShortcutManager(history);
-const keyboardManager = new KeyboardManager(shortcutManager);
+const holdActionManager = new HoldActionManager(toolManager);
+const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ===================== TOOLS =====================
 
@@ -263,13 +265,5 @@ function scrollHandler(e) {
     drawingStatus.drawSize = ctx.lineWidth;
     drawingStatus.currentTool?.drawCursor();
 }
-
-window.addEventListener("keydown", e => {
-    keyboardManager.onKeyDown(e);
-});
-
-window.addEventListener("keyup", e => {
-    keyboardManager.onKeyUp(e);
-});
 
 window.addEventListener('wheel', scrollHandler, { passive: false });
