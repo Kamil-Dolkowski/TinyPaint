@@ -6,9 +6,7 @@ export default class ToolBase {
         this.drawingStatus = drawingStatus;
     }
 
-    setTool() {
-        throw new Error('Method "setTool()" must be implemented');
-    }
+    setTool() {}
 
     onInput(pointerData) {
         switch (pointerData.eventType) {
@@ -24,23 +22,15 @@ export default class ToolBase {
         }
     }
 
-    pointerdown(pointerData) {
-        throw new Error('Method "pointerdown()" must be implemented');
-    } 
+    pointerdown(pointerData) {} 
 
-    pointermove(pointerData) {
-        throw new Error('Method "pointermove()" must be implemented');
-    } 
+    pointermove(pointerData) {} 
 
-    pointerup(pointerData) {
-        throw new Error('Method "pointerup()" must be implemented');
-    } 
+    pointerup(pointerData) {} 
 
-    drawCursor(current) {
-        throw new Error('Method "drawCursor()" must be implemented');
-    }
+    onWheel(e) {}
 
-    drawAnimationFrame(pointerData) {
-        throw new Error('Method "drawAnimationFrame()" must be implemented');
-    }
+    drawCursor(current) {}
+
+    drawAnimationFrame(pointerData) {}
 }
