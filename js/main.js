@@ -20,6 +20,11 @@ import PointerManager from './managers/PointerManager.js';
 import GestureManager from './managers/GestureManager.js';
 import InteractionController from './managers/InteractionController.js';
 import ToolManager from './managers/ToolManager.js';
+
+import KeyboardManager from './managers/keyboard/KeyboardManager.js';
+import ShortcutManager from './managers/keyboard/ShortcutManager.js';
+import HoldActionManager from './managers/keyboard/HoldActionManager.js';
+
 import WheelManager from './managers/WheelManager.js';
 
 // ===================== CANVAS =====================
@@ -104,6 +109,10 @@ const redoBtn = document.getElementById("redo-btn");
 
 const history = new History(canvas1, ctx, undoBtn, redoBtn);
 toolManager.initHistory(history);
+
+const shortcutManager = new ShortcutManager(history);
+const holdActionManager = new HoldActionManager(toolManager);
+const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ===================== TOOLS =====================
 
@@ -229,39 +238,3 @@ window.addEventListener("beforeunload", e => {
     e.preventDefault();
     e.returnValue = '';
 });
-
-// ======== SHORTCUT KEYS ========
-function shortcutKeysHandler(e) {
-    // UNDO
-    if (e.ctrlKey && e.key === 'z') {
-        e.preventDefault(); 
-        history.undo();
-        return;
-    }
-
-    // REDO
-    if (e.ctrlKey && e.key === 'y') {
-        e.preventDefault(); 
-        history.redo();
-        return;
-    }
-
-    // Move Zoom
-    if (e.ctrlKey) {
-        tempTool = drawingStatus.currentTool;
-        drawingStatus.currentTool = moveZoom;
-
-        // Clear cursor canvas
-        cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
-    }
-}
-
-function keyup(e) {
-    if (e.key == 'Control') {
-        drawingStatus.currentTool = tempTool;
-        tempTool = null;
-    }
-}
-
-window.addEventListener('keydown', shortcutKeysHandler);
-window.addEventListener('keyup', keyup);
