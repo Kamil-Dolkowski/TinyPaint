@@ -1,3 +1,4 @@
+// [! important note]: only keydown and keyup actions, there isn't action in between (yet?)
 export default class HoldActionManager {
     constructor(toolManager) {
         this.toolManager = toolManager;
