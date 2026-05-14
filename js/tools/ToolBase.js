@@ -33,4 +33,16 @@ export default class ToolBase {
     drawCursor(current) {}
 
     drawAnimationFrame(pointerData) {}
+
+    isLeftMouseButton(pointerData) {
+        return pointerData.button === 0;
+    }
+
+    isMiddleMouseButton(pointerData) {
+        return pointerData.button === 1;
+    }
+
+    isRightMouseButton(pointerData) {
+        return pointerData.button === 2;
+    }
 }
