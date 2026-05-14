@@ -7,6 +7,8 @@ export default class MoveZoom extends ToolBase {
 
         this.canvas = canvas;
         this.zoomValue = 1.5;
+
+        this.wheelSum = 0;
     }
 
     setTool() {
@@ -24,6 +26,21 @@ export default class MoveZoom extends ToolBase {
     pointerup(pointerData) {
         
     } 
+
+    onWheel(e) {
+        this.wheelSum += Math.abs(e.deltaY);
+
+        if (this.wheelSum < 120) return;
+        this.wheelSum = 0;
+
+        if (e.deltaY < 0) {
+            const zoomPoint = {x: e.clientX, y: e.clientY};
+            this.zoomIn(zoomPoint);
+        } else {
+            const zoomPoint = {x: e.clientX, y: e.clientY};
+            this.zoomOut(zoomPoint);
+        }
+    }
 
     drawCursor(current) {
         

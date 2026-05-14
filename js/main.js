@@ -20,6 +20,7 @@ import PointerManager from './managers/PointerManager.js';
 import GestureManager from './managers/GestureManager.js';
 import InteractionController from './managers/InteractionController.js';
 import ToolManager from './managers/ToolManager.js';
+import WheelManager from './managers/WheelManager.js';
 
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
@@ -51,6 +52,8 @@ const toolManager = new ToolManager(pencil, gesture);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
+
+const wheelManager = new WheelManager(toolManager);
 
 
 
@@ -260,37 +263,5 @@ function keyup(e) {
     }
 }
 
-function scrollHandler(e) {
-    // Move Zoom
-    if (drawingStatus.currentTool.tool == Tool.MOVE_ZOOM) {
-        e.preventDefault();
-
-        const zoomPoint = {x: e.clientX, y: e.clientY};
-
-        if (e.deltaY > 0) {
-            drawingStatus.currentTool.zoomOut(zoomPoint);
-        } else {
-            drawingStatus.currentTool.zoomIn(zoomPoint);
-        }
-
-        return;
-    }
-
-    // Other Tools
-    if (drawingStatus.currentTool.tool == Tool.PENCIL) return;
-    
-    if (e.deltaY > 0) {
-        ctx.lineWidth -= 1;
-        sizeLbl.innerText = ctx.lineWidth;
-    } else {
-        ctx.lineWidth += 1;
-        sizeLbl.innerText = ctx.lineWidth;
-    }
-
-    drawingStatus.drawSize = ctx.lineWidth;
-    drawingStatus.currentTool?.drawCursor();
-}
-
 window.addEventListener('keydown', shortcutKeysHandler);
 window.addEventListener('keyup', keyup);
-window.addEventListener('wheel', scrollHandler, { passive: false });
