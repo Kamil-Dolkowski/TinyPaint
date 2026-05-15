@@ -33,4 +33,16 @@ export default class ToolBase {
     drawCursor(current) {}
 
     drawAnimationFrame(pointerData) {}
+
+    isPrimaryAction(pointerData) {
+        return pointerData.button === 0;
+    }
+
+    isMiddleAction(pointerData) {
+        return pointerData.button === 1;
+    }
+
+    isSecondaryAction(pointerData) {
+        return pointerData.button === 2;
+    }
 }
