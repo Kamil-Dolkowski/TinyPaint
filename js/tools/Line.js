@@ -15,11 +15,15 @@ export default class Line extends ToolBase {
     }
 
     pointerdown(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         this.last = pointerData.canvas.current;
         this.current = pointerData.canvas.current;
     }
 
     pointermove(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
@@ -28,6 +32,8 @@ export default class Line extends ToolBase {
     }
 
     pointerup(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {

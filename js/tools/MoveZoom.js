@@ -20,6 +20,8 @@ export default class MoveZoom extends ToolBase {
     } 
 
     pointermove(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         this.canvas.moveRelative(pointerData.client.delta.x, pointerData.client.delta.y);
     } 
 

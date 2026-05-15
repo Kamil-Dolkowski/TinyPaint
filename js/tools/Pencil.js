@@ -11,6 +11,8 @@ export default class Pencil extends ToolBase {
     }
 
     pointerdown(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         const currentX = Math.floor(pointerData.canvas.current.x);
         const currentY = Math.floor(pointerData.canvas.current.y);
 
@@ -18,6 +20,8 @@ export default class Pencil extends ToolBase {
     }
 
     pointermove(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         const x0 = pointerData.canvas.last.x;
         const y0 = pointerData.canvas.last.y;
         const x1 = pointerData.canvas.current.x;

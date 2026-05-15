@@ -13,6 +13,8 @@ export default class Eyedropper extends ToolBase {
     }
 
     pointerdown(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         const imageData = this.ctx.getImageData(pointerData.canvas.current.x, pointerData.canvas.current.y, 1, 1);
         const data = imageData.data;
 

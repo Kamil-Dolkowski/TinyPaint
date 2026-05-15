@@ -13,12 +13,16 @@ export default class Eraser extends ToolBase {
     }
 
     pointerdown(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+
         this.ctx.beginPath();
         this.ctx.arc(pointerData.canvas.current.x, pointerData.canvas.current.y, 0, 0, 2 * Math.PI);
         this.ctx.stroke();
     }
 
     pointermove(pointerData) {
+        if (!this.isPrimaryAction(pointerData)) return;
+        
         this.ctx.beginPath();
         this.ctx.moveTo(pointerData.canvas.last.x, pointerData.canvas.last.y);
         this.ctx.lineTo(pointerData.canvas.current.x, pointerData.canvas.current.y)
