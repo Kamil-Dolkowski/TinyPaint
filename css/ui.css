@@ -182,7 +182,9 @@ Structure:
     pointer-events: all;
 }
 
-.button-small:hover {
-    background-color: #6b6970;
-    color: #000;
+@media (hover: hover) and (pointer: fine) {
+    .button-small:hover {
+        background-color: #6b6970;
+        color: #000;
+    }
 }
