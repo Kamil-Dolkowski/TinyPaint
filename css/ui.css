@@ -102,6 +102,60 @@ Structure:
 
 /* =============== BUTTONS =============== */
 
+/* ----- TOOLBAR BUTTONS ----- */
+
+.toolbar-button {
+    width: 36px;
+    height: 36px;
+    margin: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    background-color: transparent;
+    border-radius: 50%;
+    border-style: none;
+
+    /* box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+    box-sizing: border-box; */
+
+    color: #fff;
+    cursor: pointer;
+    
+    font-family: "RM Neue",sans-serif;
+    font-size: 100%;
+    line-height: 1.15;
+    text-align: center;
+    text-transform: none;
+    transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    pointer-events: all;
+}
+
+.toolbar-button:hover {
+    background-color: #48464b;
+}
+
+.toolbar-button:active {
+    color: #fff;
+}
+
+.toolbar-button:disabled {
+    color: #888888;
+}
+
+/* uncomplete */
+.toolbar-button[data-state="on"]:not([disabled]) {
+    background-color: #84808b;
+    color: #000;
+}
+
+/* ----- OTHER BUTTONS ----- */
+
 /* https://getcssscan.com/css-buttons-examples */
 .button-22 {
     width: 58px;
