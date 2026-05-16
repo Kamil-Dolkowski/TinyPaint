@@ -135,8 +135,10 @@ Structure:
     pointer-events: all;
 }
 
-.toolbar-button:hover {
-    background-color: #48464b;
+@media (hover: hover) and (pointer: fine) {
+    .toolbar-button:hover {
+        background-color: #48464b;
+    }
 }
 
 .toolbar-button:active {
