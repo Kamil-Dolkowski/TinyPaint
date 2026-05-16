@@ -79,10 +79,12 @@ canvas {
 }
 
 #size-lbl {
+    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     font-size: x-large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    pointer-events: none;
 }
