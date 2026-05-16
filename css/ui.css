@@ -6,10 +6,9 @@
 
 .window {
     position: absolute;
-    background-color: #c7c7c7;
+    background-color: #4a484e;
     border-radius: 8px;
-    outline: 5px solid #006AE8;
-    outline-offset: -5px;
+
     padding: 10px;
     z-index: 9999;
 }
@@ -45,10 +44,8 @@ Structure:
 
 .modal-content {
     position: relative;
-    background-color: #c7c7c7;
+    background-color: #4a484e;
     border-radius: 8px;
-    outline: 5px solid #006AE8;
-    outline-offset: -5px;
     padding: 20px;
 
     width: 90%;
@@ -57,11 +54,13 @@ Structure:
 
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 30px 10px #000000;
+
+    color: #fff;
 }
 
 .modal-close {
-  color: #000;
+  color: #fff;
   position: absolute;
   top: 10px;
   right: 15px;
@@ -71,7 +70,7 @@ Structure:
 
 .modal-close:hover,
 .modal-close:focus {
-  color: #fff;
+  color: #b6b6b6;
   text-decoration: none;
   cursor: pointer;
 }
@@ -102,27 +101,31 @@ Structure:
 
 /* =============== BUTTONS =============== */
 
-/* https://getcssscan.com/css-buttons-examples */
-.button-22 {
-    width: 58px;
-    height: 36px;
+/* ----- TOOLBAR BUTTONS ----- */
+
+.toolbar-button {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+
+    display: flex;
     align-items: center;
-    appearance: button;
-    background-color: #0276FF;
-    border-radius: 8px;
+    justify-content: center;
+    flex-shrink: 0;
+
+    background-color: transparent;
+    border-radius: 50%;
     border-style: none;
-    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
-    box-sizing: border-box;
+
+    /* box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+    box-sizing: border-box; */
+
     color: #fff;
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    flex-shrink: 0;
+    
     font-family: "RM Neue",sans-serif;
     font-size: 100%;
     line-height: 1.15;
-    margin: 2px;
-    padding: 10px 21px;
     text-align: center;
     text-transform: none;
     transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
@@ -132,51 +135,44 @@ Structure:
     pointer-events: all;
 }
 
-.button-22:active {
-    background-color: #006AE8;
+@media (hover: hover) and (pointer: fine) {
+    .toolbar-button:hover {
+        background-color: #48464b;
+    }
+}
+
+.toolbar-button:active {
     color: #fff;
 }
 
-.button-22:hover {
-    background-color: #1C84FF;
-}
-
-.button-22:disabled {
-    background-color: #ccc;
+.toolbar-button:disabled {
     color: #888888;
 }
 
-.button-22[data-state="on"]:not([disabled]) {
-    background-color: #fff;
-    color: #006AE8;
-    /*  border-radius: 1rem; */
-    outline: 4px solid #006AE8;
-    outline-offset: -4px;
+.toolbar-button[data-state="on"]:not([disabled]) {
+    background-color: #84808b;
+    color: #000;
 }
 
-.button-22[data-state="off"]:not([disabled]) {
-    background-color: #006AE8;
-    color: #fff;
-}
+/* ----- OTHER BUTTONS ----- */
 
-.button-22-small {
-    height: 25px;
+.button-small {
+    height: 30px;
+    margin: 2px;
+
+    display: flex;
     align-items: center;
-    appearance: button;
-    background-color: #0276FF;
-    border-radius: 8px;
+    justify-content: center;
+    flex-shrink: 0;
+
+    background-color: #272629;
+    border-radius: 1rem;
     border-style: none;
-    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
-    box-sizing: border-box;
+
     color: #fff;
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    flex-shrink: 0;
-    font-family: "RM Neue",sans-serif;
+    
     font-size: 100%;
-    line-height: 1.15;
-    margin: 2px;
     text-align: center;
     text-transform: none;
     transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
@@ -184,4 +180,11 @@ Structure:
     -webkit-user-select: none;
     touch-action: manipulation;
     pointer-events: all;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .button-small:hover {
+        background-color: #6b6970;
+        color: #000;
+    }
 }

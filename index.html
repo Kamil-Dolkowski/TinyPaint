@@ -18,62 +18,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Toolbox -->
-    <div id="toolbox">
-        <div class="toolbox-group">
-            <button id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
-        </div>
-        <div class="toolbox-group">
-            <button disabled id="undo-btn" title="Cofnij" class="button-22"><i class="fa-solid fa-arrow-rotate-left"></i></button>
-            <button disabled id="redo-btn" title="Ponów" class="button-22"><i class="fa-solid fa-arrow-rotate-right"></i></button>
-        </div>
-        <div id="toolbox-tools" class="toolbox-group">
-            <button id="pencil-btn" title="Ołówek" class="button-22" data-state="on"><i class="fa-solid fa-pencil"></i></i></button>
-            <button id="brush-btn" title="Pędzel" class="button-22" data-state="off"><i class="fa-solid fa-brush"></i></button>
-            <button id="line-btn" title="Linia" class="button-22" data-state="off"><i class="fa-solid fa-slash"></i></button>
-            <button id="eraser-btn" title="Gumka" class="button-22" data-state="off"><i class="fa-solid fa-eraser"></i></button>
-            <!-- <button disabled id="fill-btn" title="Wypełnij" class="button-22" data-state="off"><i class="fa-solid fa-fill-drip"></i></button> -->
-            <!-- <button disabled id="text-btn" title="Tekst" class="button-22" data-state="off"><i class="fa-solid fa-t"></i></button> -->
-            <button id="move-zoom-btn" title="Przesuń, Przybliż/Oddal" class="button-22" data-state="off"><i class="fa-solid fa-arrows-up-down-left-right"></i></button>
-            <button id="eyedropper-btn" title="Wybierz kolor" class="button-22" data-state="off"><i class="fa-solid fa-eye-dropper"></i></button>
-            <!-- <button disabled id="select-btn" title="Zaznacz" class="button-22" data-state="off"><i class="fa-solid fa-object-group"></i></button> -->
-        </div>
-        <div class="toolbox-group">
-            <!-- <button disabled id="bgcolor-btn" title="Kolor tła" class="button-22"><i class="fa-solid fa-image"></i></button> -->
-            <button id="clear-btn" title="Wyczyść" class="button-22"><i class="fa-solid fa-trash"></i></button>
-            <button id="reset-zoom-btn" title="Reset widoku" class="button-22"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
-        </div>
-        <div class="toolbox-group">
-            <button id="export-btn" title="Pobierz" class="button-22"><i class="fa-solid fa-file-arrow-up"></i></button>
-            <button id="import-btn" title="Załaduj" class="button-22"><i class="fa-solid fa-file-arrow-down"></i></button>
-        </div>
-        <div class="toolbox-group">
-            <a href="https://github.com/Kamil-Dolkowski/TinyPaint" title="GitHub" class="button-22" style="text-decoration: none;"><i class="fa-brands fa-github"></i></a>
-        </div>
-    </div>
+    <!-- Toolbar -->
+    <header id="toolbar">
+        <section id="toolbar-global">
+            <button id="settings-btn" class="toolbar-button"><i class="fa-solid fa-gear"></i></button>
 
-    <!-- Brush Settings -->
-    <div id="brush-settings">
-        <div id="size-lbl">1</div>
-        <button id="increase-btn" class="button-22"><i class="fa-solid fa-plus"></i></button>
-        <button id="decrease-btn" class="button-22"><i class="fa-solid fa-minus"></i></button>
-        <div>
-            <div id="current-color-checkerboard" class="button-22"></div>
-            <button id="current-color" class="button-22"></button>
-        </div>
-        <button id="palette-btn" title="Paleta" class="button-22"><i class="fa-solid fa-palette"></i></button>
+            <button disabled id="undo-btn" title="Cofnij" class="toolbar-button"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+            <button disabled id="redo-btn" title="Ponów" class="toolbar-button"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+
+            <!-- <button disabled id="bgcolor-btn" title="Kolor tła" class="toolbar-button"><i class="fa-solid fa-image"></i></button> -->
+            <button id="clear-btn" title="Wyczyść" class="toolbar-button"><i class="fa-solid fa-trash"></i></button>
+            <button id="reset-zoom-btn" title="Reset widoku" class="toolbar-button"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+
+            <button id="export-btn" title="Pobierz" class="toolbar-button"><i class="fa-solid fa-file-arrow-up"></i></button>
+            <button id="import-btn" title="Załaduj" class="toolbar-button"><i class="fa-solid fa-file-arrow-down"></i></button>
+
+            <a href="https://github.com/Kamil-Dolkowski/TinyPaint" title="GitHub" class="toolbar-button" style="text-decoration: none;"><i class="fa-brands fa-github"></i></a>
+        </section>
+        <section id="toolbar-tools">
+            <button id="pencil-btn" title="Ołówek" class="toolbar-button" data-state="on"><i class="fa-solid fa-pencil"></i></i></button>
+            <button id="brush-btn" title="Pędzel" class="toolbar-button" data-state="off"><i class="fa-solid fa-brush"></i></button>
+            <button id="line-btn" title="Linia" class="toolbar-button" data-state="off"><i class="fa-solid fa-slash"></i></button>
+            <button id="eraser-btn" title="Gumka" class="toolbar-button" data-state="off"><i class="fa-solid fa-eraser"></i></button>
+            <!-- <button disabled id="fill-btn" title="Wypełnij" class="toolbar-button" data-state="off"><i class="fa-solid fa-fill-drip"></i></button> -->
+            <!-- <button disabled id="text-btn" title="Tekst" class="toolbar-button" data-state="off"><i class="fa-solid fa-t"></i></button> -->
+            <button id="move-zoom-btn" title="Przesuń, Przybliż/Oddal" class="toolbar-button" data-state="off"><i class="fa-solid fa-arrows-up-down-left-right"></i></button>
+            <button id="eyedropper-btn" title="Wybierz kolor" class="toolbar-button" data-state="off"><i class="fa-solid fa-eye-dropper"></i></button>
+            <!-- <button disabled id="select-btn" title="Zaznacz" class="toolbar-button" data-state="off"><i class="fa-solid fa-object-group"></i></button> -->
+        </section>
+    </header>
+
+     <!-- Workspace -->
+    <div id="workspace">
+        <canvas id="cursor-canvas"></canvas>
+        <canvas id="canvas"></canvas>
+        <canvas id="checkerboard"></canvas>
+        <!-- <canvas id="bg-canvas"></canvas> -->
+        
     </div>
 
     <!-- Palette -->
-    <div id="palette-window">
+    <div id="palette-window" class="window">
         <div id="palette-options">
-            <button id="color-palette-btn" class="button-22-small"><!--<i class="fa-solid fa-palette"></i>-->Paleta kolorów</button>
-            <button id="color-picker-btn" class="button-22-small"><!--<i class="fa-solid fa-eye-dropper"></i>-->Wybierz kolor</button>
+            <button id="color-palette-btn" class="button-small"><!--<i class="fa-solid fa-palette"></i>-->Paleta kolorów</button>
+            <button id="color-picker-btn" class="button-small"><!--<i class="fa-solid fa-eye-dropper"></i>-->Wybierz kolor</button>
         </div>
         <div id="palette-content">
             <div id="color-palette">
                 <div id="color-palette-content"></div>
-                <button id="delete-color-btn" class="button-22-small"><i class="fa-solid fa-trash" style="margin: 2px 10px 2px 0px;"></i>Usuń kolor</button>
+                <button id="delete-color-btn" class="button-small"><i class="fa-solid fa-trash" style="margin: 2px 10px 2px 0px;"></i>Usuń kolor</button>
             </div>
             <div id="color-picker" style="display: none;"></div>
         </div>
@@ -114,19 +107,25 @@
             </div>
 
             <div class="modal-footer">
-                <button id="settings-save" class="button-22-small">Zapisz zmiany</button>
+                <button id="settings-save" class="button-small">Zapisz zmiany</button>
             </div>
         </div>
     </div>
 
-    <!-- Workspace -->
-    <div id="workspace">
-        <canvas id="cursor-canvas"></canvas>
-        <canvas id="canvas"></canvas>
-        <canvas id="checkerboard"></canvas>
-        <!-- <canvas id="bg-canvas"></canvas> -->
-        
-    </div>
+    <!-- Contextual Toolbar -->
+    <footer id="contextual-toolbar">
+        <button id="palette-btn" title="Paleta" class="toolbar-button"><i class="fa-solid fa-palette"></i></button>
+        <div>
+            <div id="current-color-checkerboard" class="toolbar-button"></div>
+            <button id="current-color" class="toolbar-button"></button>
+        </div>
+
+        <div style="margin:20px;"></div>
+
+        <div id="size-lbl" class="toolbar-button">1</div>
+        <button id="increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
+        <button id="decrease-btn" class="toolbar-button"><i class="fa-solid fa-minus"></i></button>
+    </footer>
 
     <script type="module" src="js/main.js"></script>
     <script src="js/settings.js"></script>
