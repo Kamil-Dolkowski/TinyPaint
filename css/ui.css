@@ -105,8 +105,8 @@ Structure:
 /* ----- TOOLBAR BUTTONS ----- */
 
 .toolbar-button {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     margin: 2px;
 
     display: flex;
