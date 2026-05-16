@@ -57,18 +57,6 @@
         
     </div>
 
-    <!-- Brush Settings -->
-    <div id="brush-settings">
-        <div id="size-lbl">1</div>
-        <button id="increase-btn" class="button-22"><i class="fa-solid fa-plus"></i></button>
-        <button id="decrease-btn" class="button-22"><i class="fa-solid fa-minus"></i></button>
-        <div>
-            <div id="current-color-checkerboard" class="button-22"></div>
-            <button id="current-color" class="button-22"></button>
-        </div>
-        <!-- <button id="palette-btn" title="Paleta" class="button-22"><i class="fa-solid fa-palette"></i></button> -->
-    </div>
-
     <!-- Palette -->
     <div id="palette-window">
         <div id="palette-options">
@@ -126,7 +114,17 @@
 
     <!-- Contextual Toolbar -->
     <footer id="contextual-toolbar">
-        <button id="palette-btn" title="Paleta" class="button-22"><i class="fa-solid fa-palette"></i></button>
+        <button id="palette-btn" title="Paleta" class="toolbar-button"><i class="fa-solid fa-palette"></i></button>
+        <div>
+            <div id="current-color-checkerboard" class="toolbar-button"></div>
+            <button id="current-color" class="toolbar-button"></button>
+        </div>
+
+        <div style="margin:20px;"></div>
+
+        <div id="size-lbl">1</div>
+        <button id="increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
+        <button id="decrease-btn" class="toolbar-button"><i class="fa-solid fa-minus"></i></button>
     </footer>
 
     <script type="module" src="js/main.js"></script>
