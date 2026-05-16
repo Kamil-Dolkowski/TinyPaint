@@ -56,9 +56,11 @@ export default class Palette {
     // Window
     updatePosition() {
         const rect = this.paletteBtn.getBoundingClientRect();
+        const windowHeight = 250;
+        const margin = 15;
 
-        this.paletteWindow.style.left = rect.right + 15 + "px";
-        this.paletteWindow.style.top = rect.bottom - this.paletteWindow.height + "px";
+        this.paletteWindow.style.left = rect.left + "px";
+        this.paletteWindow.style.top = rect.top - (windowHeight + margin)+ "px";
     }
 
     show() {
