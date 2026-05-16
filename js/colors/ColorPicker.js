@@ -171,7 +171,7 @@ export default class ColorPicker {
         const addToPaletteBtn = document.createElement("button");
 
         addToPaletteBtn.id = "add-to-palette-btn";
-        addToPaletteBtn.className = "button-22-small";
+        addToPaletteBtn.className = "button-small";
 
         const icon = document.createElement("i");
         icon.className = "fa-solid fa-plus";

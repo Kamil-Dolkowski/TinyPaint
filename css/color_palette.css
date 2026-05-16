@@ -1,10 +1,6 @@
 #palette-window {
     display: none;
     position: absolute;
-    background-color: #c7c7c7; /* #0276FF */
-    border-radius: 8px;
-    outline: 5px solid #006AE8;
-    outline-offset: -5px;
     width: 250px;
     height: 250px;
     padding: 5px;
