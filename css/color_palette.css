@@ -31,7 +31,7 @@
     grid-template-columns: repeat(8, 24px);
     gap: 0;
     background-color: #585858;
-    outline: 5px solid #006AE8;
+    outline: 5px solid #272629;
 }
 
 .color-button {
