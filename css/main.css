@@ -1,9 +1,31 @@
 html, body {
     margin: 0;
-    padding: 0;
-    height: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
 
     font-family: "Roboto", sans-serif;
+}
+
+#toolbar {
+    background-color: #353338;
+}
+
+#toolbar section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+#contextual-toolbar {
+    background-color: #353338;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
 }
 
 canvas {
@@ -14,8 +36,7 @@ canvas {
     position: relative;
     display: grid;
     place-items: center;
-    height: 100vh;
-    margin: 0;
+    flex: 1;
     background-color: #585858;
     overflow: hidden;
 }
@@ -37,21 +58,6 @@ canvas {
     image-rendering: pixelated;
     position: absolute;
     z-index: 2;
-}
-
-#toolbox {
-    display: flex;
-    position: absolute;
-    top: 2vh;
-    left: 2vw;
-    overflow-x: auto;
-    width: 98vw;
-    z-index: 9999;
-}
-
-.toolbox-group {
-    display: flex;
-    margin: 10px;
 }
 
 #brush-settings {
