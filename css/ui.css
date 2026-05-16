@@ -45,10 +45,8 @@ Structure:
 
 .modal-content {
     position: relative;
-    background-color: #c7c7c7;
+    background-color: #4a484e;
     border-radius: 8px;
-    outline: 5px solid #006AE8;
-    outline-offset: -5px;
     padding: 20px;
 
     width: 90%;
@@ -57,11 +55,13 @@ Structure:
 
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 30px 10px #000000;
+
+    color: #fff;
 }
 
 .modal-close {
-  color: #000;
+  color: #fff;
   position: absolute;
   top: 10px;
   right: 15px;
@@ -71,7 +71,7 @@ Structure:
 
 .modal-close:hover,
 .modal-close:focus {
-  color: #fff;
+  color: #b6b6b6;
   text-decoration: none;
   cursor: pointer;
 }
