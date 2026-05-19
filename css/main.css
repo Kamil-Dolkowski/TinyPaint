@@ -78,7 +78,7 @@ canvas {
     z-index: 9999;
 }
 
-#size-lbl {
+.size-lbl {
     color: #fff;
     display: flex;
     justify-content: center;

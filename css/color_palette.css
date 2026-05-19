@@ -57,7 +57,18 @@
     margin: 10px;
 }
 
+#current-color-group {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
 #current-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
     border-style: solid;
     border-width: 7px;
     border-color: #353338;
@@ -65,8 +76,11 @@
 
 #current-color-checkerboard {
     position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
     pointer-events: none;
-    z-index: -1;
 
     background:
         repeating-conic-gradient(#555 0% 25%, #aaa 0% 50%);
