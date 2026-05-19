@@ -33,18 +33,21 @@
             <button id="export-btn" title="Pobierz" class="toolbar-button"><i class="fa-solid fa-file-arrow-up"></i></button>
             <button id="import-btn" title="Załaduj" class="toolbar-button"><i class="fa-solid fa-file-arrow-down"></i></button>
 
-            <a href="https://github.com/Kamil-Dolkowski/TinyPaint" title="GitHub" class="toolbar-button" style="text-decoration: none;"><i class="fa-brands fa-github"></i></a>
+            <!-- <a href="https://github.com/Kamil-Dolkowski/TinyPaint" title="GitHub" class="toolbar-button" style="text-decoration: none;"><i class="fa-brands fa-github"></i></a> -->
+            <button id="layers-btn" title="Warstwy" class="toolbar-button"><i class="fa-solid fa-layer-group"></i></button>
         </section>
         <section id="toolbar-tools">
             <button id="pencil-btn" title="Ołówek" class="toolbar-button" data-state="on"><i class="fa-solid fa-pencil"></i></i></button>
             <button id="brush-btn" title="Pędzel" class="toolbar-button" data-state="off"><i class="fa-solid fa-brush"></i></button>
             <button id="line-btn" title="Linia" class="toolbar-button" data-state="off"><i class="fa-solid fa-slash"></i></button>
             <button id="eraser-btn" title="Gumka" class="toolbar-button" data-state="off"><i class="fa-solid fa-eraser"></i></button>
-            <!-- <button disabled id="fill-btn" title="Wypełnij" class="toolbar-button" data-state="off"><i class="fa-solid fa-fill-drip"></i></button> -->
-            <!-- <button disabled id="text-btn" title="Tekst" class="toolbar-button" data-state="off"><i class="fa-solid fa-t"></i></button> -->
             <button id="move-zoom-btn" title="Przesuń, Przybliż/Oddal" class="toolbar-button" data-state="off"><i class="fa-solid fa-arrows-up-down-left-right"></i></button>
             <button id="eyedropper-btn" title="Wybierz kolor" class="toolbar-button" data-state="off"><i class="fa-solid fa-eye-dropper"></i></button>
-            <!-- <button disabled id="select-btn" title="Zaznacz" class="toolbar-button" data-state="off"><i class="fa-solid fa-object-group"></i></button> -->
+            
+            <button id="fill-btn" title="Wypełnij" class="toolbar-button" data-state="off"><i class="fa-solid fa-fill-drip"></i></button>
+            <button id="select-btn" title="Zaznacz" class="toolbar-button" data-state="off"><i class="fa-solid fa-object-group"></i></button>
+            <button id="shapes-btn" title="Kształty" class="toolbar-button" data-state="off"><i class="fa-solid fa-shapes"></i></button>
+            <button id="text-btn" title="Tekst" class="toolbar-button" data-state="off"><i class="fa-solid fa-t"></i></button>
         </section>
     </header>
 
@@ -115,16 +118,27 @@
     <!-- Contextual Toolbar -->
     <footer id="contextual-toolbar">
         <button id="palette-btn" title="Paleta" class="toolbar-button"><i class="fa-solid fa-palette"></i></button>
-        <div>
+        <div id="current-color-group">
             <div id="current-color-checkerboard" class="toolbar-button"></div>
             <button id="current-color" class="toolbar-button"></button>
         </div>
 
         <div style="margin:20px;"></div>
+        <div style="margin:20px;"></div>
 
-        <div id="size-lbl" class="toolbar-button">1</div>
-        <button id="increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
+        <span class="toolbar-button"><i class="fa-solid fa-pen-nib"></i></span>
         <button id="decrease-btn" class="toolbar-button"><i class="fa-solid fa-minus"></i></button>
+        <input type="range" min="1" max="40" value="1">
+        <button id="increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
+        <div id="size-lbl" class="size-lbl toolbar-button">5</div>
+
+        <div style="margin:20px;"></div>
+
+        <span class="toolbar-button"><i class="fa-solid fa-a"></i></span>
+        <button id="alpha-decrease-btn" class="toolbar-button"><i class="fa-solid fa-minus"></i></button>
+        <input type="range" min="0" max="100" value="100">
+        <button id="alpha-increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
+        <div id="alpha-lbl" class="size-lbl toolbar-button">100</div>
     </footer>
 
     <script type="module" src="js/main.js"></script>
