@@ -1,0 +1,50 @@
+#layers-window {
+    width: 400px;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-self: right;
+    /* align-self: center; */
+}
+
+#layers-list {
+    width: auto;
+    margin: 10px;
+    background-color: #353338;
+}
+
+.layer-element {
+    display: flex;
+    flex-direction: row;
+
+    margin: 10px;
+    background-color: #4a484e;
+}
+
+.layer-display {
+    width: 35px;
+    height: 20px;
+
+    margin: 10px;
+
+    background-color: white;
+}
+
+.layer-order {
+    width: 20px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layer-name {
+    width: 90px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-overflow: ellipsis
+}
