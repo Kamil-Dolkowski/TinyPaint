@@ -1,6 +1,7 @@
 html, body {
     margin: 0;
     height: 100dvh;
+    width: 100dvw;
 
     display: flex;
     flex-direction: column;
@@ -37,12 +38,15 @@ html, body {
 
 canvas {
     touch-action: none;
+
+    justify-self: center;
+    align-self: center;
 }
 
 #workspace {
     position: relative;
     display: grid;
-    place-items: center;
+    /* place-items: center; */
     flex: 1;
     background-color: #585858;
     overflow: hidden;
@@ -87,4 +91,31 @@ canvas {
     font-size: x-large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     pointer-events: none;
+}
+
+@media screen and (max-width: 768px)  and (orientation: landscape) {
+    html, body {
+        flex-direction: row;
+    }
+
+    #toolbar {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #toolbar section {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    #contextual-toolbar {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    input[type = "range"] {
+        writing-mode: vertical-lr;
+        direction: rtl; /* żeby "góra = max" */
+        height: 200px;
+    }
 }
