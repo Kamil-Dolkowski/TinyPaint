@@ -37,10 +37,7 @@ html, body {
 
 canvas {
     image-rendering: pixelated;
-    position: absolute;
-
     touch-action: none;
-    transform-origin: top left;
 }
 
 #workspace {
@@ -62,14 +59,20 @@ canvas {
 }
 
 #checkerboard {
+    position: absolute;
+    transform-origin: top left;
     z-index: 0;
 }
 
 #canvas {
+    position: absolute;
+    transform-origin: top left;
     z-index: 1;
 }
 
 #cursor-canvas {
+    position: absolute;
+    transform-origin: top left;
     z-index: 2;
 }
 
