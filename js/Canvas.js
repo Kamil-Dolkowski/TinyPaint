@@ -1,10 +1,8 @@
 export default class Canvas {
-    constructor(workspace, checkerboard, canvas, cursorCanvas, drawingStatus) {
+    constructor(workspace, canvasSpace, canvasBorder, checkerboard, canvas, cursorCanvas, drawingStatus) {
         this.workspace = workspace;
-
-        // this.checkerboard = this.workspace.querySelector("#checkerboard");
-        // this.canvas = this.workspace.querySelector("#canvas");
-        // this.cursorCanvas = this.workspace.querySelector("#cursor-canvas");
+        this.canvasSpace = canvasSpace;
+        this.canvasBorder = canvasBorder;
 
         this.checkerboard = checkerboard;
         this.canvas = canvas;
@@ -18,10 +16,13 @@ export default class Canvas {
         this.cssWidth = this.width;
         this.cssHeight = this.height;
 
+        this.x = 0;
+        this.y = 0;
+
         this.currentZoom = 1; // current canvas css scale
         this.fitZoom = 1; // fit-to-screen zoom
         this.maxZoom = 1000; // zoom in limit
-
+        
         this.resize();
         this.fitToScreen();
     }
@@ -59,6 +60,12 @@ export default class Canvas {
     }
 
     resize() {
+        this.canvasSpace.style.width = this.width + "px";
+        this.canvasSpace.style.height = this.height + "px";
+
+        this.canvasBorder.style.width = this.width + "px";
+        this.canvasBorder.style.height = this.height + "px";
+
         this.checkerboard.width = this.width;
         this.checkerboard.height = this.height;
 
@@ -85,14 +92,7 @@ export default class Canvas {
         this.cssWidth = this.width * this.currentZoom;
         this.cssHeight = this.height * this.currentZoom;
 
-        this.checkerboard.style.width = this.cssWidth + 'px';
-        this.checkerboard.style.height = this.cssHeight + 'px';
-
-        this.canvas.style.width = this.cssWidth + 'px';
-        this.canvas.style.height = this.cssHeight + 'px';
-
-        this.cursorCanvas.style.width = this.cssWidth + 'px';
-        this.cursorCanvas.style.height = this.cssHeight + 'px';
+        this.updateTransform();
 
         return true;
     }
@@ -117,33 +117,34 @@ export default class Canvas {
         this.setZoom(this.fitZoom);
 
         // move
-        const left = (workspaceWidth - this.cssWidth) / 2;
-        const top = (workspaceHeight - this.cssHeight) / 2;
+        const x = (workspaceWidth - this.cssWidth) / 2;
+        const y = (workspaceHeight - this.cssHeight) / 2;
 
-        this.moveAbsolute(left, top);
+        this.moveAbsolute(x, y);
     }
 
     moveRelative(x, y) {
-        const rect = this.checkerboard.getBoundingClientRect();
+        this.x += x;
+        this.y += y;
 
-        this.checkerboard.style.left = rect.left + x + 'px';
-        this.checkerboard.style.top = rect.top + y + 'px';
-
-        this.canvas.style.left = rect.left + x + 'px';
-        this.canvas.style.top = rect.top + y + 'px';
-
-        this.cursorCanvas.style.left = rect.left + x + 'px';
-        this.cursorCanvas.style.top = rect.top + y + 'px';
+        this.updateTransform();
     }
 
     moveAbsolute(x, y) {
-        this.checkerboard.style.left = x + 'px';
-        this.checkerboard.style.top = y + 'px';
+        this.x = x;
+        this.y = y;
 
-        this.canvas.style.left = x + 'px';
-        this.canvas.style.top = y + 'px';
+        this.updateTransform();
+    }
 
-        this.cursorCanvas.style.left = x + 'px';
-        this.cursorCanvas.style.top = y + 'px';
+    updateTransform() {
+        // update canvas space transform -> update all canvases transforms
+        this.canvasSpace.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
+
+        // update canvasBorder size and translate
+        this.canvasBorder.style.width = this.cssWidth + "px";
+        this.canvasBorder.style.height = this.cssHeight + "px";
+
+        this.canvasBorder.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
 }

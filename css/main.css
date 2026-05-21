@@ -36,34 +36,40 @@ html, body {
 }
 
 canvas {
+    image-rendering: pixelated;
+    position: absolute;
+
     touch-action: none;
+    transform-origin: top left;
 }
 
 #workspace {
     position: relative;
-    display: grid;
-    place-items: center;
     flex: 1;
     background-color: #585858;
     overflow: hidden;
 }
 
-#checkerboard {
-    outline: 3px solid #000000;
-    image-rendering: pixelated;
+#canvas-space {
     position: absolute;
+    transform-origin: top left;
+}
+
+#canvas-border {
+    outline: 3px solid #000000;
+    touch-action: none;
+    pointer-events: none;
+}
+
+#checkerboard {
     z-index: 0;
 }
 
 #canvas {
-    image-rendering: pixelated;
-    position: absolute;
     z-index: 1;
 }
 
 #cursor-canvas {
-    image-rendering: pixelated;
-    position: absolute;
     z-index: 2;
 }
 
