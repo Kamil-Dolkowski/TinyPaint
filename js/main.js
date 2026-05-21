@@ -120,7 +120,7 @@ const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 // ===================== TOOLS =====================
 
 // ======== TOOLS RADIO ========
-const toolBtns = document.querySelectorAll("#toolbox-tools button")
+const toolBtns = document.querySelectorAll("#toolbar-tools button")
 
 toolBtns.forEach(toolBtn => {
     toolBtn.addEventListener("click", e => {
