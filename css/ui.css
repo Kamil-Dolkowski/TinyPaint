@@ -184,6 +184,10 @@ Structure:
     pointer-events: all;
 }
 
+/* .button-small[data-state="off"]:not([disabled]) {
+    background-color: #272629;
+} */
+
 @media (hover: hover) and (pointer: fine) {
     .button-small:hover {
         background-color: #6b6970;

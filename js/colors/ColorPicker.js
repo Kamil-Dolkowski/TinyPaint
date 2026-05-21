@@ -22,6 +22,10 @@ export default class ColorPicker {
         this.cursorCanvas = this.createCursorCanvas();
         // -- slider
         this.colorSlider = this.createColorSlider();
+        // -- value inputs
+        this.buttonsDir = this.createButtonsDir();
+        this.inputsDir = this.createRgbInputs();
+
         // -- button
         this.addToPaletteBtn = this.createAddToPaletteBtn();
 
@@ -44,6 +48,8 @@ export default class ColorPicker {
 
         this.colorSlider.mount(this.colorPickerContent);
         this.content.appendChild(this.colorPickerContent);
+        this.content.appendChild(this.buttonsDir);
+        this.content.appendChild(this.inputsDir);
         this.content.appendChild(this.addToPaletteBtn);
 
         this.renderHsvSquare(0);
@@ -165,6 +171,84 @@ export default class ColorPicker {
         const colorSlider = new Slider(0, 360, 0, "color-slider");
 
         return colorSlider;
+    }
+
+    createButtonsDir() {
+        const rgbBtn = document.createElement("button");
+        rgbBtn.textContent = "RGB";
+        rgbBtn.className = "button-small";
+        rgbBtn.dataset.state = "on";
+
+        const hexBtn = document.createElement("button");
+        hexBtn.textContent = "HEX";
+        hexBtn.className = "button-small";
+        hexBtn.dataset.state = "off";
+
+        const hsvBtn = document.createElement("button");
+        hsvBtn.textContent = "HSV";
+        hsvBtn.className = "button-small";
+        hsvBtn.dataset.state = "off";
+
+        const hslBtn = document.createElement("button");
+        hslBtn.textContent = "HSL";
+        hslBtn.className = "button-small";
+        hslBtn.dataset.state = "off";
+
+        const buttonsDiv = document.createElement("div");
+        buttonsDiv.style.display = "flex";
+        buttonsDiv.style.flexDirection = "row";
+        buttonsDiv.style.justifyContent = "center";
+        buttonsDiv.style.margin = "5px";
+
+        buttonsDiv.appendChild(rgbBtn);
+        buttonsDiv.appendChild(hexBtn);
+        buttonsDiv.appendChild(hsvBtn);
+        buttonsDiv.appendChild(hslBtn);
+
+        return buttonsDiv;
+    }
+
+    createRgbInputs() {
+        // R
+        const r = document.createElement("label");
+        r.textContent = "R:";
+
+        const rBtn = document.createElement("input");
+        rBtn.className = "color-value-button";
+        
+        r.appendChild(rBtn);
+
+        // G
+        const g = document.createElement("label");
+        g.textContent = "G:";
+
+        const gBtn = document.createElement("input");
+        gBtn.className = "color-value-button";
+        
+        g.appendChild(gBtn);
+
+        // B
+        const b = document.createElement("label");
+        b.textContent = "B:";
+
+        const bBtn = document.createElement("input");
+        bBtn.className = "color-value-button";
+        
+        b.appendChild(bBtn);
+        
+        // input dir
+        const inputsDir = document.createElement("div");
+        inputsDir.style.display = "flex";
+        inputsDir.style.flexDirection = "row";
+        inputsDir.style.gap = "10px";
+        inputsDir.style.justifyContent = "center";
+        inputsDir.style.margin = "15px";
+
+        inputsDir.appendChild(r);
+        inputsDir.appendChild(g);
+        inputsDir.appendChild(b);
+
+        return inputsDir;
     }
 
     createAddToPaletteBtn() {

@@ -2,7 +2,7 @@
     display: none;
     position: absolute;
     width: 250px;
-    height: 250px;
+    height: 350px;
     padding: 5px;
     z-index: 9999;
     bottom: 2vh;
@@ -117,4 +117,8 @@
 
 #add-to-palette-btn {
     margin: 10px;
+}
+
+.color-value-button {
+    width: 30px;
 }
