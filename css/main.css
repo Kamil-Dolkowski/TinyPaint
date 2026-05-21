@@ -50,14 +50,18 @@ canvas {
     overflow: hidden;
 }
 
-/* #canvas-border {
+#canvas-space {
     position: absolute;
-    outline: 3px solid #000000;
     transform-origin: top left;
-} */
+}
+
+#canvas-border {
+    outline: 3px solid #000000;
+    touch-action: none;
+    pointer-events: none;
+}
 
 #checkerboard {
-    outline: 3px solid #000000;
     z-index: 0;
 }
 

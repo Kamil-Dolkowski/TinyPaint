@@ -1,6 +1,8 @@
 export default class Canvas {
-    constructor(workspace, checkerboard, canvas, cursorCanvas, drawingStatus) {
+    constructor(workspace, canvasSpace, canvasBorder, checkerboard, canvas, cursorCanvas, drawingStatus) {
         this.workspace = workspace;
+        this.canvasSpace = canvasSpace;
+        this.canvasBorder = canvasBorder;
 
         this.checkerboard = checkerboard;
         this.canvas = canvas;
@@ -20,7 +22,7 @@ export default class Canvas {
         this.currentZoom = 1; // current canvas css scale
         this.fitZoom = 1; // fit-to-screen zoom
         this.maxZoom = 1000; // zoom in limit
-
+        
         this.resize();
         this.fitToScreen();
     }
@@ -58,6 +60,12 @@ export default class Canvas {
     }
 
     resize() {
+        this.canvasSpace.style.width = this.width + "px";
+        this.canvasSpace.style.height = this.height + "px";
+
+        this.canvasBorder.style.width = this.width + "px";
+        this.canvasBorder.style.height = this.height + "px";
+
         this.checkerboard.width = this.width;
         this.checkerboard.height = this.height;
 
@@ -130,8 +138,13 @@ export default class Canvas {
     }
 
     updateTransform() {
-        this.checkerboard.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
-        this.canvas.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
-        this.cursorCanvas.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
+        // update canvas space transform -> update all canvases transforms
+        this.canvasSpace.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
+
+        // update canvasBorder size and translate
+        this.canvasBorder.style.width = this.cssWidth + "px";
+        this.canvasBorder.style.height = this.cssHeight + "px";
+
+        this.canvasBorder.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
 }

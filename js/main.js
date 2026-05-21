@@ -30,6 +30,9 @@ import WheelManager from './managers/WheelManager.js';
 // ===================== CANVAS =====================
 const workspace = document.getElementById("workspace");
 
+const canvasSpace = document.getElementById("canvas-space");
+const canvasBorder = document.getElementById("canvas-border");
+
 const checkerboard = document.getElementById("checkerboard");
 
 const canvas1 = document.getElementById("canvas");
@@ -38,7 +41,7 @@ const ctx = canvas1.getContext("2d", { willReadFrequently: true });
 const cursorCanvas = document.getElementById("cursor-canvas");
 const cursorCtx = cursorCanvas.getContext("2d");
 
-const canvas = new Canvas(workspace, checkerboard, canvas1, cursorCanvas, drawingStatus);
+const canvas = new Canvas(workspace, canvasSpace, canvasBorder, checkerboard, canvas1, cursorCanvas, drawingStatus);
 
 initSettingsModal(canvas);
 
