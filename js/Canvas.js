@@ -2,10 +2,6 @@ export default class Canvas {
     constructor(workspace, checkerboard, canvas, cursorCanvas, drawingStatus) {
         this.workspace = workspace;
 
-        // this.checkerboard = this.workspace.querySelector("#checkerboard");
-        // this.canvas = this.workspace.querySelector("#canvas");
-        // this.cursorCanvas = this.workspace.querySelector("#cursor-canvas");
-
         this.checkerboard = checkerboard;
         this.canvas = canvas;
         this.cursorCanvas = cursorCanvas;
@@ -17,6 +13,9 @@ export default class Canvas {
 
         this.cssWidth = this.width;
         this.cssHeight = this.height;
+
+        this.x = 0;
+        this.y = 0;
 
         this.currentZoom = 1; // current canvas css scale
         this.fitZoom = 1; // fit-to-screen zoom
@@ -85,14 +84,7 @@ export default class Canvas {
         this.cssWidth = this.width * this.currentZoom;
         this.cssHeight = this.height * this.currentZoom;
 
-        this.checkerboard.style.width = this.cssWidth + 'px';
-        this.checkerboard.style.height = this.cssHeight + 'px';
-
-        this.canvas.style.width = this.cssWidth + 'px';
-        this.canvas.style.height = this.cssHeight + 'px';
-
-        this.cursorCanvas.style.width = this.cssWidth + 'px';
-        this.cursorCanvas.style.height = this.cssHeight + 'px';
+        this.updateTransform();
 
         return true;
     }
@@ -117,33 +109,29 @@ export default class Canvas {
         this.setZoom(this.fitZoom);
 
         // move
-        const left = (workspaceWidth - this.cssWidth) / 2;
-        const top = (workspaceHeight - this.cssHeight) / 2;
+        const x = (workspaceWidth - this.cssWidth) / 2;
+        const y = (workspaceHeight - this.cssHeight) / 2;
 
-        this.moveAbsolute(left, top);
+        this.moveAbsolute(x, y);
     }
 
     moveRelative(x, y) {
-        const rect = this.checkerboard.getBoundingClientRect();
+        this.x += x;
+        this.y += y;
 
-        this.checkerboard.style.left = rect.left + x + 'px';
-        this.checkerboard.style.top = rect.top + y + 'px';
-
-        this.canvas.style.left = rect.left + x + 'px';
-        this.canvas.style.top = rect.top + y + 'px';
-
-        this.cursorCanvas.style.left = rect.left + x + 'px';
-        this.cursorCanvas.style.top = rect.top + y + 'px';
+        this.updateTransform();
     }
 
     moveAbsolute(x, y) {
-        this.checkerboard.style.left = x + 'px';
-        this.checkerboard.style.top = y + 'px';
+        this.x = x;
+        this.y = y;
 
-        this.canvas.style.left = x + 'px';
-        this.canvas.style.top = y + 'px';
+        this.updateTransform();
+    }
 
-        this.cursorCanvas.style.left = x + 'px';
-        this.cursorCanvas.style.top = y + 'px';
+    updateTransform() {
+        this.checkerboard.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
+        this.canvas.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
+        this.cursorCanvas.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.currentZoom})`;
     }
 }
