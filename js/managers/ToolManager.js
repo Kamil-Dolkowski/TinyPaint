@@ -14,9 +14,21 @@ export default class ToolManager {
     }
 
     initToolButtonsEvents() {
+        // Set Tool actions
         Object.values(this.tools).forEach(tool => {
             tool.button.addEventListener("click", () => {
                 this.setTool(tool.tool);
+            });
+        });
+
+        // Radio Buttons logic
+        Object.values(this.tools).forEach(tool => {
+            tool.button.addEventListener("click", () => {
+                Object.values(this.tools).forEach(tool => {
+                    tool.button.dataset.state = "off";
+                });
+
+                tool.button.dataset.state = "on";
             });
         });
     }

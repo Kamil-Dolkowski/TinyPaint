@@ -104,8 +104,6 @@ ctx.strokeStyle = "black";
 
 // ======== CANVAS EVENTS ========
 
-// const gesture = new Gesture(moveZoom, canvas, drawingStatus);
-
 // 1 - pointerdown
 cursorCanvas.addEventListener("pointerdown", e => {
     pointerManager.pointerdown(e);
@@ -148,19 +146,6 @@ const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ===================== TOOLS =====================
-
-// ======== TOOLS RADIO ========
-const toolsToolbar = document.querySelectorAll("#toolbar-tools button");
-
-toolsToolbar.forEach(toolBtn => {
-    toolBtn.addEventListener("click", e => {
-        toolsToolbar.forEach(toolBtn => {
-            toolBtn.dataset.state = "off";
-        });
-
-        toolBtn.dataset.state = "on";
-    });
-});
 
 // ======== CLEAR ========
 const clearBtn = document.getElementById("clear-btn");
