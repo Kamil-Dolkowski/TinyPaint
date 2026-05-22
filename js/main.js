@@ -45,6 +45,15 @@ const canvas = new Canvas(workspace, canvasSpace, canvasBorder, checkerboard, ca
 
 initSettingsModal(canvas);
 
+// ======== PALETTE ========
+const paletteBtn = document.getElementById("palette-btn");
+const paletteWindow = document.getElementById("palette-window");
+const currentColor = document.getElementById("current-color");
+
+const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+
+const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, palette);
+
 // ======== TOOLS INICIALIZATION ========
 const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
 const brush = new Brush(ctx, cursorCtx, drawingStatus);
@@ -52,21 +61,42 @@ const line = new Line(ctx, cursorCtx, drawingStatus);
 const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
 const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
 
+const tools = {
+    pencil: {
+        tool: pencil,
+        button: document.getElementById("pencil-btn")
+    },
+    brush: {
+        tool: brush,
+        button: document.getElementById("brush-btn")
+    },
+    line: {
+        tool: line,
+        button: document.getElementById("line-btn")
+    },
+    eraser: {
+        tool: eraser,
+        button: document.getElementById("eraser-btn")
+    },
+    moveZoom: {
+        tool: moveZoom,
+        button: document.getElementById("move-zoom-btn")
+    },
+    eyedropper: {
+        tool: eyedropper,
+        button: document.getElementById("eyedropper-btn")
+    },
+};
 
 
 const gesture = new Gesture(moveZoom);
 
-const toolManager = new ToolManager(pencil, gesture);
+const toolManager = new ToolManager(tools, tools.pencil.tool, gesture);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
 
 const wheelManager = new WheelManager(toolManager);
-
-
-
-drawingStatus.currentTool = pencil;
-let tempTool = null;
 
 // ======== DRAW INITIAL SETTINGS ========
 ctx.lineWidth = 1;
@@ -120,65 +150,16 @@ const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 // ===================== TOOLS =====================
 
 // ======== TOOLS RADIO ========
-const toolBtns = document.querySelectorAll("#toolbar-tools button")
+const toolsToolbar = document.querySelectorAll("#toolbar-tools button");
 
-toolBtns.forEach(toolBtn => {
+toolsToolbar.forEach(toolBtn => {
     toolBtn.addEventListener("click", e => {
-        toolBtns.forEach(toolBtn => {
+        toolsToolbar.forEach(toolBtn => {
             toolBtn.dataset.state = "off";
         });
 
         toolBtn.dataset.state = "on";
     });
-});
-
-// ======== PENCIL ========
-const pencilBtn = document.getElementById("pencil-btn");
-
-pencilBtn.addEventListener("click", () => {
-    toolManager.setTool(pencil);
-});
-
-// ======== BRUSH ========
-const brushBtn = document.getElementById("brush-btn");
-
-brushBtn.addEventListener("click", () => {
-    toolManager.setTool(brush);
-});
-
-// ======== LINE ========
-const lineBtn = document.getElementById("line-btn");
-
-lineBtn.addEventListener("click", () => {
-    toolManager.setTool(line);
-});
-
-// ======== ERASER ========
-const eraserBtn = document.getElementById("eraser-btn");
-
-eraserBtn.addEventListener("click", () => {
-    toolManager.setTool(eraser);
-});
-
-// ======== BACKGROUND COLOR ========
-// const bgColorBtn = document.getElementById("bgcolor-btn");
-
-// bgColorBtn.addEventListener("click", () => {
-
-// });
-
-// ======== MOVE_ZOOM ========
-const moveZoomBtn = document.getElementById("move-zoom-btn");
-
-moveZoomBtn.addEventListener("click", () => {
-    toolManager.setTool(moveZoom);
-});
-
-// ======== EYEDROPPER ========
-const eyedropperBtn = document.getElementById("eyedropper-btn");
-
-eyedropperBtn.addEventListener("click", () => {
-    toolManager.setTool(eyedropper);
 });
 
 // ======== CLEAR ========
@@ -195,15 +176,6 @@ const resetZoomBtn = document.getElementById("reset-zoom-btn");
 resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
 });
-
-// ======== PALETTE ========
-const paletteBtn = document.getElementById("palette-btn");
-const paletteWindow = document.getElementById("palette-window");
-const currentColor = document.getElementById("current-color");
-
-const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
-
-const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, palette);
 
 // ======== INCREASE/DECREASE DRAW SIZE ========
 

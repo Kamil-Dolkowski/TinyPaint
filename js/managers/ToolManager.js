@@ -1,11 +1,24 @@
 import Tool from '../tools/Tool.js';
 
 export default class ToolManager {
-    constructor(firstTool, gesture) {
+    constructor(tools, firstTool, gesture) {
+        this.tools = tools;
+        this.gesture = gesture;
+
         this.currentTool = firstTool;
         this.tempTool = null;
-        this.gesture = gesture;
+        
         this.history = null;
+
+        this.initToolButtonsEvents();
+    }
+
+    initToolButtonsEvents() {
+        Object.values(this.tools).forEach(tool => {
+            tool.button.addEventListener("click", () => {
+                this.setTool(tool.tool);
+            });
+        });
     }
 
     initHistory(history) {
