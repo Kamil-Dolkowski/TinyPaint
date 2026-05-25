@@ -45,36 +45,56 @@ const canvas = new Canvas(workspace, canvasSpace, canvasBorder, checkerboard, ca
 
 initSettingsModal(canvas);
 
+// ======== PALETTE ========
+const paletteBtn = document.getElementById("palette-btn");
+const paletteWindow = document.getElementById("palette-window");
+const currentColor = document.getElementById("current-color");
+
+const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+
 // ======== TOOLS INICIALIZATION ========
-const pencil = new Pencil(ctx, cursorCtx, drawingStatus);
-const brush = new Brush(ctx, cursorCtx, drawingStatus);
-const line = new Line(ctx, cursorCtx, drawingStatus);
-const eraser = new Eraser(ctx, cursorCtx, drawingStatus);
-const moveZoom = new MoveZoom(ctx, cursorCtx, drawingStatus, canvas);
 
+const tools = {
+    pencil: {
+        tool: new Pencil(ctx, cursorCtx, drawingStatus),
+        button: document.getElementById("pencil-btn")
+    },
+    brush: {
+        tool: new Brush(ctx, cursorCtx, drawingStatus),
+        button: document.getElementById("brush-btn")
+    },
+    line: {
+        tool: new Line(ctx, cursorCtx, drawingStatus),
+        button: document.getElementById("line-btn")
+    },
+    eraser: {
+        tool: new Eraser(ctx, cursorCtx, drawingStatus),
+        button: document.getElementById("eraser-btn")
+    },
+    moveZoom: {
+        tool: new MoveZoom(ctx, cursorCtx, drawingStatus, canvas),
+        button: document.getElementById("move-zoom-btn")
+    },
+    eyedropper: {
+        tool: new Eyedropper(ctx, cursorCtx, drawingStatus, palette),
+        button: document.getElementById("eyedropper-btn")
+    },
+};
 
+const gesture = new Gesture(tools.moveZoom.tool);
 
-const gesture = new Gesture(moveZoom);
-
-const toolManager = new ToolManager(pencil, gesture);
+const toolManager = new ToolManager(tools, tools.pencil.tool, gesture);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
 
 const wheelManager = new WheelManager(toolManager);
 
-
-
-drawingStatus.currentTool = pencil;
-let tempTool = null;
-
 // ======== DRAW INITIAL SETTINGS ========
 ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
 // ======== CANVAS EVENTS ========
-
-// const gesture = new Gesture(moveZoom, canvas, drawingStatus);
 
 // 1 - pointerdown
 cursorCanvas.addEventListener("pointerdown", e => {
@@ -113,73 +133,11 @@ const redoBtn = document.getElementById("redo-btn");
 const history = new History(canvas1, ctx, undoBtn, redoBtn);
 toolManager.initHistory(history);
 
-const shortcutManager = new ShortcutManager(history);
+const shortcutManager = new ShortcutManager(history, toolManager);
 const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ===================== TOOLS =====================
-
-// ======== TOOLS RADIO ========
-const toolBtns = document.querySelectorAll("#toolbar-tools button")
-
-toolBtns.forEach(toolBtn => {
-    toolBtn.addEventListener("click", e => {
-        toolBtns.forEach(toolBtn => {
-            toolBtn.dataset.state = "off";
-        });
-
-        toolBtn.dataset.state = "on";
-    });
-});
-
-// ======== PENCIL ========
-const pencilBtn = document.getElementById("pencil-btn");
-
-pencilBtn.addEventListener("click", () => {
-    toolManager.setTool(pencil);
-});
-
-// ======== BRUSH ========
-const brushBtn = document.getElementById("brush-btn");
-
-brushBtn.addEventListener("click", () => {
-    toolManager.setTool(brush);
-});
-
-// ======== LINE ========
-const lineBtn = document.getElementById("line-btn");
-
-lineBtn.addEventListener("click", () => {
-    toolManager.setTool(line);
-});
-
-// ======== ERASER ========
-const eraserBtn = document.getElementById("eraser-btn");
-
-eraserBtn.addEventListener("click", () => {
-    toolManager.setTool(eraser);
-});
-
-// ======== BACKGROUND COLOR ========
-// const bgColorBtn = document.getElementById("bgcolor-btn");
-
-// bgColorBtn.addEventListener("click", () => {
-
-// });
-
-// ======== MOVE_ZOOM ========
-const moveZoomBtn = document.getElementById("move-zoom-btn");
-
-moveZoomBtn.addEventListener("click", () => {
-    toolManager.setTool(moveZoom);
-});
-
-// ======== EYEDROPPER ========
-const eyedropperBtn = document.getElementById("eyedropper-btn");
-
-eyedropperBtn.addEventListener("click", () => {
-    toolManager.setTool(eyedropper);
-});
 
 // ======== CLEAR ========
 const clearBtn = document.getElementById("clear-btn");
@@ -195,15 +153,6 @@ const resetZoomBtn = document.getElementById("reset-zoom-btn");
 resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
 });
-
-// ======== PALETTE ========
-const paletteBtn = document.getElementById("palette-btn");
-const paletteWindow = document.getElementById("palette-window");
-const currentColor = document.getElementById("current-color");
-
-const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
-
-const eyedropper = new Eyedropper(ctx, cursorCtx, drawingStatus, palette);
 
 // ======== INCREASE/DECREASE DRAW SIZE ========
 

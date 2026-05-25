@@ -4,7 +4,7 @@ const Tool = Object.freeze({
     ERASER: 'eraser',
     LINE: 'line',
     FILL: 'fill',
-    MOVE_ZOOM: 'move_zoom',
+    MOVE_ZOOM: 'moveZoom',
     EYEDROPPER: 'eyedropper'
 });
 

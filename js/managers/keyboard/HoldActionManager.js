@@ -7,8 +7,8 @@ export default class HoldActionManager {
         this.holdActions = {
             ctrl: {
                 code: "ControlLeft",
-                keydownAction: () => console.log("moveZoom"),
-                keyupAction: () => console.log("default")
+                keydownAction: () => this.toolManager.setToolByName("moveZoom"),
+                keyupAction: () => this.toolManager.setLastTool()
             }
         }
     }

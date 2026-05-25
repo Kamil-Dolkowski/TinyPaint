@@ -12,7 +12,7 @@ export default class MoveZoom extends ToolBase {
     }
 
     setTool() {
-        
+        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
     }
 
     pointerdown(pointerData) {
