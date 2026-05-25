@@ -6,7 +6,7 @@ export default class ToolManager {
         this.gesture = gesture;
 
         this.currentTool = firstTool;
-        this.tempTool = null;
+        this.lastTool = null;
         
         this.history = null;
 
@@ -38,8 +38,31 @@ export default class ToolManager {
     }
 
     setTool(tool) {
+        if (tool != this.currentTool) this.lastTool = this.currentTool;
+        
         this.currentTool = tool;
         this.currentTool?.setTool();
+    }
+
+    setToolByName(toolName) {
+        const tool = this.tools[toolName].tool;
+        
+        if (!tool) return;
+
+        // set tool
+        this.setTool(tool);
+
+        // set button
+        const button = this.tools[toolName].button;
+        button.click();
+        button.blur();
+    }
+
+    setLastTool() {
+        if (!this.lastTool) return;
+
+        this.setToolByName(this.lastTool.tool)
+        this.lastTool = null;
     }
 
     drawCursor(current) {
