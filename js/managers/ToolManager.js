@@ -1,14 +1,14 @@
 import Tool from '../tools/Tool.js';
 
 export default class ToolManager {
-    constructor(tools, firstTool, gesture) {
+    constructor(tools, firstTool, gesture, history) {
         this.tools = tools;
         this.gesture = gesture;
 
         this.currentTool = firstTool;
         this.lastTool = null;
         
-        this.history = null;
+        this.history = history;
 
         this.initToolButtonsEvents();
     }
@@ -31,10 +31,6 @@ export default class ToolManager {
                 tool.button.dataset.state = "on";
             });
         });
-    }
-
-    initHistory(history) {
-        this.history = history;
     }
 
     setTool(tool) {

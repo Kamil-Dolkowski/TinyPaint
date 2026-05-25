@@ -28,6 +28,7 @@ import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 import WheelManager from './managers/WheelManager.js';
 
 // ===================== CANVAS =====================
+
 const workspace = document.getElementById("workspace");
 const canvasSpace = document.getElementById("canvas-space");
 const canvasBorder = document.getElementById("canvas-border");
@@ -40,14 +41,22 @@ const canvas = new Canvas(workspace, canvasSpace, canvasBorder, checkerboard, ma
 
 initSettingsModal(canvas);
 
-// ======== PALETTE ========
+// ==================== UNDO/REDO ===================
+
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
+
+const history = new History(canvas, undoBtn, redoBtn);
+
+// ===================== PALETTE ====================
+
 const paletteBtn = document.getElementById("palette-btn");
 const paletteWindow = document.getElementById("palette-window");
 const currentColor = document.getElementById("current-color");
 
 const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
 
-// ======== TOOLS INICIALIZATION ========
+// ============== TOOLS INICIALIZATION ==============
 
 const tools = {
     pencil: {
@@ -78,12 +87,20 @@ const tools = {
 
 const gesture = new Gesture(tools.moveZoom.tool);
 
-const toolManager = new ToolManager(tools, tools.pencil.tool, gesture);
+// ==================== MANAGERS ====================
+
+const toolManager = new ToolManager(tools, tools.pencil.tool, gesture, history);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
 
 const wheelManager = new WheelManager(toolManager);
+
+// ==================== KEYBOARD ====================
+
+const shortcutManager = new ShortcutManager(history, toolManager);
+const holdActionManager = new HoldActionManager(toolManager);
+const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ======== DRAW INITIAL SETTINGS ========
 canvas.ctx.lineWidth = 1;
@@ -119,18 +136,6 @@ cursorCanvas.addEventListener("pointerout", e => {
 
 // 5 - tool animation
 toolManager.drawToolAnimation();
-
-// ===================== UNDO/REDO =====================
-
-const undoBtn = document.getElementById("undo-btn");
-const redoBtn = document.getElementById("redo-btn");
-
-const history = new History(canvas, undoBtn, redoBtn);
-toolManager.initHistory(history);
-
-const shortcutManager = new ShortcutManager(history, toolManager);
-const holdActionManager = new HoldActionManager(toolManager);
-const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ===================== TOOLS =====================
 
