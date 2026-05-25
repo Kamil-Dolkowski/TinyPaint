@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Brush extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.BRUSH, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingStatus) {
+        super(Tool.BRUSH, canvas, drawingStatus);
     }
 
     setTool() {
@@ -34,7 +34,7 @@ export default class Brush extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         this.cursorCtx.save();
         this.cursorCtx.lineWidth = 1;

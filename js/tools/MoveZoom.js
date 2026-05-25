@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class MoveZoom extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus, canvas) {
-        super(Tool.MOVE_ZOOM, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingStatus) {
+        super(Tool.MOVE_ZOOM, canvas, drawingStatus);
 
         this.canvas = canvas;
         this.zoomValue = 1.5;
@@ -12,7 +12,7 @@ export default class MoveZoom extends ToolBase {
     }
 
     setTool() {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
     }
 
     pointerdown(pointerData) {

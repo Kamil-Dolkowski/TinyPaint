@@ -1,9 +1,11 @@
 export default class ToolBase {
-    constructor(tool, ctx, cursorCtx, drawingStatus) {
+    constructor(tool, canvas, drawingStatus) {
         this.tool = tool;
-        this.ctx = ctx;
-        this.cursorCtx = cursorCtx;
+        this.canvas = canvas;
         this.drawingStatus = drawingStatus;
+
+        this.ctx = canvas.ctx;
+        this.cursorCtx = canvas.cursorCtx;
     }
 
     setTool() {}

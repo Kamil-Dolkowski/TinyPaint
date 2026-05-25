@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Eraser extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.ERASER, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingStatus) {
+        super(Tool.ERASER, canvas, drawingStatus);
     }
 
     setTool() {
@@ -34,7 +34,7 @@ export default class Eraser extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         this.cursorCtx.save();
         this.cursorCtx.lineWidth = 1;

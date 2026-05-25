@@ -1,24 +1,32 @@
 export default class Canvas {
-    constructor(workspace, canvasSpace, canvasBorder, checkerboard, canvas, cursorCanvas, drawingStatus) {
+    constructor(workspace, canvasSpace, canvasBorder, checkerboard, canvas, cursorCanvas) {
+        // elements
         this.workspace = workspace;
         this.canvasSpace = canvasSpace;
         this.canvasBorder = canvasBorder;
 
+        // canvases
         this.checkerboard = checkerboard;
         this.canvas = canvas;
         this.cursorCanvas = cursorCanvas;
 
-        this.drawingStatus = drawingStatus;
+        // ctx'es
+        this.checkerboardCtx = this.checkerboard.getContext("2d");
+        this.ctx = this.canvas.getContext("2d");
+        this.cursorCtx = this.cursorCanvas.getContext("2d");
 
+        // sizes
         this.width = 800;
         this.height = 600;
 
         this.cssWidth = this.width;
         this.cssHeight = this.height;
 
+        // position
         this.x = 0;
         this.y = 0;
 
+        // zoom values
         this.currentZoom = 1; // current canvas css scale
         this.fitZoom = 1; // fit-to-screen zoom
         this.maxZoom = 1000; // zoom in limit
@@ -29,7 +37,7 @@ export default class Canvas {
 
     drawCheckerboard() {
         const tileSize = 16;
-        const ctx = this.checkerboard.getContext("2d");
+        const ctx = this.checkerboardCtx;
 
         for (let y = 0; y*tileSize < this.height; y++) {
             for (let x = 0; x*tileSize < this.width; x++) {
@@ -60,12 +68,14 @@ export default class Canvas {
     }
 
     resize() {
+        // elements
         this.canvasSpace.style.width = this.width + "px";
         this.canvasSpace.style.height = this.height + "px";
 
         this.canvasBorder.style.width = this.width + "px";
         this.canvasBorder.style.height = this.height + "px";
 
+        // canvases
         this.checkerboard.width = this.width;
         this.checkerboard.height = this.height;
 
@@ -76,9 +86,6 @@ export default class Canvas {
         this.cursorCanvas.height = this.height;
 
         this.drawCheckerboard();
-
-        this.drawingStatus.canvasWidth = this.width;
-        this.drawingStatus.canvasHeight = this.height;
     }
 
     setZoom(value) {
@@ -146,5 +153,13 @@ export default class Canvas {
         this.canvasBorder.style.height = this.cssHeight + "px";
 
         this.canvasBorder.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+
+    clearCursorCanvas() {
+        this.cursorCtx.clearRect(0, 0, this.width, this.height);
+    }
+
+    clearMainCanvas() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
     }
 }

@@ -28,71 +28,83 @@ import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 import WheelManager from './managers/WheelManager.js';
 
 // ===================== CANVAS =====================
-const workspace = document.getElementById("workspace");
 
+const workspace = document.getElementById("workspace");
 const canvasSpace = document.getElementById("canvas-space");
 const canvasBorder = document.getElementById("canvas-border");
 
 const checkerboard = document.getElementById("checkerboard");
-
-const canvas1 = document.getElementById("canvas");
-const ctx = canvas1.getContext("2d", { willReadFrequently: true });
-
+const mainCanvas = document.getElementById("canvas");
 const cursorCanvas = document.getElementById("cursor-canvas");
-const cursorCtx = cursorCanvas.getContext("2d");
 
-const canvas = new Canvas(workspace, canvasSpace, canvasBorder, checkerboard, canvas1, cursorCanvas, drawingStatus);
+const canvas = new Canvas(workspace, canvasSpace, canvasBorder, checkerboard, mainCanvas, cursorCanvas);
 
 initSettingsModal(canvas);
 
-// ======== PALETTE ========
+// ==================== UNDO/REDO ===================
+
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
+
+const history = new History(canvas, undoBtn, redoBtn);
+
+// ===================== PALETTE ====================
+
 const paletteBtn = document.getElementById("palette-btn");
 const paletteWindow = document.getElementById("palette-window");
 const currentColor = document.getElementById("current-color");
 
 const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
 
-// ======== TOOLS INICIALIZATION ========
+// ============== TOOLS INICIALIZATION ==============
 
 const tools = {
     pencil: {
-        tool: new Pencil(ctx, cursorCtx, drawingStatus),
+        tool: new Pencil(canvas, drawingStatus),
         button: document.getElementById("pencil-btn")
     },
     brush: {
-        tool: new Brush(ctx, cursorCtx, drawingStatus),
+        tool: new Brush(canvas, drawingStatus),
         button: document.getElementById("brush-btn")
     },
     line: {
-        tool: new Line(ctx, cursorCtx, drawingStatus),
+        tool: new Line(canvas, drawingStatus),
         button: document.getElementById("line-btn")
     },
     eraser: {
-        tool: new Eraser(ctx, cursorCtx, drawingStatus),
+        tool: new Eraser(canvas, drawingStatus),
         button: document.getElementById("eraser-btn")
     },
     moveZoom: {
-        tool: new MoveZoom(ctx, cursorCtx, drawingStatus, canvas),
+        tool: new MoveZoom(canvas, drawingStatus),
         button: document.getElementById("move-zoom-btn")
     },
     eyedropper: {
-        tool: new Eyedropper(ctx, cursorCtx, drawingStatus, palette),
+        tool: new Eyedropper(canvas, drawingStatus, palette),
         button: document.getElementById("eyedropper-btn")
     },
 };
 
 const gesture = new Gesture(tools.moveZoom.tool);
 
-const toolManager = new ToolManager(tools, tools.pencil.tool, gesture);
+// ==================== MANAGERS ====================
+
+const toolManager = new ToolManager(tools, tools.pencil.tool, gesture, history);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
 
 const wheelManager = new WheelManager(toolManager);
 
+// ==================== KEYBOARD ====================
+
+const shortcutManager = new ShortcutManager(history, toolManager);
+const holdActionManager = new HoldActionManager(toolManager);
+const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
+
 // ======== DRAW INITIAL SETTINGS ========
-ctx.lineWidth = 1;
-ctx.strokeStyle = "black";
+canvas.ctx.lineWidth = 1;
+canvas.ctx.strokeStyle = "black";
 
 // ======== CANVAS EVENTS ========
 
@@ -119,23 +131,11 @@ cursorCanvas.addEventListener("pointerup", e => {
 // 4 - pointerout
 cursorCanvas.addEventListener("pointerout", e => {
     // Clear cursor canvas
-    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+    canvas.clearCursorCanvas();
 });
 
 // 5 - tool animation
 toolManager.drawToolAnimation();
-
-// ===================== UNDO/REDO =====================
-
-const undoBtn = document.getElementById("undo-btn");
-const redoBtn = document.getElementById("redo-btn");
-
-const history = new History(canvas1, ctx, undoBtn, redoBtn);
-toolManager.initHistory(history);
-
-const shortcutManager = new ShortcutManager(history, toolManager);
-const holdActionManager = new HoldActionManager(toolManager);
-const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
 // ===================== TOOLS =====================
 
@@ -143,7 +143,7 @@ const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 const clearBtn = document.getElementById("clear-btn");
 
 clearBtn.addEventListener("click", () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.ctx.clearRect(0, 0, canvas.width, canvas.height);
     history.addCanvasToHistory();
 });
 
@@ -161,18 +161,18 @@ const increaseBtn = document.getElementById("increase-btn");
 const decreaseBtn = document.getElementById("decrease-btn");
 const sizeLbl = document.getElementById("size-lbl");
 
-sizeLbl.innerText = ctx.lineWidth;
+sizeLbl.innerText = canvas.ctx.lineWidth;
 
 increaseBtn.addEventListener("click", () => {
-    ctx.lineWidth += 1;
-    drawingStatus.drawSize = ctx.lineWidth;
-    sizeLbl.innerText = ctx.lineWidth;
+    canvas.ctx.lineWidth += 1;
+    drawingStatus.drawSize = canvas.ctx.lineWidth;
+    sizeLbl.innerText = canvas.ctx.lineWidth;
 });
 
 decreaseBtn.addEventListener("click", () => {
-    ctx.lineWidth -= 1;
-    drawingStatus.drawSize = ctx.lineWidth;
-    sizeLbl.innerText = ctx.lineWidth;
+    canvas.ctx.lineWidth -= 1;
+    drawingStatus.drawSize = canvas.ctx.lineWidth;
+    sizeLbl.innerText = canvas.ctx.lineWidth;
 });
 
 // ======== DOWNLOAD ========

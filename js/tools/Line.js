@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Line extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.LINE, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingStatus) {
+        super(Tool.LINE, canvas, drawingStatus);
         this.last = null;
         this.current = null;
     }
@@ -52,7 +52,7 @@ export default class Line extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         this.cursorCtx.save();
         this.cursorCtx.lineWidth = 1;
@@ -65,7 +65,7 @@ export default class Line extends ToolBase {
     }
 
     drawAnimationFrame() {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
         
         if (this.last == null || this.current == null) return;
         
