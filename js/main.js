@@ -133,7 +133,7 @@ const redoBtn = document.getElementById("redo-btn");
 const history = new History(canvas1, ctx, undoBtn, redoBtn);
 toolManager.initHistory(history);
 
-const shortcutManager = new ShortcutManager(history);
+const shortcutManager = new ShortcutManager(history, toolManager);
 const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
