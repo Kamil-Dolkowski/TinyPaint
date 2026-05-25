@@ -24,6 +24,7 @@ export default class Line extends ToolBase {
     pointermove(pointerData) {
         if (!this.isPrimaryAction(pointerData)) return;
         
+        if (!this.last) return;
         this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
@@ -34,6 +35,7 @@ export default class Line extends ToolBase {
     pointerup(pointerData) {
         if (!this.isPrimaryAction(pointerData)) return;
         
+        if (!this.last) return;
         this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
@@ -65,7 +67,7 @@ export default class Line extends ToolBase {
     drawAnimationFrame() {
         this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
         
-        if (this.last == null && this.current == null) return;
+        if (this.last == null || this.current == null) return;
         
         this.cursorCtx.save();
 
