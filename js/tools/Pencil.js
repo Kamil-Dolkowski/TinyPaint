@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Pencil extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.PENCIL, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingStatus) {
+        super(Tool.PENCIL, canvas, drawingStatus);
     }
 
     setTool() {
@@ -35,7 +35,7 @@ export default class Pencil extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         const currentX = Math.floor(current.x);
         const currentY = Math.floor(current.y);
