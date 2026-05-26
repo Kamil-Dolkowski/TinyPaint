@@ -4,7 +4,7 @@ export default class OptionSlider {
         this.max = max;
         this.value = value;
 
-        this.icon = this.createIcon(iconClass);
+        this.iconBtn = this.createIconBtn(iconClass);
         this.minusBtn = this.createMinusBtn();
         this.slider = this.createSlider();
         this.plusBtn = this.createPlusBtn();
@@ -36,7 +36,7 @@ export default class OptionSlider {
         });
     }
 
-    createIcon(iconClass) {
+    createIconBtn(iconClass) {
         const button = document.createElement("button");
         button.classList.add("toolbar-button");
         
@@ -94,7 +94,7 @@ export default class OptionSlider {
         const root = document.createElement("div");
         root.style.display = "flex";
 
-        root.appendChild(this.icon);
+        root.appendChild(this.iconBtn);
         root.appendChild(this.minusBtn);
         root.appendChild(this.slider);
         root.appendChild(this.plusBtn);
