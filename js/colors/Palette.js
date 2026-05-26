@@ -8,6 +8,8 @@ export default class Palette {
         this.currentColorDiv = currentColorDiv;
         this.canvas = canvas;
 
+        this.element = this.createElement();
+
         this.ctx = this.canvas.canvas.getContext("2d");
 
         // palette options
@@ -51,6 +53,18 @@ export default class Palette {
         });
 
         window.addEventListener("resize", this.updatePosition.bind(this));
+    }
+
+    createElement() {
+        const element = document.createElement("div");
+
+        element.id = "palette";
+        element.style.display = "flex";
+
+        element.appendChild(this.paletteBtn);
+        element.appendChild(this.currentColorDiv);
+
+        return element;
     }
 
     // Window

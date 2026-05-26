@@ -26,6 +26,7 @@ import ShortcutManager from './managers/keyboard/ShortcutManager.js';
 import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 
 import WheelManager from './managers/WheelManager.js';
+import ContextualToolbarManager from './managers/ContextualToolbarManager.js';
 
 // ===================== CANVAS =====================
 
@@ -86,6 +87,14 @@ const tools = {
 };
 
 const gesture = new Gesture(tools.moveZoom.tool);
+
+// ============== CONTEXTUAL TOOLBAR = ==============
+
+const ctxToolbar = document.getElementById("contextual-toolbar");
+
+const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, palette);
+
+ctxToolbarManager.update(["palette", "size", "alpha"]);
 
 // ==================== MANAGERS ====================
 
@@ -157,23 +166,23 @@ resetZoomBtn.addEventListener("click", () => {
 // ======== INCREASE/DECREASE DRAW SIZE ========
 
 // -- BUTTONS --
-const increaseBtn = document.getElementById("increase-btn");
-const decreaseBtn = document.getElementById("decrease-btn");
-const sizeLbl = document.getElementById("size-lbl");
+// const increaseBtn = document.getElementById("increase-btn");
+// const decreaseBtn = document.getElementById("decrease-btn");
+// const sizeLbl = document.getElementById("size-lbl");
 
-sizeLbl.innerText = canvas.ctx.lineWidth;
+// sizeLbl.innerText = canvas.ctx.lineWidth;
 
-increaseBtn.addEventListener("click", () => {
-    canvas.ctx.lineWidth += 1;
-    drawingStatus.drawSize = canvas.ctx.lineWidth;
-    sizeLbl.innerText = canvas.ctx.lineWidth;
-});
+// increaseBtn.addEventListener("click", () => {
+//     canvas.ctx.lineWidth += 1;
+//     drawingStatus.drawSize = canvas.ctx.lineWidth;
+//     sizeLbl.innerText = canvas.ctx.lineWidth;
+// });
 
-decreaseBtn.addEventListener("click", () => {
-    canvas.ctx.lineWidth -= 1;
-    drawingStatus.drawSize = canvas.ctx.lineWidth;
-    sizeLbl.innerText = canvas.ctx.lineWidth;
-});
+// decreaseBtn.addEventListener("click", () => {
+//     canvas.ctx.lineWidth -= 1;
+//     drawingStatus.drawSize = canvas.ctx.lineWidth;
+//     sizeLbl.innerText = canvas.ctx.lineWidth;
+// });
 
 // ======== DOWNLOAD ========
 const exportBtn = document.getElementById("export-btn");
