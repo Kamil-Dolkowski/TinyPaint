@@ -64,8 +64,6 @@ const ctxToolbar = document.getElementById("contextual-toolbar");
 
 const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, controlsContent);
 
-// ctxToolbarManager.update(["palette", "size", "alpha"]);
-
 // ===================== PALETTE ====================
 
 const paletteWindow = document.getElementById("palette-window");
@@ -105,7 +103,7 @@ const gesture = new Gesture(tools.moveZoom.tool);
 
 // ==================== MANAGERS ====================
 
-const toolManager = new ToolManager(tools, tools.pencil.tool, gesture, history);
+const toolManager = new ToolManager(tools, tools.pencil.tool, gesture, history, ctxToolbarManager);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
