@@ -24,6 +24,7 @@ html, body {
 }
 
 #contextual-toolbar {
+    height: 44px;
     background-color: #353338;
 
     display: flex;
