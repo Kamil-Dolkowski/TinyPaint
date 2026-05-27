@@ -28,6 +28,7 @@ import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 import WheelManager from './managers/WheelManager.js';
 import ContextualToolbarManager from './managers/ContextualToolbarManager.js';
 
+import PaletteControl from "./ui/PaletteControl.js";
 import OptionSlider from "./ui/OptionSlider.js";
 
 // ===================== CANVAS =====================
@@ -51,13 +52,25 @@ const redoBtn = document.getElementById("redo-btn");
 
 const history = new History(canvas, undoBtn, redoBtn);
 
+// ============== CONTEXTUAL TOOLBAR = ==============
+
+const controlsContent = {
+    palette: new PaletteControl(),
+    size: new OptionSlider(1, 40, 1, "fa-solid fa-pen-nib"),
+    alpha: new OptionSlider(1, 100, 100, "fa-solid fa-a"),
+}
+
+const ctxToolbar = document.getElementById("contextual-toolbar");
+
+const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, controlsContent);
+
+// ctxToolbarManager.update(["palette", "size", "alpha"]);
+
 // ===================== PALETTE ====================
 
-const paletteBtn = document.getElementById("palette-btn");
 const paletteWindow = document.getElementById("palette-window");
-const currentColor = document.getElementById("current-color");
 
-const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+const palette = new Palette(paletteWindow, controlsContent.palette, canvas);
 
 // ============== TOOLS INICIALIZATION ==============
 
@@ -89,20 +102,6 @@ const tools = {
 };
 
 const gesture = new Gesture(tools.moveZoom.tool);
-
-// ============== CONTEXTUAL TOOLBAR = ==============
-
-const controlsContent = {
-    palette: null,
-    size: new OptionSlider(1, 40, 1, "fa-solid fa-pen-nib"),
-    alpha: new OptionSlider(1, 100, 100, "fa-solid fa-a"),
-}
-
-const ctxToolbar = document.getElementById("contextual-toolbar");
-
-const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, controlsContent);
-
-// ctxToolbarManager.update(["palette", "size", "alpha"]);
 
 // ==================== MANAGERS ====================
 

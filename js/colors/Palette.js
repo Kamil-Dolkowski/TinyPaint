@@ -2,13 +2,10 @@ import ColorPalette from './ColorPalette.js';
 import ColorPicker from './ColorPicker.js';
 
 export default class Palette {
-    constructor(paletteWindow, paletteBtn, currentColorDiv, canvas) {
+    constructor(paletteWindow, paletteControl, canvas) {
         this.paletteWindow = paletteWindow;
-        this.paletteBtn = paletteBtn;
-        this.currentColorDiv = currentColorDiv;
+        this.paletteControl = paletteControl
         this.canvas = canvas;
-
-        this.element = this.createElement();
 
         this.ctx = this.canvas.canvas.getContext("2d");
 
@@ -28,7 +25,7 @@ export default class Palette {
         this.currentColor = this.colorPalette.basicColors[0];
 
         // init/events
-        this.paletteBtn.addEventListener("click", () => {
+        this.paletteControl.iconBtn.addEventListener("click", () => {
             this.isPaletteVisible = !this.isPaletteVisible;
             this.updatePosition();
 
@@ -55,21 +52,9 @@ export default class Palette {
         window.addEventListener("resize", this.updatePosition.bind(this));
     }
 
-    createElement() {
-        const element = document.createElement("div");
-
-        element.id = "palette";
-        element.style.display = "flex";
-
-        // element.appendChild(this.paletteBtn);
-        // element.appendChild(this.currentColorDiv);
-
-        return element;
-    }
-
     // Window
     updatePosition() {
-        const rect = this.paletteBtn.getBoundingClientRect();
+        const rect = this.paletteControl.iconBtn.getBoundingClientRect();
         const windowHeight = 250;
         const margin = 15;
 
@@ -106,7 +91,7 @@ export default class Palette {
         this.ctx.strokeStyle = color;
         this.ctx.fillStyle = color;
 
-        this.currentColorDiv.style.backgroundColor = color;
+        this.paletteControl.changeCurrentColor(color);
         this.currentColor = color;
     }
 }
