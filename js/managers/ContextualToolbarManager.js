@@ -1,38 +1,44 @@
-import OptionSlider from "../ui/OptionSlider.js";
-
 export default class ContextualToolbarManager {
-    constructor(toolbar, palette) {
+    constructor(toolbar, controlsContent) {
         this.toolbar = toolbar;
-        this.palette = palette;
+        this.controls = this.toolbar.querySelectorAll("[data-control]");
 
-        this.options = {
-            palette: this.palette.element,
-            size: new OptionSlider(1, 40, 1, "fa-solid fa-pen-nib").element,
-            alpha: new OptionSlider(1, 100, 100, "fa-solid fa-a").element,
-        }
+        this.initControlsContent(controlsContent);
     }
 
-    update(options) {
-        // clear toolbar
-        this.toolbar.innerHTML = "";
+    initControlsContent(controlsContent) {
+        this.controls.forEach(control => {
+            const object = controlsContent[control.dataset.control];
 
-        // update toolbar
-        options.forEach(option => {
-            const element = this.createOption(option);
-
-            if (element) {
-                this.toolbar.appendChild(element);
+            if (object?.element instanceof Node) {
+                control.appendChild(object.element);
+            } else {
+                console.log(`! - There is no content fo control '${control.dataset.control}'`)
             }
         });
     }
 
-    createOption(option) {
-        const element = this.options[option];
+    update(toolControls) {
+        this.hideAll();
 
-        if (!element) {
-            return null;
-        }
+        const allowed = new Set(toolControls);
 
-        return element;
+        this.controls.forEach(control => {
+            if (allowed.has(control.dataset.control)) {
+                control.classList.remove("hidden");
+            }
+        });
+    }
+
+    showAll() {
+        this.controls.forEach(control => {
+            control.classList.remove("hidden");
+        });
+    }
+
+    hideAll() {
+        this.controls.forEach(control => {
+            control.classList.add("hidden");
+        });
     }
 }

@@ -61,8 +61,8 @@ export default class Palette {
         element.id = "palette";
         element.style.display = "flex";
 
-        element.appendChild(this.paletteBtn);
-        element.appendChild(this.currentColorDiv);
+        // element.appendChild(this.paletteBtn);
+        // element.appendChild(this.currentColorDiv);
 
         return element;
     }

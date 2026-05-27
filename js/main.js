@@ -28,6 +28,8 @@ import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 import WheelManager from './managers/WheelManager.js';
 import ContextualToolbarManager from './managers/ContextualToolbarManager.js';
 
+import OptionSlider from "./ui/OptionSlider.js";
+
 // ===================== CANVAS =====================
 
 const workspace = document.getElementById("workspace");
@@ -90,11 +92,17 @@ const gesture = new Gesture(tools.moveZoom.tool);
 
 // ============== CONTEXTUAL TOOLBAR = ==============
 
+const controlsContent = {
+    palette: null,
+    size: new OptionSlider(1, 40, 1, "fa-solid fa-pen-nib"),
+    alpha: new OptionSlider(1, 100, 100, "fa-solid fa-a"),
+}
+
 const ctxToolbar = document.getElementById("contextual-toolbar");
 
-const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, palette);
+const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, controlsContent);
 
-ctxToolbarManager.update(["palette", "size", "alpha"]);
+// ctxToolbarManager.update(["palette", "size", "alpha"]);
 
 // ==================== MANAGERS ====================
 
