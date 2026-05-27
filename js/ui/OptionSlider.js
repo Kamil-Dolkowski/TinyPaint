@@ -10,9 +10,16 @@ export default class OptionSlider {
         this.plusBtn = this.createPlusBtn();
         this.label = this.createLabel();
 
+        this.content = this.createContent();
+
         this.element = this.createElement();
 
         // events
+        // -- iconBtn
+        this.iconBtn.addEventListener("click", () => {
+            this.switchVisibility();
+        });
+
         // -- minusBtn
         this.minusBtn.addEventListener("click", () => {
             if (this.value - 1 < this.min) return;
@@ -90,17 +97,31 @@ export default class OptionSlider {
         return label;
     }
 
+    createContent() {
+        const content = document.createElement("div")
+        content.classList.add("option-slider-content");
+        // content.classList.add("hidden");
+
+        content.appendChild(this.minusBtn);
+        content.appendChild(this.slider);
+        content.appendChild(this.plusBtn);
+        content.appendChild(this.label);
+
+        return content;
+    }
+
     createElement() {
         const root = document.createElement("div");
-        root.style.display = "flex";
+        root.className = "option-slider";
 
         root.appendChild(this.iconBtn);
-        root.appendChild(this.minusBtn);
-        root.appendChild(this.slider);
-        root.appendChild(this.plusBtn);
-        root.appendChild(this.label);
+        root.appendChild(this.content);
 
         return root;
+    }
+
+    switchVisibility() {
+        this.content.classList.toggle("hidden");
     }
 
     updateLabel() {
