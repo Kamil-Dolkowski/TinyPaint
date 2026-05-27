@@ -4,6 +4,8 @@ import Tool from './Tool.js';
 export default class Eraser extends ToolBase {
     constructor(canvas, drawingStatus) {
         super(Tool.ERASER, canvas, drawingStatus);
+
+        this.toolControls = ["size", "alpha"];
     }
 
     setTool() {
