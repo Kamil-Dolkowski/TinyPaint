@@ -114,7 +114,7 @@ const wheelManager = new WheelManager(toolManager);
 
 // ====================== APP =======================
 
-const app = new App(drawingState, canvas, palette);
+const app = new App(drawingState, canvas, palette, controlsContent);
 
 // ==================== KEYBOARD ====================
 
