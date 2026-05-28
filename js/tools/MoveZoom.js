@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class MoveZoom extends ToolBase {
-    constructor(canvas, drawingStatus) {
-        super(Tool.MOVE_ZOOM, canvas, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.MOVE_ZOOM, canvas, drawingState);
 
         this.canvas = canvas;
         this.zoomValue = 1.5;

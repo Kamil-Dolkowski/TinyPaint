@@ -2,14 +2,14 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Brush extends ToolBase {
-    constructor(canvas, drawingStatus) {
-        super(Tool.BRUSH, canvas, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.BRUSH, canvas, drawingState);
 
         this.toolControls = ["palette", "size", "alpha"];
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingStatus.drawSize;
+        this.ctx.lineWidth = this.drawingState.drawSize;
         this.ctx.lineCap = "round";
         this.ctx.globalCompositeOperation = "source-over";
     }

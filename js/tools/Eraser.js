@@ -2,14 +2,14 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Eraser extends ToolBase {
-    constructor(canvas, drawingStatus) {
-        super(Tool.ERASER, canvas, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.ERASER, canvas, drawingState);
 
         this.toolControls = ["size", "alpha"];
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingStatus.drawSize;
+        this.ctx.lineWidth = this.drawingState.drawSize;
         this.ctx.lineCap = "round";
         this.ctx.globalCompositeOperation = "destination-out";
     }

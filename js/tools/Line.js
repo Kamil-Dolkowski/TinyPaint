@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Line extends ToolBase {
-    constructor(canvas, drawingStatus) {
-        super(Tool.LINE, canvas, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.LINE, canvas, drawingState);
         this.last = null;
         this.current = null;
 
@@ -11,7 +11,7 @@ export default class Line extends ToolBase {
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingStatus.drawSize;
+        this.ctx.lineWidth = this.drawingState.drawSize;
         this.ctx.lineCap = "round";
         this.ctx.globalCompositeOperation = "source-over";
     }

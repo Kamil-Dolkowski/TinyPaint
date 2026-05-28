@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Pencil extends ToolBase {
-    constructor(canvas, drawingStatus) {
-        super(Tool.PENCIL, canvas, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.PENCIL, canvas, drawingState);
 
         this.toolControls = ["palette", "alpha"];
     }

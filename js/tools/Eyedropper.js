@@ -2,8 +2,8 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Eyedropper extends ToolBase {
-    constructor(canvas, drawingStatus, palette) {
-        super(Tool.EYEDROPPER, canvas, drawingStatus);
+    constructor(canvas, drawingState, palette) {
+        super(Tool.EYEDROPPER, canvas, drawingState);
 
         this.palette = palette;
     }
