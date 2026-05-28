@@ -61,6 +61,8 @@ export default class Canvas extends EventTarget {
         this.ctx.lineWidth = drawingState.drawSize;
         this.ctx.globalAlpha = drawingState.alpha;
         this.ctx.font = drawingState.font;
+        this.ctx.lineCap = drawingState.lineCap;
+        this.ctx.globalCompositeOperation = drawingState.compositeOperation;
     }
 
     setSize(width, height) {
