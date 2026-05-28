@@ -26,15 +26,8 @@ export default class Palette {
 
         // init/events
         this.paletteControl.iconBtn.addEventListener("click", () => {
-            this.isPaletteVisible = !this.isPaletteVisible;
             this.updatePosition();
-
-            if (this.isPaletteVisible) {
-                this.show();
-            } else {
-                this.hide();
-            }
-            
+            this.paletteWindow.classList.toggle("hidden");
         });
 
         this.colorPaletteBtn.addEventListener("click", () => {
@@ -60,14 +53,6 @@ export default class Palette {
 
         this.paletteWindow.style.left = rect.left + "px";
         this.paletteWindow.style.top = rect.top - (windowHeight + margin)+ "px";
-    }
-
-    show() {
-        this.paletteWindow.style.display = "block";
-    }
-
-    hide() {
-        this.paletteWindow.style.display = "none";
     }
 
     changeOptionWindow(name) {
