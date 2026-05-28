@@ -7,7 +7,7 @@ export default class Palette {
         this.paletteControl = paletteControl
         this.canvas = canvas;
 
-        this.ctx = this.canvas.canvas.getContext("2d");
+        this.ctx = this.canvas.ctx;
 
         // palette options
         this.colorPaletteBtn = this.paletteWindow.querySelector("#color-palette-btn");
