@@ -31,7 +31,7 @@ import ContextualToolbarManager from './managers/ContextualToolbarManager.js';
 import PaletteControl from "./ui/PaletteControl.js";
 import OptionSlider from "./ui/OptionSlider.js";
 
-import App from './App.js';
+import DrawingController from './DrawingController.js';
 
 // ===================== CANVAS =====================
 
@@ -112,9 +112,9 @@ const pointerManager = new PointerManager(canvas, interactionController, gesture
 
 const wheelManager = new WheelManager(toolManager);
 
-// ====================== APP =======================
+// ============== DRAWING CONTROLLER ================
 
-const app = new App(drawingState, canvas, palette, controlsContent);
+const drawingController = new DrawingController(drawingState, canvas, palette, controlsContent);
 
 // ==================== KEYBOARD ====================
 

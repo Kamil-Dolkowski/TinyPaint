@@ -1,4 +1,4 @@
-export default class App {
+export default class DrawingController {
     constructor(drawingState, canvas, palette, controlsContent) {
         this.drawingState = drawingState;
 
