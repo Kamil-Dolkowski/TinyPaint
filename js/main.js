@@ -168,27 +168,6 @@ resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
 });
 
-// ======== INCREASE/DECREASE DRAW SIZE ========
-
-// -- BUTTONS --
-// const increaseBtn = document.getElementById("increase-btn");
-// const decreaseBtn = document.getElementById("decrease-btn");
-// const sizeLbl = document.getElementById("size-lbl");
-
-// sizeLbl.innerText = canvas.ctx.lineWidth;
-
-// increaseBtn.addEventListener("click", () => {
-//     canvas.ctx.lineWidth += 1;
-//     drawingStatus.drawSize = canvas.ctx.lineWidth;
-//     sizeLbl.innerText = canvas.ctx.lineWidth;
-// });
-
-// decreaseBtn.addEventListener("click", () => {
-//     canvas.ctx.lineWidth -= 1;
-//     drawingStatus.drawSize = canvas.ctx.lineWidth;
-//     sizeLbl.innerText = canvas.ctx.lineWidth;
-// });
-
 // ======== DOWNLOAD ========
 const exportBtn = document.getElementById("export-btn");
 
