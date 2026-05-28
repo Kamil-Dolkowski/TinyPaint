@@ -6,10 +6,13 @@ export default class Pencil extends ToolBase {
         super(Tool.PENCIL, canvas, drawingState);
 
         this.toolControls = ["palette", "alpha"];
+        this.settings = {
+            compositeOperation: "source-over"
+        }
     }
 
     setTool() {
-        this.ctx.globalCompositeOperation = "source-over";
+        
     }
 
     pointerdown(pointerData) {

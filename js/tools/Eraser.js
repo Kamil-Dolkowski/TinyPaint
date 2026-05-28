@@ -6,12 +6,13 @@ export default class Eraser extends ToolBase {
         super(Tool.ERASER, canvas, drawingState);
 
         this.toolControls = ["size", "alpha"];
+        this.settings = {
+            compositeOperation: "destination-out"
+        }
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingState.drawSize;
-        this.ctx.lineCap = "round";
-        this.ctx.globalCompositeOperation = "destination-out";
+        
     }
 
     pointerdown(pointerData) {

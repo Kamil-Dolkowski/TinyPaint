@@ -1,9 +1,10 @@
 export default class DrawingController {
-    constructor(drawingState, canvas, palette, controlsContent) {
+    constructor(drawingState, canvas, palette, toolManager, controlsContent) {
         this.drawingState = drawingState;
 
         this.canvas = canvas;
         this.palette = palette;
+        this.toolManager = toolManager;
         this.controlsContent = controlsContent;
 
         // events
@@ -15,6 +16,14 @@ export default class DrawingController {
             if (this.drawingState.currentColor == e.detail.color) return;
 
             this.drawingState.currentColor = e.detail.color;
+            this.canvas.applyState(this.drawingState);
+        });
+
+        this.toolManager.addEventListener("change", e => {
+            Object.entries(e.detail.settings).forEach(([key, value]) => {
+                this.drawingState[key] = value;
+            });
+
             this.canvas.applyState(this.drawingState);
         });
 

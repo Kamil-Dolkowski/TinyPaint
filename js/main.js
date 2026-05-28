@@ -114,7 +114,7 @@ const wheelManager = new WheelManager(toolManager);
 
 // ============== DRAWING CONTROLLER ================
 
-const drawingController = new DrawingController(drawingState, canvas, palette, controlsContent);
+const drawingController = new DrawingController(drawingState, canvas, palette, toolManager, controlsContent);
 
 // ==================== KEYBOARD ====================
 

@@ -8,12 +8,13 @@ export default class Line extends ToolBase {
         this.current = null;
 
         this.toolControls = ["palette", "size", "alpha"];
+        this.settings = {
+            compositeOperation: "source-over"
+        }
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingState.drawSize;
-        this.ctx.lineCap = "round";
-        this.ctx.globalCompositeOperation = "source-over";
+        
     }
 
     pointerdown(pointerData) {

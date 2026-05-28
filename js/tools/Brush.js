@@ -6,12 +6,13 @@ export default class Brush extends ToolBase {
         super(Tool.BRUSH, canvas, drawingState);
 
         this.toolControls = ["palette", "size", "alpha"];
+        this.settings = {
+            compositeOperation: "source-over"
+        }
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingState.drawSize;
-        this.ctx.lineCap = "round";
-        this.ctx.globalCompositeOperation = "source-over";
+        
     }
 
     pointerdown(pointerData) {

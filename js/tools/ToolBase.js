@@ -8,6 +8,7 @@ export default class ToolBase {
         this.cursorCtx = canvas.cursorCtx;
 
         this.toolControls = [];
+        this.settings = {};
     }
 
     setTool() {}
