@@ -1,8 +1,10 @@
 import ColorPalette from './ColorPalette.js';
 import ColorPicker from './ColorPicker.js';
 
-export default class Palette {
+export default class Palette extends EventTarget {
     constructor(paletteWindow, paletteControl, canvas) {
+        super();
+        
         this.paletteWindow = paletteWindow;
         this.paletteControl = paletteControl
         this.canvas = canvas;
@@ -73,10 +75,14 @@ export default class Palette {
     changeColor(color) {
         if (color === "none") color = "#000000";
 
-        this.ctx.strokeStyle = color;
-        this.ctx.fillStyle = color;
-
         this.paletteControl.changeCurrentColor(color);
         this.currentColor = color;
+
+        // event
+        this.dispatchEvent(
+            new CustomEvent("change", {
+                detail: { color: this.currentColor }
+            })
+        );
     }
 }

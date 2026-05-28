@@ -31,6 +31,8 @@ import ContextualToolbarManager from './managers/ContextualToolbarManager.js';
 import PaletteControl from "./ui/PaletteControl.js";
 import OptionSlider from "./ui/OptionSlider.js";
 
+import DrawingController from './DrawingController.js';
+
 // ===================== CANVAS =====================
 
 const workspace = document.getElementById("workspace");
@@ -74,27 +76,27 @@ const palette = new Palette(paletteWindow, controlsContent.palette, canvas);
 
 const tools = {
     pencil: {
-        tool: new Pencil(canvas, drawingStatus),
+        tool: new Pencil(canvas, drawingState),
         button: document.getElementById("pencil-btn")
     },
     brush: {
-        tool: new Brush(canvas, drawingStatus),
+        tool: new Brush(canvas, drawingState),
         button: document.getElementById("brush-btn")
     },
     line: {
-        tool: new Line(canvas, drawingStatus),
+        tool: new Line(canvas, drawingState),
         button: document.getElementById("line-btn")
     },
     eraser: {
-        tool: new Eraser(canvas, drawingStatus),
+        tool: new Eraser(canvas, drawingState),
         button: document.getElementById("eraser-btn")
     },
     moveZoom: {
-        tool: new MoveZoom(canvas, drawingStatus),
+        tool: new MoveZoom(canvas, drawingState),
         button: document.getElementById("move-zoom-btn")
     },
     eyedropper: {
-        tool: new Eyedropper(canvas, drawingStatus, palette),
+        tool: new Eyedropper(canvas, drawingState, palette),
         button: document.getElementById("eyedropper-btn")
     },
 };
@@ -110,15 +112,15 @@ const pointerManager = new PointerManager(canvas, interactionController, gesture
 
 const wheelManager = new WheelManager(toolManager);
 
+// ============== DRAWING CONTROLLER ================
+
+const drawingController = new DrawingController(drawingState, canvas, palette, toolManager, controlsContent);
+
 // ==================== KEYBOARD ====================
 
 const shortcutManager = new ShortcutManager(history, toolManager);
 const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
-
-// ======== DRAW INITIAL SETTINGS ========
-canvas.ctx.lineWidth = 1;
-canvas.ctx.strokeStyle = "black";
 
 // ======== CANVAS EVENTS ========
 

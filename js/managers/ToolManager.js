@@ -1,7 +1,9 @@
 import Tool from '../tools/Tool.js';
 
-export default class ToolManager {
+export default class ToolManager extends EventTarget {
     constructor(tools, firstTool, gesture, history, ctxToolbarManager) {
+        super();
+        
         this.tools = tools;
         this.gesture = gesture;
         this.ctxToolbarManager = ctxToolbarManager;
@@ -42,6 +44,13 @@ export default class ToolManager {
         this.currentTool?.setTool();
 
         this.ctxToolbarManager.update(this.currentTool.toolControls);
+
+        // event
+        this.dispatchEvent(
+            new CustomEvent("change", {
+                detail: { settings: tool.settings }
+            })
+        );
     }
 
     setToolByName(toolName) {
