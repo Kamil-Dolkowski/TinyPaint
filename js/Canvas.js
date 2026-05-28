@@ -53,6 +53,14 @@ export default class Canvas {
         }
     }
 
+    upplyState(drawingState) {
+        this.ctx.fillStyle = drawingState.currentColor;
+        this.ctx.strokeStyle = drawingState.currentColor;
+        this.ctx.lineWidth = drawingState.drawSize;
+        this.ctx.globalAlpha = drawingState.alpha;
+        this.ctx.font = drawingState.font;
+    }
+
     setSize(width, height) {
         // 1. change physical size
         this.width = width;
