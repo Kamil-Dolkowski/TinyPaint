@@ -7,6 +7,9 @@ export default class DrawingController {
         this.toolManager = toolManager;
         this.controlsContent = controlsContent;
 
+        // init default state
+        this.canvas.applyState(this.drawingState);
+
         // events
         this.canvas.addEventListener("afterResize", () => {
             this.canvas.applyState(this.drawingState);

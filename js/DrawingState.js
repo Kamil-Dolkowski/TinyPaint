@@ -1,6 +1,6 @@
 const drawingState = {
     currentColor: "#000",
-    drawSize: 5,
+    drawSize: 1,
     alpha: 1,
     font: "10px sans-serif",
     lineCap: "round",

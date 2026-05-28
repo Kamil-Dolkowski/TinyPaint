@@ -122,10 +122,6 @@ const shortcutManager = new ShortcutManager(history, toolManager);
 const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
-// ======== DRAW INITIAL SETTINGS ========
-canvas.ctx.lineWidth = 1;
-canvas.ctx.strokeStyle = "black";
-
 // ======== CANVAS EVENTS ========
 
 // 1 - pointerdown
