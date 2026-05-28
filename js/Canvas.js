@@ -1,5 +1,7 @@
-export default class Canvas {
+export default class Canvas extends EventTarget {
     constructor(workspace, canvasSpace, canvasBorder, checkerboard, canvas, cursorCanvas) {
+        super();
+
         // elements
         this.workspace = workspace;
         this.canvasSpace = canvasSpace;
@@ -53,7 +55,7 @@ export default class Canvas {
         }
     }
 
-    upplyState(drawingState) {
+    applyState(drawingState) {
         this.ctx.fillStyle = drawingState.currentColor;
         this.ctx.strokeStyle = drawingState.currentColor;
         this.ctx.lineWidth = drawingState.drawSize;
@@ -73,6 +75,11 @@ export default class Canvas {
         this.currentZoom = 1;
 
         this.fitToScreen();
+
+        // event
+        this.dispatchEvent(
+            new CustomEvent("afterResize")
+        );
     }
 
     resize() {
