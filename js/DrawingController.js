@@ -28,7 +28,7 @@ export default class DrawingController {
         this.controlsContent.alpha.addEventListener("change", e => {
             if (this.drawingState.drawSize == e.detail.value) return;
 
-            this.drawingState.drawSize = e.detail.value;
+            this.drawingState.alpha = Number(e.detail.value)/100;
             this.canvas.applyState(this.drawingState);
         });
     }
