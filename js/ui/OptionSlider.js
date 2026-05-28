@@ -1,5 +1,7 @@
-export default class OptionSlider {
+export default class OptionSlider extends EventTarget {
     constructor(min=1, max=100, value=1, iconClass=null) {
+        super();
+
         this.min = min;
         this.max = max;
         this.value = value;
@@ -22,24 +24,17 @@ export default class OptionSlider {
 
         // -- minusBtn
         this.minusBtn.addEventListener("click", () => {
-            if (this.value - 1 < this.min) return;
-            this.value -= 1;
-            this.updateSlider();
-            this.updateLabel();
+            this.setValue(this.value - 1);
         });
 
         // -- plusBtn
         this.plusBtn.addEventListener("click", () => {
-            if (this.value + 1 > this.max) return;
-            this.value += 1;
-            this.updateSlider();
-            this.updateLabel();
+            this.setValue(this.value + 1);
         });
 
         // -- slider
         this.slider.addEventListener("input", e => {
-            this.value = Number(e.target.value);
-            this.updateLabel();
+            this.setValue(Number(e.target.value));
         });
     }
 
@@ -122,6 +117,22 @@ export default class OptionSlider {
 
     switchVisibility() {
         this.content.classList.toggle("hidden");
+    }
+
+    setValue(newValue) {
+        if (newValue < this.min || newValue > this.max) return;
+        this.value = newValue;
+
+        // event
+        this.dispatchEvent(
+            new CustomEvent("change", {
+                detail: { value: this.value }
+            })
+        );
+
+        // update slider and label
+        this.updateSlider();
+        this.updateLabel();
     }
 
     updateLabel() {
