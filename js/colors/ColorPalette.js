@@ -103,7 +103,6 @@ export default class ColorPalette {
         if (button == null) return;
 
         // change button color
-        this.currentColor = color;
         button.dataset.color = color;
         button.style.backgroundColor = color;
     }
