@@ -6,6 +6,8 @@ export default class Line extends ToolBase {
         super(Tool.LINE, canvas, drawingStatus);
         this.last = null;
         this.current = null;
+
+        this.toolControls = ["palette", "size", "alpha"];
     }
 
     setTool() {

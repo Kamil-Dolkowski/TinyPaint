@@ -1,9 +1,10 @@
 import Tool from '../tools/Tool.js';
 
 export default class ToolManager {
-    constructor(tools, firstTool, gesture, history) {
+    constructor(tools, firstTool, gesture, history, ctxToolbarManager) {
         this.tools = tools;
         this.gesture = gesture;
+        this.ctxToolbarManager = ctxToolbarManager;
 
         this.currentTool = firstTool;
         this.lastTool = null;
@@ -11,6 +12,7 @@ export default class ToolManager {
         this.history = history;
 
         this.initToolButtonsEvents();
+        this.setTool(firstTool);
     }
 
     initToolButtonsEvents() {
@@ -38,6 +40,8 @@ export default class ToolManager {
         
         this.currentTool = tool;
         this.currentTool?.setTool();
+
+        this.ctxToolbarManager.update(this.currentTool.toolControls);
     }
 
     setToolByName(toolName) {

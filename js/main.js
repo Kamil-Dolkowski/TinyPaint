@@ -1,4 +1,4 @@
-import drawingStatus from './DrawingStatus.js';
+import drawingState from './DrawingState.js';
 
 import Tool from './tools/Tool.js';
 import Pencil from './tools/Pencil.js';
@@ -26,6 +26,10 @@ import ShortcutManager from './managers/keyboard/ShortcutManager.js';
 import HoldActionManager from './managers/keyboard/HoldActionManager.js';
 
 import WheelManager from './managers/WheelManager.js';
+import ContextualToolbarManager from './managers/ContextualToolbarManager.js';
+
+import PaletteControl from "./ui/PaletteControl.js";
+import OptionSlider from "./ui/OptionSlider.js";
 
 // ===================== CANVAS =====================
 
@@ -48,13 +52,23 @@ const redoBtn = document.getElementById("redo-btn");
 
 const history = new History(canvas, undoBtn, redoBtn);
 
+// ============== CONTEXTUAL TOOLBAR = ==============
+
+const controlsContent = {
+    palette: new PaletteControl(),
+    size: new OptionSlider(1, 40, 1, "fa-solid fa-pen-nib"),
+    alpha: new OptionSlider(1, 100, 100, "fa-solid fa-a"),
+}
+
+const ctxToolbar = document.getElementById("contextual-toolbar");
+
+const ctxToolbarManager = new ContextualToolbarManager(ctxToolbar, controlsContent);
+
 // ===================== PALETTE ====================
 
-const paletteBtn = document.getElementById("palette-btn");
 const paletteWindow = document.getElementById("palette-window");
-const currentColor = document.getElementById("current-color");
 
-const palette = new Palette(paletteWindow, paletteBtn, currentColor, canvas);
+const palette = new Palette(paletteWindow, controlsContent.palette, canvas);
 
 // ============== TOOLS INICIALIZATION ==============
 
@@ -89,7 +103,7 @@ const gesture = new Gesture(tools.moveZoom.tool);
 
 // ==================== MANAGERS ====================
 
-const toolManager = new ToolManager(tools, tools.pencil.tool, gesture, history);
+const toolManager = new ToolManager(tools, tools.pencil.tool, gesture, history, ctxToolbarManager);
 const interactionController = new InteractionController(toolManager);
 const gestureManager = new GestureManager(canvas);
 const pointerManager = new PointerManager(canvas, interactionController, gestureManager);
@@ -152,27 +166,6 @@ const resetZoomBtn = document.getElementById("reset-zoom-btn");
 
 resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
-});
-
-// ======== INCREASE/DECREASE DRAW SIZE ========
-
-// -- BUTTONS --
-const increaseBtn = document.getElementById("increase-btn");
-const decreaseBtn = document.getElementById("decrease-btn");
-const sizeLbl = document.getElementById("size-lbl");
-
-sizeLbl.innerText = canvas.ctx.lineWidth;
-
-increaseBtn.addEventListener("click", () => {
-    canvas.ctx.lineWidth += 1;
-    drawingStatus.drawSize = canvas.ctx.lineWidth;
-    sizeLbl.innerText = canvas.ctx.lineWidth;
-});
-
-decreaseBtn.addEventListener("click", () => {
-    canvas.ctx.lineWidth -= 1;
-    drawingStatus.drawSize = canvas.ctx.lineWidth;
-    sizeLbl.innerText = canvas.ctx.lineWidth;
 });
 
 // ======== DOWNLOAD ========
