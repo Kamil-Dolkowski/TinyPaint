@@ -18,10 +18,15 @@ export default class ImageImport {
             const img = new Image();
 
             img.onload = () => {
-                const ctx = this.canvas.canvas.getContext("2d");
+                const ctx = this.canvas.ctx;
                 
+                ctx.save();
                 ctx.imageSmoothingEnabled = false;
+                ctx.globalCompositeOperation = "source-over";
+                
                 ctx.drawImage(img, 0, 0);
+                ctx.restore();
+
                 this.history.addCanvasToHistory();
 
                 // reset value
