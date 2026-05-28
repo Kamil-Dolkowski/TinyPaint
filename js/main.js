@@ -1,4 +1,4 @@
-import drawingStatus from './DrawingStatus.js';
+import drawingState from './DrawingState.js';
 
 import Tool from './tools/Tool.js';
 import Pencil from './tools/Pencil.js';
