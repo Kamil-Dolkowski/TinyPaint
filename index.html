@@ -10,12 +10,13 @@
     <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
 
     <!-- css -->
-    <link rel="stylesheet" href="css/ui.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/settings.css">
     <link rel="stylesheet" href="css/slider.css">
     <link rel="stylesheet" href="css/color_palette.css">
     <link rel="stylesheet" href="css/layers.css">
+    <link rel="stylesheet" href="css/option-slider.css">
+    <link rel="stylesheet" href="css/ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -54,10 +55,12 @@
 
      <!-- Workspace -->
     <div id="workspace">
-        <canvas id="cursor-canvas"></canvas>
-        <canvas id="canvas"></canvas>
-        <canvas id="checkerboard"></canvas>
-        <!-- <canvas id="bg-canvas"></canvas> -->
+        <div id="canvas-space">
+            <canvas id="cursor-canvas"></canvas>
+            <canvas id="canvas"></canvas>
+            <canvas id="checkerboard"></canvas>
+            <!-- <canvas id="bg-canvas"></canvas> -->
+        </div>
 
          <!-- Layers -->
         <!-- <div id="layers-window" class="window">
@@ -85,11 +88,12 @@
 
             <button class="button-small"><i class="fa-solid fa-plus"></i>Dodaj warstwę</button>
         </div> -->
-        
+
+        <div id="canvas-border"></div>
     </div>
 
     <!-- Palette -->
-    <div id="palette-window" class="window">
+    <div id="palette-window" class="window hidden">
         <div id="palette-options">
             <button id="color-palette-btn" class="button-small"><!--<i class="fa-solid fa-palette"></i>-->Paleta kolorów</button>
             <button id="color-picker-btn" class="button-small"><!--<i class="fa-solid fa-eye-dropper"></i>-->Wybierz kolor</button>
@@ -147,28 +151,9 @@
 
     <!-- Contextual Toolbar -->
     <footer id="contextual-toolbar">
-        <button id="palette-btn" title="Paleta" class="toolbar-button"><i class="fa-solid fa-palette"></i></button>
-        <div id="current-color-group">
-            <div id="current-color-checkerboard" class="toolbar-button"></div>
-            <button id="current-color" class="toolbar-button"></button>
-        </div>
-
-        <div style="margin:20px;"></div>
-        <div style="margin:20px;"></div>
-
-        <span class="toolbar-button"><i class="fa-solid fa-pen-nib"></i></span>
-        <button id="decrease-btn" class="toolbar-button"><i class="fa-solid fa-minus"></i></button>
-        <input type="range" min="1" max="40" value="1">
-        <button id="increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
-        <div id="size-lbl" class="size-lbl toolbar-button">5</div>
-
-        <div style="margin:20px;"></div>
-
-        <span class="toolbar-button"><i class="fa-solid fa-a"></i></span>
-        <button id="alpha-decrease-btn" class="toolbar-button"><i class="fa-solid fa-minus"></i></button>
-        <input type="range" min="0" max="100" value="100">
-        <button id="alpha-increase-btn" class="toolbar-button"><i class="fa-solid fa-plus"></i></button>
-        <div id="alpha-lbl" class="size-lbl toolbar-button">100</div>
+        <div data-control="palette"></div>
+        <div data-control="size"></div>
+        <div data-control="alpha"></div>
     </footer>
 
     <script type="module" src="js/main.js"></script>

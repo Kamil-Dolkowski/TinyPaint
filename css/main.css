@@ -25,6 +25,7 @@ html, body {
 }
 
 #contextual-toolbar {
+    height: 44px;
     background-color: #353338;
 
     display: flex;
@@ -37,6 +38,7 @@ html, body {
 }
 
 canvas {
+    image-rendering: pixelated;
     touch-action: none;
 
     justify-self: center;
@@ -45,29 +47,37 @@ canvas {
 
 #workspace {
     position: relative;
-    display: grid;
-    /* place-items: center; */
     flex: 1;
     background-color: #585858;
     overflow: hidden;
 }
 
-#checkerboard {
-    outline: 3px solid #000000;
-    image-rendering: pixelated;
+#canvas-space {
     position: absolute;
+    transform-origin: top left;
+}
+
+#canvas-border {
+    outline: 3px solid #000000;
+    touch-action: none;
+    pointer-events: none;
+}
+
+#checkerboard {
+    position: absolute;
+    transform-origin: top left;
     z-index: 0;
 }
 
 #canvas {
-    image-rendering: pixelated;
     position: absolute;
+    transform-origin: top left;
     z-index: 1;
 }
 
 #cursor-canvas {
-    image-rendering: pixelated;
     position: absolute;
+    transform-origin: top left;
     z-index: 2;
 }
 

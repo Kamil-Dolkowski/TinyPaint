@@ -1,14 +1,15 @@
 import ColorPalette from './ColorPalette.js';
 import ColorPicker from './ColorPicker.js';
 
-export default class Palette {
-    constructor(paletteWindow, paletteBtn, currentColorDiv, canvas) {
+export default class Palette extends EventTarget {
+    constructor(paletteWindow, paletteControl, canvas) {
+        super();
+        
         this.paletteWindow = paletteWindow;
-        this.paletteBtn = paletteBtn;
-        this.currentColorDiv = currentColorDiv;
+        this.paletteControl = paletteControl
         this.canvas = canvas;
 
-        this.ctx = this.canvas.canvas.getContext("2d");
+        this.ctx = this.canvas.ctx;
 
         // palette options
         this.colorPaletteBtn = this.paletteWindow.querySelector("#color-palette-btn");
@@ -26,16 +27,9 @@ export default class Palette {
         this.currentColor = this.colorPalette.basicColors[0];
 
         // init/events
-        this.paletteBtn.addEventListener("click", () => {
-            this.isPaletteVisible = !this.isPaletteVisible;
+        this.paletteControl.iconBtn.addEventListener("click", () => {
             this.updatePosition();
-
-            if (this.isPaletteVisible) {
-                this.show();
-            } else {
-                this.hide();
-            }
-            
+            this.paletteWindow.classList.toggle("hidden");
         });
 
         this.colorPaletteBtn.addEventListener("click", () => {
@@ -55,20 +49,12 @@ export default class Palette {
 
     // Window
     updatePosition() {
-        const rect = this.paletteBtn.getBoundingClientRect();
-        const windowHeight = 350;
+        const rect = this.paletteControl.iconBtn.getBoundingClientRect();
+        const windowHeight = 250;
         const margin = 15;
 
         this.paletteWindow.style.left = rect.left + "px";
         this.paletteWindow.style.top = rect.top - (windowHeight + margin)+ "px";
-    }
-
-    show() {
-        this.paletteWindow.style.display = "block";
-    }
-
-    hide() {
-        this.paletteWindow.style.display = "none";
     }
 
     changeOptionWindow(name) {
@@ -89,10 +75,14 @@ export default class Palette {
     changeColor(color) {
         if (color === "none") color = "#000000";
 
-        this.ctx.strokeStyle = color;
-        this.ctx.fillStyle = color;
-
-        this.currentColorDiv.style.backgroundColor = color;
+        this.paletteControl.changeCurrentColor(color);
         this.currentColor = color;
+
+        // event
+        this.dispatchEvent(
+            new CustomEvent("change", {
+                detail: { color: this.currentColor }
+            })
+        );
     }
 }

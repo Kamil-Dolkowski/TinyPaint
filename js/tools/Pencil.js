@@ -2,12 +2,17 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Pencil extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.PENCIL, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.PENCIL, canvas, drawingState);
+
+        this.toolControls = ["palette", "alpha"];
+        this.settings = {
+            compositeOperation: "source-over"
+        }
     }
 
     setTool() {
-        this.ctx.globalCompositeOperation = "source-over";
+        
     }
 
     pointerdown(pointerData) {
@@ -35,7 +40,7 @@ export default class Pencil extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         const currentX = Math.floor(current.x);
         const currentY = Math.floor(current.y);

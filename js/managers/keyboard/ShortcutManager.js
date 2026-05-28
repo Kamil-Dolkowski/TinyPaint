@@ -15,6 +15,10 @@ export default class ShortcutManager {
                 ctrlKey: true,
                 action: () => this.history.redo()
             },
+            b: {
+                code: "KeyB",
+                action: () => this.toolManager.setToolByName("brush")
+            }
         };
     }
 

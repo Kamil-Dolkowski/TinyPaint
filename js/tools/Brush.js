@@ -2,14 +2,17 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Brush extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.BRUSH, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.BRUSH, canvas, drawingState);
+
+        this.toolControls = ["palette", "size", "alpha"];
+        this.settings = {
+            compositeOperation: "source-over"
+        }
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingStatus.drawSize;
-        this.ctx.lineCap = "round";
-        this.ctx.globalCompositeOperation = "source-over";
+        
     }
 
     pointerdown(pointerData) {
@@ -34,7 +37,7 @@ export default class Brush extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         this.cursorCtx.save();
         this.cursorCtx.lineWidth = 1;

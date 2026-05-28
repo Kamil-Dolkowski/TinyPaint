@@ -2,16 +2,19 @@ import ToolBase from './ToolBase.js';
 import Tool from './Tool.js';
 
 export default class Line extends ToolBase {
-    constructor(ctx, cursorCtx, drawingStatus) {
-        super(Tool.LINE, ctx, cursorCtx, drawingStatus);
+    constructor(canvas, drawingState) {
+        super(Tool.LINE, canvas, drawingState);
         this.last = null;
         this.current = null;
+
+        this.toolControls = ["palette", "size", "alpha"];
+        this.settings = {
+            compositeOperation: "source-over"
+        }
     }
 
     setTool() {
-        this.ctx.lineWidth = this.drawingStatus.drawSize;
-        this.ctx.lineCap = "round";
-        this.ctx.globalCompositeOperation = "source-over";
+        
     }
 
     pointerdown(pointerData) {
@@ -24,6 +27,7 @@ export default class Line extends ToolBase {
     pointermove(pointerData) {
         if (!this.isPrimaryAction(pointerData)) return;
         
+        if (!this.last) return;
         this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
@@ -34,6 +38,7 @@ export default class Line extends ToolBase {
     pointerup(pointerData) {
         if (!this.isPrimaryAction(pointerData)) return;
         
+        if (!this.last) return;
         this.current = pointerData.canvas.current;
 
         if (pointerData.shiftKey) {
@@ -50,7 +55,7 @@ export default class Line extends ToolBase {
     }
 
     drawCursor(current) {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
 
         this.cursorCtx.save();
         this.cursorCtx.lineWidth = 1;
@@ -63,9 +68,9 @@ export default class Line extends ToolBase {
     }
 
     drawAnimationFrame() {
-        this.cursorCtx.clearRect(0, 0, this.drawingStatus.canvasWidth, this.drawingStatus.canvasHeight);
+        this.canvas.clearCursorCanvas();
         
-        if (this.last == null && this.current == null) return;
+        if (this.last == null || this.current == null) return;
         
         this.cursorCtx.save();
 

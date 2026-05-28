@@ -1,11 +1,12 @@
 export default class History {
-    constructor(canvas, ctx, undoBtn, redoBtn) {
+    constructor(canvas, undoBtn, redoBtn) {
         this.canvas = canvas;
-        this.ctx = ctx;
+        this.mainCanvas = this.canvas.canvas;
+        this.ctx = this.canvas.ctx;
         this.undoBtn = undoBtn;
         this.redoBtn = redoBtn;
 
-        this.undoStack = [this.canvas.toDataURL()];
+        this.undoStack = [this.mainCanvas.toDataURL()];
         this.redoStack = [];
 
         this.limit = 30;
@@ -18,7 +19,7 @@ export default class History {
     }
 
     addCanvasToHistory() {
-        this.undoStack.push(this.canvas.toDataURL());
+        this.undoStack.push(this.mainCanvas.toDataURL());
         this.redoStack = [];
 
         if (this.undoStack.length > this.limit) {
@@ -55,7 +56,7 @@ export default class History {
             this.ctx.globalCompositeOperation = "source-over";
             
             this.ctx.imageSmoothingEnabled = false;
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.canvas.clearMainCanvas();
             this.ctx.drawImage(this.img, 0, 0);
 
             this.ctx.restore();
