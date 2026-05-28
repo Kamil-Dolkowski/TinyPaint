@@ -10,12 +10,12 @@ export default class App {
             this.canvas.applyState(this.drawingState);
         });
 
-        // this.palette.addEventListener("change", e => {
-        //     if (this.drawingState.currentColor == e.detail.color) return;
+        this.palette.addEventListener("change", e => {
+            if (this.drawingState.currentColor == e.detail.color) return;
 
-        //     this.drawingState.currentColor = e.detail.color;
-        //     this.canvas.upplyState(this.drawingState);
-        // });
+            this.drawingState.currentColor = e.detail.color;
+            this.canvas.applyState(this.drawingState);
+        });
     }
 
     
