@@ -66,8 +66,6 @@ export default class Palette extends EventTarget {
         if (name == "color-picker") {
             this.colorPaletteContent.style.display = "none";
             this.colorPickerContent.style.display = "block";
-
-            requestAnimationFrame(() => this.colorPicker.colorSlider.updateLayout());
         }
     }
 
@@ -75,8 +73,12 @@ export default class Palette extends EventTarget {
     changeColor(color) {
         if (color === "none") color = "#000000";
 
+        // currentColor control
         this.paletteControl.changeCurrentColor(color);
         this.currentColor = color;
+
+        // color picker
+        if (this.colorPicker) //this.colorPicker.setColor(color);
 
         // event
         this.dispatchEvent(

@@ -1,5 +1,3 @@
-import Slider from '../../ui/Slider.js';
-
 export default class ColorPicker {
     constructor(content, changeColorCallback) {
         this.content = content;
@@ -42,23 +40,23 @@ export default class ColorPicker {
         this.canvasDiv.appendChild(this.cursorCanvas);
         this.colorPickerContent.appendChild(this.canvasDiv);
 
-        this.colorSlider.mount(this.colorPickerContent);
+        this.colorPickerContent.appendChild(this.colorSlider);
         this.content.appendChild(this.colorPickerContent);
         this.content.appendChild(this.addToPaletteBtn);
 
         this.renderHsvSquare(0);
-        this.colorSlider.thumb.style.backgroundColor = `hsl(${this.colorSlider.value}, 100%, 50%)`;
+        this.colorSlider.style.setProperty("--thumb-color", `hsl(${this.colorSlider.value}, 100%, 50%)`)
 
         // === SLIDER ===
-        this.colorSlider.slider.addEventListener("change", e => {
-            this.renderHsvSquare(e.detail.value);
+        this.colorSlider.addEventListener("input", e => {
+            this.renderHsvSquare(e.target.value);
 
             const {r,g,b} = this.getRgb();
 
             const colorHex = this.rgbToHex(r,g,b);
             this.changeColorCallback?.(colorHex);
 
-            this.colorSlider.thumb.style.backgroundColor = `hsl(${e.detail.value}, 100%, 50%)`;
+            this.colorSlider.style.setProperty("--thumb-color", `hsl(${e.target.value}, 100%, 50%)`)
         });
 
         // === CURSOR CANVAS ===
@@ -162,7 +160,12 @@ export default class ColorPicker {
     }
 
     createColorSlider() {
-        const colorSlider = new Slider(0, 360, 0, "color-slider");
+        const colorSlider = document.createElement("input");
+        colorSlider.type = "range";
+        colorSlider.min = 0;
+        colorSlider.max = 360;
+        colorSlider.value = 0;
+        colorSlider.id = "color-slider";
 
         return colorSlider;
     }
@@ -189,7 +192,8 @@ export default class ColorPicker {
         const {r,g,b} = this.hexToRgb(hexColor);
         const {h,s,v} = this.rgbToHsv(r,g,b);
 
-        console.log(h,s,v);
+        this.colorSlider.value = h;
+        this.renderHsvSquare(h);
     }
 
     drawCursor() {

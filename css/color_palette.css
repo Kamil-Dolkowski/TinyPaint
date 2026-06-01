@@ -73,14 +73,17 @@
 }
 
 #color-slider {
+    height: 150px;
     width: 10px;
-    height: 130px;
-}
 
-#color-slider .track {
-    border-radius: 5px;
+    writing-mode: vertical-lr;
+    -webkit-appearance: none;
+    appearance: none;
+
+    border-radius: 10px;
     background: linear-gradient(
         to bottom,
+        hsl(0, 100%, 50%),
         hsl(0, 100%, 50%),
         hsl(30, 100%, 50%),
         hsl(60, 100%, 50%),
@@ -93,12 +96,29 @@
         hsl(270, 100%, 50%),
         hsl(300, 100%, 50%),
         hsl(330, 100%, 50%),
+        hsl(360, 100%, 50%),
         hsl(360, 100%, 50%)
     );
 }
 
-#color-slider .thumb {
-    box-shadow: 0 0 0 3px #000;
+#color-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%; 
+    background: var(--thumb-color, red);
+    border: 3px solid black;
+    cursor: pointer;
+}
+
+#color-slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 50%; 
+    background: var(--thumb-color, red);
+    border: 3px solid black;
+    cursor: pointer;
 }
 
 #add-to-palette-btn {
