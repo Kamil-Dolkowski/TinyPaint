@@ -386,15 +386,6 @@ export default class ColorPicker {
         }
     }
 
-    // slower
-    getRgbFromImageData() {
-        const data = this.imageData.data;
-        const i = (parseInt(this.currentY) * this.canvasWidth + parseInt(this.currentX)) * 4;
-
-        return {r: data[i], g: data[i+1], b: data[i+2]};
-    }
-
-    // faster
     getRgb() {
         const h = this.colorSlider.value;
         const s = this.currentX / (this.canvasWidth - 1);
