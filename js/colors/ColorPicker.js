@@ -49,14 +49,15 @@ export default class ColorPicker {
 
         // === SLIDER ===
         this.colorSlider.addEventListener("input", e => {
-            this.renderHsvSquare(e.target.value);
+            const h = Number(e.target.value);
+            this.renderHsvSquare(h);
 
             const {r,g,b} = this.getRgb();
 
             const colorHex = this.rgbToHex(r,g,b);
             this.changeColorCallback?.(colorHex);
 
-            this.colorSlider.style.setProperty("--thumb-color", `hsl(${e.target.value}, 100%, 50%)`)
+            this.colorSlider.style.setProperty("--thumb-color", `hsl(${h}, 100%, 50%)`)
         });
 
         // === CURSOR CANVAS ===
@@ -204,8 +205,8 @@ export default class ColorPicker {
     renderHsvSquare(h) {
         // h - hue [0,360]
 
-        const width = this.colorCanvas.width;
-        const height = this.colorCanvas.height;
+        const width = this.canvasWidth;
+        const height = this.canvasHeight;
 
         const data = this.imageData.data;
 
