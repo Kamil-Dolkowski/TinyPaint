@@ -188,14 +188,6 @@ export default class ColorPicker {
         return addToPaletteBtn;
     }
 
-    setColor(hexColor) {
-        const {r,g,b} = this.hexToRgb(hexColor);
-        const {h,s,v} = this.rgbToHsv(r,g,b);
-
-        this.colorSlider.value = h;
-        this.renderHsvSquare(h);
-    }
-
     drawCursor() {
         this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
 
@@ -206,6 +198,8 @@ export default class ColorPicker {
         this.cursorCtx.arc(this.currentX, this.currentY, 10, 0, 2 * Math.PI);
         this.cursorCtx.stroke();
     }
+
+    // ==================== METHODS ====================
 
     renderHsvSquare(h) {
         // h - hue [0,360]
@@ -232,6 +226,24 @@ export default class ColorPicker {
 
         this.ctx.putImageData(this.imageData, 0, 0);
     }
+
+    getRgb() {
+        const h = this.colorSlider.value;
+        const s = this.currentX / (this.canvasWidth - 1);
+        const v = 1 - (this.currentY / (this.canvasHeight - 1));
+
+        return this.hsvToRgb(h, s, v);
+    }
+
+    setColor(hexColor) {
+        const {r,g,b} = this.hexToRgb(hexColor);
+        const {h,s,v} = this.rgbToHsv(r,g,b);
+
+        this.colorSlider.value = h;
+        this.renderHsvSquare(h);
+    }
+
+    // ==================== CONVERSIONS ====================
 
     //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
     hsvToRgb(h, s, v) {
@@ -384,13 +396,5 @@ export default class ColorPicker {
 
                 return number;
         }
-    }
-
-    getRgb() {
-        const h = this.colorSlider.value;
-        const s = this.currentX / (this.canvasWidth - 1);
-        const v = 1 - (this.currentY / (this.canvasHeight - 1));
-
-        return this.hsvToRgb(h, s, v);
     }
 }
