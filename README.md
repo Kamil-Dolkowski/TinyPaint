@@ -11,11 +11,13 @@ The application has only polish interface now, but I plan to add english interfa
 
 # Changelog
 
-## [1.0.0] - 2026-04-23
+## [1.0.0] - 2026-06-01
 
 ### Added
 - new canvas system
-- new input system
+- new input system (PointerManager, WheelManager, KeyboardManager, InteractionController)
+- new contextual toolbar
+- new drawing state system (DrawingState and DrawingController)
 - gesture support
 - gesture: pinch-to-zoom
 - gesture: pinch-to-pan
@@ -23,13 +25,14 @@ The application has only polish interface now, but I plan to add english interfa
 - new tools: move-zoom, fit-to-screen, eyedropper, palette (color-palette and color-picker)
 - new settings options (change canvas size)
 - move-zoom: holding CTRL switches current tool to move-zoom
-- move-zoom: holding SCROLL switches current tool to move-zoom
 - new 'Roboto' font
 - ToolBase class - the base of tool classes
 - 'code_ideas' directory for unused and experimental code ideas
 - Slider class - custom slider
 
 ### Changed
+- tools toolbar has 2 toolbars (app tools and basic tools)
+- button color changed from blue to dark gray
 - canvas has size, it's not fullscreen now
 - color button was changed to current color button and now is non-interactive
 - new import/export functions
@@ -39,7 +42,6 @@ The application has only polish interface now, but I plan to add english interfa
 ### Fixed
 - shortcuts for undo/redo
 - undo after changing eraser bug
-- can draw on space between buttons
 - canvas border (offset) bug
 
 
@@ -117,6 +119,3 @@ Start of the project.
 
 
 # Known Issues
-- after draw, choose eraser and do undo action, chosen is brush instead of eraser
-- line's edges (round, square) depends on the latest chosen tool - brush or pencil
-- after color change, line's visualization is always black
