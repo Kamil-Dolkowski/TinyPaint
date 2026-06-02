@@ -63,6 +63,7 @@ export default class Canvas extends EventTarget {
         this.ctx.font = drawingState.font;
         this.ctx.lineCap = drawingState.lineCap;
         this.ctx.globalCompositeOperation = drawingState.compositeOperation;
+        this.ctx.imageSmoothingEnabled = drawingState.imageSmoothing;
     }
 
     setSize(width, height) {
