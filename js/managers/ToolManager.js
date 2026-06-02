@@ -44,6 +44,7 @@ export default class ToolManager extends EventTarget {
         this.currentTool?.setTool();
 
         this.ctxToolbarManager.update(this.currentTool.toolControls);
+        this.currentTool.canvas.clearCursorCanvas();
 
         // event
         this.dispatchEvent(
