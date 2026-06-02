@@ -66,18 +66,25 @@ export default class Palette extends EventTarget {
         if (name == "color-picker") {
             this.colorPaletteContent.style.display = "none";
             this.colorPickerContent.style.display = "block";
-
-            requestAnimationFrame(() => this.colorPicker.colorSlider.updateLayout());
         }
     }
 
     // Canvas
-    changeColor(color) {
+    changeColor(color, updateToolsState = false) {
         if (color === "none") color = "#000000";
 
+        // currentColor control
         this.paletteControl.changeCurrentColor(color);
         this.currentColor = color;
 
+        if (updateToolsState){
+            // color picker
+            if (this.colorPicker) this.colorPicker.setColor(color);
+            
+            // color palette
+            if (this.colorPalette) this.colorPalette.setColor(color);
+        }
+        
         // event
         this.dispatchEvent(
             new CustomEvent("change", {

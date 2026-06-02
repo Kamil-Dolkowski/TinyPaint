@@ -1,5 +1,3 @@
-import Slider from '../../ui/Slider.js';
-
 export default class ColorPicker {
     constructor(content, changeColorCallback) {
         this.content = content;
@@ -42,23 +40,24 @@ export default class ColorPicker {
         this.canvasDiv.appendChild(this.cursorCanvas);
         this.colorPickerContent.appendChild(this.canvasDiv);
 
-        this.colorSlider.mount(this.colorPickerContent);
+        this.colorPickerContent.appendChild(this.colorSlider);
         this.content.appendChild(this.colorPickerContent);
         this.content.appendChild(this.addToPaletteBtn);
 
         this.renderHsvSquare(0);
-        this.colorSlider.thumb.style.backgroundColor = `hsl(${this.colorSlider.value}, 100%, 50%)`;
+        this.colorSlider.style.setProperty("--thumb-color", `hsl(${this.colorSlider.value}, 100%, 50%)`)
 
         // === SLIDER ===
-        this.colorSlider.slider.addEventListener("change", e => {
-            this.renderHsvSquare(e.detail.value);
+        this.colorSlider.addEventListener("input", e => {
+            const h = Number(e.target.value);
+            this.renderHsvSquare(h);
 
             const {r,g,b} = this.getRgb();
 
             const colorHex = this.rgbToHex(r,g,b);
             this.changeColorCallback?.(colorHex);
 
-            this.colorSlider.thumb.style.backgroundColor = `hsl(${e.detail.value}, 100%, 50%)`;
+            this.colorSlider.style.setProperty("--thumb-color", `hsl(${h}, 100%, 50%)`);
         });
 
         // === CURSOR CANVAS ===
@@ -162,7 +161,12 @@ export default class ColorPicker {
     }
 
     createColorSlider() {
-        const colorSlider = new Slider(0, 360, 0, "color-slider");
+        const colorSlider = document.createElement("input");
+        colorSlider.type = "range";
+        colorSlider.min = 0;
+        colorSlider.max = 360;
+        colorSlider.value = 0;
+        colorSlider.id = "color-slider";
 
         return colorSlider;
     }
@@ -185,22 +189,24 @@ export default class ColorPicker {
         return addToPaletteBtn;
     }
 
-    drawCursor() {
+    drawCursor(x = this.currentX, y = this.currentY) {
         this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
 
         this.cursorCtx.lineWidth = 4;
         this.cursorCtx.strokeStyle = "black"
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.currentX, this.currentY, 10, 0, 2 * Math.PI);
+        this.cursorCtx.arc(x, y, 10, 0, 2 * Math.PI);
         this.cursorCtx.stroke();
     }
+
+    // ==================== METHODS ====================
 
     renderHsvSquare(h) {
         // h - hue [0,360]
 
-        const width = this.colorCanvas.width;
-        const height = this.colorCanvas.height;
+        const width = this.canvasWidth;
+        const height = this.canvasHeight;
 
         const data = this.imageData.data;
 
@@ -221,6 +227,31 @@ export default class ColorPicker {
 
         this.ctx.putImageData(this.imageData, 0, 0);
     }
+
+    getRgb() {
+        const h = this.colorSlider.value;
+        const s = this.currentX / (this.canvasWidth - 1);
+        const v = 1 - (this.currentY / (this.canvasHeight - 1));
+
+        return this.hsvToRgb(h, s, v);
+    }
+
+    setColor(hexColor) {
+        const {r,g,b} = this.hexToRgb(hexColor);
+        const {h,s,v} = this.rgbToHsv(r,g,b);
+
+        // update color slider
+        this.colorSlider.value = h;
+        this.colorSlider.style.setProperty("--thumb-color", `hsl(${h}, 100%, 50%)`);
+
+        // update hsv square
+        this.renderHsvSquare(h);
+
+        // update cursor
+        this.drawCursor(s * this.canvasWidth, this.canvasHeight - v * this.canvasHeight);
+    }
+
+    // ==================== CONVERSIONS ====================
 
     //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
     hsvToRgb(h, s, v) {
@@ -284,28 +315,94 @@ export default class ColorPicker {
         return {r: r, g: g, b: b};
     }
 
+    // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+    rgbToHsv(r, g, b) {
+        // The R,G,B values are divided by 255 to change the range from 0..255 to 0..1:
+        r = r/255;
+        g = g/255;
+        b = b/255;
+
+        const cMax = Math.max(r,g,b);
+        const cMin = Math.min(r,g,b);
+
+        const delta = cMax - cMin;
+
+        // H
+        let h = 0;
+
+        switch (cMax) {
+            case cMin:
+                break;
+            case r:
+                h = 60 * (((g-b) / delta) % 6);
+                break;
+            case g:
+                h = 60 * (((b-r) / delta) + 2);
+                break;
+            case b:
+                h = 60 * (((r-g) / delta) + 4);
+                break;
+        }
+
+        // S
+        let s = 0;
+
+        if (cMax != 0) {
+            s = delta / cMax;
+        }
+
+        // V
+        const v = cMax;
+
+        return {h,s,v};
+    }
+
     rgbToHex(r, g, b) {
         return "#" + this.decimalToHex(r) + this.decimalToHex(g) + this.decimalToHex(b);
+    }
+
+    hexToRgb(hex) {
+        // 1. delete '#' on front
+        hex = hex.slice(1); 
+
+        // 2. divide into 3 parts (RGB)
+        const rStr = hex.slice(0,2);
+        const gStr = hex.slice(2,4);
+        const bStr = hex.slice(4,6);
+
+        // 3. calculate RGB [hexadecimal to decimal]
+        const r = this.hexToDec(rStr[1]) + 16 * this.hexToDec(rStr[0]);
+        const g = this.hexToDec(gStr[1]) + 16 * this.hexToDec(gStr[0]);
+        const b = this.hexToDec(bStr[1]) + 16 * this.hexToDec(bStr[0]);
+
+        return {r: r, g: g, b: b};
     }
 
     decimalToHex(decimal) {
         return decimal.toString(16).padStart(2, '0');
     }
 
-    // slower
-    getRgbFromImageData() {
-        const data = this.imageData.data;
-        const i = (parseInt(this.currentY) * this.canvasWidth + parseInt(this.currentX)) * 4;
+    hexToDec(hex) {
+        switch(hex) {
+            case 'a':
+                return 10;
+            case 'b':
+                return 11;
+            case 'c':
+                return 12;
+            case 'd':
+                return 13;
+            case 'e':
+                return 14;
+            case 'f':
+                return 15;
+            default:
+                if (!Number.isInteger(Number(hex))) return null;
 
-        return {r: data[i], g: data[i+1], b: data[i+2]};
-    }
+                const number = Number(hex);
+                if (number < 0 || number > 9) return null;
 
-    // faster
-    getRgb() {
-        const h = this.colorSlider.value;
-        const s = this.currentX / (this.canvasWidth - 1);
-        const v = 1 - (this.currentY / (this.canvasHeight - 1));
-
-        return this.hsvToRgb(h, s, v);
+                return number;
+        }
     }
 }

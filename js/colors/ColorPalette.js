@@ -118,6 +118,35 @@ export default class ColorPalette {
         this.colorButtons[id2].dataset.focus = focus_temp;
         this.colorButtons[id2].dataset.color = color_temp;
         this.colorButtons[id2].style.backgroundColor = (color_temp === "none") ? "transparent" : color_temp;
+    }
 
+    setColor(hexColor) {
+        for (const button of this.colorButtons) {
+            if (button.dataset.color == "none") return;
+
+            if (this.isColorWithinTolerance(button.dataset.color, hexColor, 2)) {
+                this.colorButtons.forEach(btn => {
+                    btn.dataset.focus = "false";
+                });
+
+                button.dataset.focus = "true";
+                this.currentColorBtnId = Number(button.dataset.id);
+                return;
+            }
+        };
+    }
+
+    isColorWithinTolerance(color1, color2, tolerance = 2) {
+        let errorValue = 0;
+        
+        for (let i = 1; i < 6; i += 2) {
+            errorValue += Math.abs(parseInt(color1.substr(i,2), 16) - parseInt(color2.substr(i,2), 16));
+        }
+        
+        if (errorValue > tolerance) {
+            return false;
+        } else {
+            return true;
+        }   
     }
 }

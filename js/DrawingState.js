@@ -5,6 +5,7 @@ const drawingState = {
     font: "10px sans-serif",
     lineCap: "round",
     compositeOperation: "source-over",
+    imageSmoothing: false,
 }
 
 export default drawingState;

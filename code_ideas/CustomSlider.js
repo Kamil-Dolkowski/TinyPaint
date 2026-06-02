@@ -1,4 +1,4 @@
-export default class Slider {
+export default class CustomSlider {
     constructor(min = 0, max = 100, value = min, id = null, className = null) {
         // variables
         this.min = min;

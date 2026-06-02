@@ -20,7 +20,7 @@ export default class Eyedropper extends ToolBase {
 
         const hex = this.rgbToHex(data[0], data[1], data[2]);
 
-        this.palette.changeColor(hex);
+        this.palette.changeColor(hex, true);
     }
 
     pointermove(pointerData) {
