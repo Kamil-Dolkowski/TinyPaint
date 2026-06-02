@@ -80,7 +80,9 @@ export default class Palette extends EventTarget {
         if (updateToolsState){
             // color picker
             if (this.colorPicker) this.colorPicker.setColor(color);
-
+            
+            // color palette
+            if (this.colorPalette) this.colorPalette.setColor(color);
         }
         
         // event
