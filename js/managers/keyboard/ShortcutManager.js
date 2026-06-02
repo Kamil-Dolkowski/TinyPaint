@@ -6,41 +6,41 @@ export default class ShortcutManager {
 
         // shortcuts - single action
         this.shortcuts = {
-            ctrlZ: {
+            undo: {
                 code: "KeyZ",
                 ctrlKey: true,
                 action: () => this.history.undo()
             },
-            ctrlY: {
+            redo: {
                 code: "KeyY",
                 ctrlKey: true,
                 action: () => this.history.redo()
             },
-            p: {
+            pencil: {
                 code: "KeyP",
                 action: () => this.toolManager.setToolByName("pencil")
             },
-            b: {
+            brush: {
                 code: "KeyB",
                 action: () => this.toolManager.setToolByName("brush")
             },
-            l: {
+            line: {
                 code: "KeyL",
                 action: () => this.toolManager.setToolByName("line")
             },
-            e: {
+            eraser: {
                 code: "KeyE",
                 action: () => this.toolManager.setToolByName("eraser")
             },
-            m: {
+            moveZoom: {
                 code: "KeyM",
                 action: () => this.toolManager.setToolByName("moveZoom")
             },
-            i: {
+            eyedropper: {
                 code: "KeyI",
                 action: () => this.toolManager.setToolByName("eyedropper")
             },
-            f: {
+            fitToScreen: {
                 code: "KeyF",
                 action: () => this.canvas.fitToScreen()
             },
