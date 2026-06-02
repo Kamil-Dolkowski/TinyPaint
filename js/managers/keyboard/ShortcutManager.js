@@ -36,6 +36,10 @@ export default class ShortcutManager {
                 code: "KeyM",
                 action: () => this.toolManager.setToolByName("moveZoom")
             },
+            i: {
+                code: "KeyI",
+                action: () => this.toolManager.setToolByName("eyedropper")
+            },
             f: {
                 code: "KeyF",
                 action: () => this.canvas.fitToScreen()
