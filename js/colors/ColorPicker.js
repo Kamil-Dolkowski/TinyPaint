@@ -57,7 +57,7 @@ export default class ColorPicker {
             const colorHex = this.rgbToHex(r,g,b);
             this.changeColorCallback?.(colorHex);
 
-            this.colorSlider.style.setProperty("--thumb-color", `hsl(${h}, 100%, 50%)`)
+            this.colorSlider.style.setProperty("--thumb-color", `hsl(${h}, 100%, 50%)`);
         });
 
         // === CURSOR CANVAS ===
@@ -189,14 +189,14 @@ export default class ColorPicker {
         return addToPaletteBtn;
     }
 
-    drawCursor() {
+    drawCursor(x = this.currentX, y = this.currentY) {
         this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
 
         this.cursorCtx.lineWidth = 4;
         this.cursorCtx.strokeStyle = "black"
 
         this.cursorCtx.beginPath();
-        this.cursorCtx.arc(this.currentX, this.currentY, 10, 0, 2 * Math.PI);
+        this.cursorCtx.arc(x, y, 10, 0, 2 * Math.PI);
         this.cursorCtx.stroke();
     }
 
@@ -240,8 +240,15 @@ export default class ColorPicker {
         const {r,g,b} = this.hexToRgb(hexColor);
         const {h,s,v} = this.rgbToHsv(r,g,b);
 
+        // update color slider
         this.colorSlider.value = h;
+        this.colorSlider.style.setProperty("--thumb-color", `hsl(${h}, 100%, 50%)`);
+
+        // update hsv square
         this.renderHsvSquare(h);
+
+        // update cursor
+        this.drawCursor(s * this.canvasWidth, this.canvasHeight - v * this.canvasHeight);
     }
 
     // ==================== CONVERSIONS ====================

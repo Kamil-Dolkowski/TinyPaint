@@ -70,16 +70,19 @@ export default class Palette extends EventTarget {
     }
 
     // Canvas
-    changeColor(color) {
+    changeColor(color, updateToolsState = false) {
         if (color === "none") color = "#000000";
 
         // currentColor control
         this.paletteControl.changeCurrentColor(color);
         this.currentColor = color;
 
-        // color picker
-        if (this.colorPicker) //this.colorPicker.setColor(color);
+        if (updateToolsState){
+            // color picker
+            if (this.colorPicker) this.colorPicker.setColor(color);
 
+        }
+        
         // event
         this.dispatchEvent(
             new CustomEvent("change", {
