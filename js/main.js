@@ -118,7 +118,7 @@ const drawingController = new DrawingController(drawingState, canvas, palette, t
 
 // ==================== KEYBOARD ====================
 
-const shortcutManager = new ShortcutManager(history, toolManager);
+const shortcutManager = new ShortcutManager(canvas, history, toolManager);
 const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 

@@ -19,12 +19,24 @@ The application has only polish interface now, but I plan to add english interfa
 - new contextual toolbar
 - new drawing state system (DrawingState and DrawingController)
 - gesture support
-- gesture: pinch-to-zoom
-- gesture: pinch-to-pan
+- gestures: 
+    - pinch-to-zoom
+    - pinch-to-pan
 - improved mobile user experience
-- new tools: move-zoom, fit-to-screen, eyedropper, palette (color-palette and color-picker)
+- new tools: 
+    - move-zoom, 
+    - fit-to-screen, 
+    - eyedropper, 
+    - palette (color-palette and color-picker)
 - new settings options (change canvas size)
 - move-zoom: holding CTRL switches current tool to move-zoom
+- new shortcuts: 
+    - P - pencil, 
+    - B - Brush, 
+    - L - Line, 
+    - E - Eraser, 
+    - M - Manipulate, 
+    - F - Fit-to-screen
 - new 'Roboto' font
 - ToolBase class - the base of tool classes
 - 'code_ideas' directory for unused and experimental code ideas

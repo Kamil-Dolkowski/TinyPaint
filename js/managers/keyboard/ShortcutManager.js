@@ -1,5 +1,6 @@
 export default class ShortcutManager {
-    constructor(history, toolManager) {
+    constructor(canvas, history, toolManager) {
+        this.canvas = canvas;
         this.history = history;
         this.toolManager = toolManager;
 
@@ -15,10 +16,30 @@ export default class ShortcutManager {
                 ctrlKey: true,
                 action: () => this.history.redo()
             },
+            p: {
+                code: "KeyP",
+                action: () => this.toolManager.setToolByName("pencil")
+            },
             b: {
                 code: "KeyB",
                 action: () => this.toolManager.setToolByName("brush")
-            }
+            },
+            l: {
+                code: "KeyL",
+                action: () => this.toolManager.setToolByName("line")
+            },
+            e: {
+                code: "KeyE",
+                action: () => this.toolManager.setToolByName("eraser")
+            },
+            m: {
+                code: "KeyM",
+                action: () => this.toolManager.setToolByName("moveZoom")
+            },
+            f: {
+                code: "KeyF",
+                action: () => this.canvas.fitToScreen()
+            },
         };
     }
 
