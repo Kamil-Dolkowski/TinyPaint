@@ -119,3 +119,4 @@ Start of the project.
 
 
 # Known Issues
+- Slight color differences in canvas `getImageData()` on Brave (Chromium-based browsers). Firefox returns exact RGB values.
