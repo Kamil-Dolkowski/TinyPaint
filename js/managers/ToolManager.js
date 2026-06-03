@@ -9,7 +9,7 @@ export default class ToolManager extends EventTarget {
         this.ctxToolbarManager = ctxToolbarManager;
 
         this.currentTool = firstTool;
-        this.lastTool = null;
+        this.lastTools = [];
         
         this.history = history;
 
@@ -37,13 +37,18 @@ export default class ToolManager extends EventTarget {
         });
     }
 
-    setTool(tool) {
-        if (tool != this.currentTool) this.lastTool = this.currentTool;
+    setTool(tool, rememberHistory = false) {
+        if (rememberHistory) {
+            if (tool != this.currentTool) {
+                this.lastTools.push(this.currentTool);
+            }
+        }
         
         this.currentTool = tool;
         this.currentTool?.setTool();
 
         this.ctxToolbarManager.update(this.currentTool.toolControls);
+        this.currentTool.canvas.clearCursorCanvas();
 
         // event
         this.dispatchEvent(
@@ -53,13 +58,13 @@ export default class ToolManager extends EventTarget {
         );
     }
 
-    setToolByName(toolName) {
+    setToolByName(toolName, rememberHistory = false) {
         const tool = this.tools[toolName].tool;
         
         if (!tool) return;
 
         // set tool
-        this.setTool(tool);
+        this.setTool(tool, rememberHistory);
 
         // set button
         const button = this.tools[toolName].button;
@@ -68,10 +73,10 @@ export default class ToolManager extends EventTarget {
     }
 
     setLastTool() {
-        if (!this.lastTool) return;
+        if (this.lastTools.length == 0) return;
 
-        this.setToolByName(this.lastTool.tool)
-        this.lastTool = null;
+        const lastTool = this.lastTools.pop();
+        this.setToolByName(lastTool.tool)
     }
 
     drawCursor(current) {

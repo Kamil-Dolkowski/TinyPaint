@@ -116,9 +116,19 @@ const wheelManager = new WheelManager(toolManager);
 
 const drawingController = new DrawingController(drawingState, canvas, palette, toolManager, controlsContent);
 
+// ======== DOWNLOAD ========
+const exportBtn = document.getElementById("export-btn");
+
+const imageExport = new ImageExport(exportBtn, canvas.canvas);
+
+// ======== UPLOAD ========
+const importBtn = document.getElementById("import-btn");
+
+const imageImport = new ImageImport(importBtn, canvas, history);
+
 // ==================== KEYBOARD ====================
 
-const shortcutManager = new ShortcutManager(history, toolManager);
+const shortcutManager = new ShortcutManager(canvas, history, toolManager, imageExport);
 const holdActionManager = new HoldActionManager(toolManager);
 const keyboardManager = new KeyboardManager(shortcutManager, holdActionManager);
 
@@ -169,16 +179,6 @@ const resetZoomBtn = document.getElementById("reset-zoom-btn");
 resetZoomBtn.addEventListener("click", () => {
     canvas.fitToScreen();
 });
-
-// ======== DOWNLOAD ========
-const exportBtn = document.getElementById("export-btn");
-
-const imageExport = new ImageExport(exportBtn, canvas.canvas);
-
-// ======== UPLOAD ========
-const importBtn = document.getElementById("import-btn");
-
-const imageImport = new ImageImport(importBtn, canvas, history);
 
 // ======== EXIT ALERT ========
 window.addEventListener("beforeunload", e => {
