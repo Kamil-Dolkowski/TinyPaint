@@ -1,8 +1,9 @@
 export default class ShortcutManager {
-    constructor(canvas, history, toolManager) {
+    constructor(canvas, history, toolManager, imageExport) {
         this.canvas = canvas;
         this.history = history;
         this.toolManager = toolManager;
+        this.imageExport = imageExport;
 
         // shortcuts - single action
         this.shortcuts = {
@@ -15,6 +16,14 @@ export default class ShortcutManager {
                 code: "KeyY",
                 ctrlKey: true,
                 action: () => this.history.redo()
+            },
+            save: {
+                code: "KeyS",
+                ctrlKey: true,
+                action: () => {
+                    this.imageExport.save();
+                    this.toolManager.setLastTool();
+                }
             },
             pencil: {
                 code: "KeyP",
@@ -58,6 +67,9 @@ export default class ShortcutManager {
                 keyData.shiftKey === !!shortcut.shiftKey &&
                 keyData.altKey === !!shortcut.altKey
             ) {
+                if (keyData.ctrlKey || keyData.shiftKey || keyData.altKey) {
+                    keyData.event.preventDefault();
+                }
                 shortcut.action();
                 return;
             }

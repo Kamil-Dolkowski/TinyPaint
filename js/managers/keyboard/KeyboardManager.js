@@ -34,7 +34,8 @@ export default class KeyboardManager {
             ctrlKey: e.ctrlKey,
             shiftKey: e.shiftKey,
             altKey: e.altKey,
-            metaKey: e.metaKey
+            metaKey: e.metaKey,
+            event: e
         };
     }
 }
