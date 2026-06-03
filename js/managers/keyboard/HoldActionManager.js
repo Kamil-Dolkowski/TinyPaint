@@ -5,11 +5,16 @@ export default class HoldActionManager {
 
         // holdActions - constant action
         this.holdActions = {
-            ctrl: {
+            moveZoom: {
                 code: "ControlLeft",
-                keydownAction: () => this.toolManager.setToolByName("moveZoom"),
+                keydownAction: () => this.toolManager.setToolByName("moveZoom", true),
                 keyupAction: () => this.toolManager.setLastTool()
-            }
+            },
+            eyedropper: {
+                code: "AltLeft",
+                keydownAction: () => this.toolManager.setToolByName("eyedropper", true),
+                keyupAction: () => this.toolManager.setLastTool()
+            },
         }
     }
 
