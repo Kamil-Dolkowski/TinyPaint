@@ -58,8 +58,8 @@ const history = new History(canvas, undoBtn, redoBtn);
 
 const controlsContent = {
     palette: new PaletteControl(),
-    size: new OptionSlider(1, 40, 1, "fa-solid fa-pen-nib"),
-    alpha: new OptionSlider(1, 100, 100, "fa-solid fa-a"),
+    size: new OptionSlider(1, 40, 1, "draw-size"),
+    alpha: new OptionSlider(1, 100, 100, "alpha"),
 }
 
 const ctxToolbar = document.getElementById("contextual-toolbar");

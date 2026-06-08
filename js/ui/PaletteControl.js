@@ -11,10 +11,15 @@ export default class PaletteControl {
         const button = document.createElement("button");
         button.classList.add("toolbar-button");
         
-        const icon = document.createElement("i");
-        icon.className = "fa-solid fa-palette";
+        // icon
+        const SVG_NS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(SVG_NS, "svg");
+        const use = document.createElementNS(SVG_NS, "use");
 
-        button.appendChild(icon);
+        use.setAttribute("href", "assets/icons/controls.svg#palette");
+
+        svg.appendChild(use);
+        button.appendChild(svg);
 
         return button;
     }
