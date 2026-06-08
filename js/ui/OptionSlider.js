@@ -59,10 +59,15 @@ export default class OptionSlider extends EventTarget {
         const minusBtn = document.createElement("button");
         minusBtn.classList.add("toolbar-button");
 
-        const minusIcon = document.createElement("i");
-        minusIcon.classList.add("fa-solid", "fa-minus")
+        // icon
+        const SVG_NS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(SVG_NS, "svg");
+        const use = document.createElementNS(SVG_NS, "use");
 
-        minusBtn.appendChild(minusIcon);
+        use.setAttribute("href", `assets/icons/controls.svg#minus`);
+
+        svg.appendChild(use);
+        minusBtn.appendChild(svg);
 
         return minusBtn;
     }
@@ -81,10 +86,15 @@ export default class OptionSlider extends EventTarget {
         const plusBtn = document.createElement("button");
         plusBtn.classList.add("toolbar-button");
 
-        const plusIcon = document.createElement("i");
-        plusIcon.classList.add("fa-solid", "fa-plus")
+        // icon
+        const SVG_NS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(SVG_NS, "svg");
+        const use = document.createElementNS(SVG_NS, "use");
 
-        plusBtn.appendChild(plusIcon);
+        use.setAttribute("href", `assets/icons/controls.svg#plus`);
+
+        svg.appendChild(use);
+        plusBtn.appendChild(svg);
 
         return plusBtn;
     }
