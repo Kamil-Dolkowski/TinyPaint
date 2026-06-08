@@ -189,9 +189,10 @@ Structure:
 }
 
 .button-small svg {
-    width: 80%;
+    width: 10%;
     height: 80%;
     fill: currentColor;
+    margin: 5px;
 }
 
 @media (hover: hover) and (pointer: fine) {
