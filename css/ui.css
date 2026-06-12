@@ -135,6 +135,12 @@ Structure:
     pointer-events: all;
 }
 
+.toolbar-button svg {
+    width: 80%;
+    height: 80%;
+    fill: currentColor;
+}
+
 @media (hover: hover) and (pointer: fine) {
     .toolbar-button:hover {
         background-color: #48464b;
@@ -180,6 +186,13 @@ Structure:
     -webkit-user-select: none;
     touch-action: manipulation;
     pointer-events: all;
+}
+
+.button-small svg {
+    width: 10%;
+    height: 80%;
+    fill: currentColor;
+    margin: 5px;
 }
 
 @media (hover: hover) and (pointer: fine) {
