@@ -11,36 +11,41 @@ The application has only polish interface now, but I plan to add english interfa
 
 # Changelog
 
-## [1.0.0] - 2026-06-01
+## [1.0.0] - 2026-06-12
 
 ### Added
 - new canvas system
 - new input system (PointerManager, WheelManager, KeyboardManager, InteractionController)
 - new contextual toolbar
 - new drawing state system (DrawingState and DrawingController)
+- improved mobile user experience
 - gesture support
 - gestures: 
     - pinch-to-zoom
     - pinch-to-pan
-- improved mobile user experience
 - new tools: 
-    - move-zoom, 
-    - fit-to-screen, 
-    - eyedropper, 
+    - move-zoom
+    - fit-to-screen
+    - eyedropper
     - palette (color-palette and color-picker)
-- new settings options (change canvas size)
-- move-zoom: holding CTRL switches current tool to move-zoom
 - new shortcuts: 
-    - P - pencil, 
-    - B - Brush, 
-    - L - Line, 
-    - E - Eraser, 
-    - M - Manipulate, 
-    - F - Fit-to-screen
+    - tool shortcuts (change tool): 
+        - P - Pencil
+        - B - Brush
+        - L - Line
+        - E - Eraser
+        - M - Manipulate
+    - temporary tool shortcuts (hold key to temporarily change tool):
+        - CTRL - Manipulate
+        - (CTRL+)ALT - Eyedropper
+    - operation shortcuts:
+        - F - Fit-to-screen
+        - CTRL+S - Save image
+- new settings modal
+- new setting: change canvas size
 - new 'Roboto' font
 - ToolBase class - the base of tool classes
 - 'code_ideas' directory for unused and experimental code ideas
-- Slider class - custom slider
 
 ### Changed
 - tools toolbar has 2 toolbars (app tools and basic tools)
@@ -50,11 +55,12 @@ The application has only polish interface now, but I plan to add english interfa
 - new import/export functions
 - pencil: pencil now draws true 1 px line (thanks to Bresenham algorithm)
 - improved code structure: division code into multiple files/modules and directories, better OOP
+- moved SVG icons to the local /assets/icons directory; they are no longer loaded from the Font Awesome online repository
  
 ### Fixed
 - shortcuts for undo/redo
 - undo after changing eraser bug
-- canvas border (offset) bug
+
 
 
 ## [0.5.0] - 2026-03-30
