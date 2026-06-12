@@ -4,9 +4,20 @@
 
 Check out my app: [TinyPaint](https://kamil-dolkowski.github.io/TinyPaint/)
 
-In the future, I want to add a cooperative option to draw with friends :), but now I am working at basic functionalities of my graphic application.
+<!-- In the future, I want to add a cooperative option to draw with friends :), but now I am working at basic functionalities of my graphic application. -->
+
+The application can serve as an equivalent to **MS Paint** on **GNU/Linux** systems.
 
 The application has only polish interface now, but I plan to add english interface in the future (but it's not a big problem, because app is very intuitive thanks to many icons :D).
+
+
+# Technologies
+
+- HTML
+- CSS
+- JavaScript
+- Canvas API
+- Font Awesome
 
 
 # Changelog
