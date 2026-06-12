@@ -44,7 +44,7 @@ The application has only polish interface now, but I plan to add english interfa
 - UI:
     - Contextual toolbar
     - Palette (color selector) (includes: color-palette and color-picker)
-- Shortcuts: 
+- Keyboard shortcuts: 
     - Tool shortcuts (change tool): 
         - P - Pencil
         - B - Brush
