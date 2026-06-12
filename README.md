@@ -25,52 +25,70 @@ The application has only polish interface now, but I plan to add english interfa
 ## [1.0.0] - 2026-06-12
 
 ### Added
-- new canvas system
-- new input system (PointerManager, WheelManager, KeyboardManager, InteractionController)
-- new contextual toolbar
-- new drawing state system (DrawingState and DrawingController)
-- improved mobile user experience
-- gesture support
-- gestures: 
-    - pinch-to-zoom
-    - pinch-to-pan
-- new tools: 
-    - move-zoom
-    - fit-to-screen
-    - eyedropper
-    - palette (color-palette and color-picker)
-- new shortcuts: 
-    - tool shortcuts (change tool): 
+- New systems:
+    - Canvas system
+    - Input system (PointerManager, WheelManager, KeyboardManager, InteractionController)
+    - Gesture system
+    - Drawing state system (DrawingState and DrawingController)
+- Improved mobile user experience:
+    - Gesture support
+    - UI adjustments
+- Gestures: 
+    - Pinch-to-zoom
+    - Pinch-to-pan
+- Tools: 
+    - Move-zoom
+    - Fit-to-screen
+    - Eyedropper
+    - Settings
+- UI:
+    - Contextual toolbar
+    - Palette (color selector) (includes: color-palette and color-picker)
+- Shortcuts: 
+    - Tool shortcuts (change tool): 
         - P - Pencil
         - B - Brush
         - L - Line
         - E - Eraser
         - M - Manipulate
-    - temporary tool shortcuts (hold key to temporarily change tool):
+    - Temporary tool shortcuts (hold key to temporarily change tool):
         - CTRL - Manipulate
         - (CTRL+)ALT - Eyedropper
-    - operation shortcuts:
+    - Operation shortcuts:
         - F - Fit-to-screen
         - CTRL+S - Save image
-- new settings modal
-- new setting: change canvas size
-- new 'Roboto' font
-- ToolBase class - the base of tool classes
-- 'code_ideas' directory for unused and experimental code ideas
+- Settings: 
+    - Change canvas size
+- UI Components:
+    - Option slider
+    - Palette control
+- Other:
+    - Roboto font
+    - ToolBase class - the base of tool classes
+    - `/code_ideas` directory for unused and experimental code ideas
+   
 
 ### Changed
-- tools toolbar has 2 toolbars (app tools and basic tools)
-- button color changed from blue to dark gray
-- canvas has size, it's not fullscreen now
-- color button was changed to current color button and now is non-interactive
-- new import/export functions
-- pencil: pencil now draws true 1 px line (thanks to Bresenham algorithm)
-- improved code structure: division code into multiple files/modules and directories, better OOP
-- moved SVG icons to the local /assets/icons directory; they are no longer loaded from the Font Awesome online repository
+- Major UI update:
+    - App color theme changed from light to dark
+    - Tools toolbar split into two sections (app tools and basic tools)
+    - Brush settings changed to contextual toolbar and moved to the bottom of app
+    - SVG icons moved to local `/assets/icons` (no longer loaded from Font Awesome repository)
+    - Buttons changed to circular shape
+    - Color button changed to current color button and now is non-interactive
+- Canvas:
+    - Canvas is no longer fullscreen; it now has a fixed size
+- Tools:
+    - Pencil now draws true 1 px line using Bresenham algorithm
+- Code structure: 
+    - Refactored into multiple modules and directories
+- Import/Export:
+    - Updated import/export functions to support the new canvas system
+
  
 ### Fixed
-- shortcuts for undo/redo
-- undo after changing eraser bug
+- Undo/redo shortcuts
+- Undo bug after switching eraser tool
 
 
 
