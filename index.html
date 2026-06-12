@@ -3,57 +3,125 @@
     <title>Tiny Paint</title>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
+
+    <!-- css -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/slider.css">
+    <link rel="stylesheet" href="css/color_palette.css">
+    <link rel="stylesheet" href="css/option-slider.css">
+    <link rel="stylesheet" href="css/ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div id="toolbox">
-        <div class="toolbox-group">
-            <button disabled id="settings-btn" class="button-22"><i class="fa-solid fa-gear"></i></button>
+    <!-- Toolbar -->
+    <header id="toolbar">
+        <section id="toolbar-global">
+            <button id="settings-btn" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#settings"></use></svg></button>
+
+            <button disabled id="undo-btn" title="Cofnij" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#undo"></use></svg></button>
+            <button disabled id="redo-btn" title="Ponów" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#redo"></use></svg></button>
+
+            <button id="clear-btn" title="Wyczyść" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#clear"></use></svg></button>
+            <button id="reset-zoom-btn" title="Reset widoku" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#fit-to-screen"></use></svg></button>
+
+            <button id="export-btn" title="Pobierz" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#export"></use></svg></button>
+            <button id="import-btn" title="Załaduj" class="toolbar-button"><svg><use href="assets/icons/app-tools.svg#import"></use></svg></button>
+
+            <a href="https://github.com/Kamil-Dolkowski/TinyPaint" title="GitHub" class="toolbar-button" style="text-decoration: none;"><svg><use href="assets/icons/app-tools.svg#github"></use></svg></a>
+        </section>
+        <section id="toolbar-tools">
+            <button id="pencil-btn" title="Ołówek" class="toolbar-button" data-state="on"><svg><use href="assets/icons/basic-tools.svg#pencil"></use></svg></button>
+            <button id="brush-btn" title="Pędzel" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#brush"></use></svg></button>
+            <button id="line-btn" title="Linia" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#line"></use></svg></button>
+            <button id="eraser-btn" title="Gumka" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#eraser"></use></svg></button>
+            <button id="move-zoom-btn" title="Przesuń, Przybliż/Oddal" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#move-zoom"></use></svg></button>
+            <button id="eyedropper-btn" title="Wybierz kolor" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#eye-dropper"></use></svg></button>
+            <!-- <button disabled id="fill-btn" title="Wypełnij" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#fill"></use></svg></button> -->
+            <!-- <button disabled id="select-btn" title="Zaznacz" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#selector"></use></svg></button> -->
+            <!-- <button disabled id="text-btn" title="Tekst" class="toolbar-button" data-state="off"><svg><use href="assets/icons/basic-tools.svg#text"></use></svg></button> -->
+        </section>
+    </header>
+
+     <!-- Workspace -->
+    <div id="workspace">
+        <div id="canvas-space">
+            <canvas id="cursor-canvas"></canvas>
+            <canvas id="canvas"></canvas>
+            <canvas id="checkerboard"></canvas>
+            <!-- <canvas id="bg-canvas"></canvas> -->
         </div>
-        <div class="toolbox-group">
-            <button disabled id="undo-btn" title="Cofnij" class="button-22"><i class="fa-solid fa-arrow-rotate-left"></i></button>
-            <button disabled id="redo-btn" title="Ponów" class="button-22"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+
+        <div id="canvas-border"></div>
+    </div>
+
+    <!-- Palette -->
+    <div id="palette-window" class="window hidden">
+        <div id="palette-options">
+            <button id="color-palette-btn" class="button-small"><!--<i class="fa-solid fa-palette"></i>-->Paleta kolorów</button>
+            <button id="color-picker-btn" class="button-small"><!--<i class="fa-solid fa-eye-dropper"></i>-->Wybierz kolor</button>
         </div>
-        <div id="toolbox-tools" class="toolbox-group">
-            <button id="pencil-btn" title="Ołówek" class="button-22" data-state="on"><i class="fa-solid fa-pencil"></i></i></button>
-            <button id="brush-btn" title="Pędzel" class="button-22" data-state="off"><i class="fa-solid fa-brush"></i></button>
-            <button id="line-btn" title="Linia" class="button-22" data-state="off"><i class="fa-solid fa-slash"></i></button>
-            <button id="eraser-btn" title="Gumka" class="button-22" data-state="off"><i class="fa-solid fa-eraser"></i></button>
-            <!-- <button disabled id="fill-btn" title="Wypełnij" class="button-22" data-state="off"><i class="fa-solid fa-fill-drip"></i></button>
-            <button disabled id="text-btn" title="Tekst" class="button-22" data-state="off"><i class="fa-solid fa-t"></i></button>
-            <button disabled id="move-btn" title="Przesuń" class="button-22" data-state="off"><i class="fa-solid fa-arrows-up-down-left-right"></i></button>
-            <button disabled id="zoom-btn" title="Przybliż/Oddal" class="button-22" data-state="off"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <button disabled id="color-picker-btn" title="Wybierz kolor" class="button-22" data-state="off"><i class="fa-solid fa-eye-dropper"></i></button>
-            <button disabled id="select-btn" title="Zaznacz" class="button-22" data-state="off"><i class="fa-solid fa-object-group"></i></button> -->
-        </div>
-        <div class="toolbox-group">
-            <!-- <button disabled id="bgcolor-btn" title="Kolor tła" class="button-22"><i class="fa-solid fa-image"></i></button> -->
-            <button id="clear-btn" title="Wyczyść" class="button-22"><i class="fa-solid fa-trash"></i></button>
-        </div>
-        <div class="toolbox-group">
-            <button id="download-btn" title="Pobierz" class="button-22"><i class="fa-solid fa-file-arrow-down"></i></button>
-            <button id="upload-btn" title="Załaduj" class="button-22"><i class="fa-solid fa-file-arrow-up"></i></button>
-        </div>
-        <div class="toolbox-group">
-            <a href="https://github.com/Kamil-Dolkowski/TinyPaint" title="GitHub" class="button-22" style="text-decoration: none;"><i class="fa-brands fa-github"></i></a>
+        <div id="palette-content">
+            <div id="color-palette">
+                <div id="color-palette-content"></div>
+                <button id="delete-color-btn" class="button-small"><svg><use href="assets/icons/app-tools.svg#clear"></use></svg>Usuń kolor</button>
+            </div>
+            <div id="color-picker" style="display: none;"></div>
         </div>
     </div>
 
-    <div id="brush-settings">
-        <div id="size-lbl">1</div>
-        <button id="increase-btn" class="button-22"><i class="fa-solid fa-plus"></i></button>
-        <button id="decrease-btn" class="button-22"><i class="fa-solid fa-minus"></i></button>
-        <input type="color" id="color-picker">
+    <!-- Settings -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span class="modal-close">&times;</span>
+                <h2>Ustawienia</h2>
+            </div>
+            
+            <div class="modal-body">
+                <ul>
+                    <li id="canvas-size-settings">
+                        <h3>Rozmiar płótna</h3>
+
+                        <div id="canvas-size-inputs">
+                            <label>
+                                Szerokość [px]
+                                <input type="number" id="canvas-size-width-input" min="1" value="800">
+                            </label>
+                            <p>x</p>
+                            <label>
+                                Wysokość [px]
+                                <input type="number" id="canvas-size-height-input" min="1" value="600">
+                            </label>
+                        </div>
+                    </li>
+                    <li class="hidden">
+                        <h3>Kolor tła</h3>
+
+                        <input type="color" id="background-input">
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-footer">
+                <button id="settings-save" class="button-small">Zapisz zmiany</button>
+            </div>
+        </div>
     </div>
 
-    <input type="file" id="upload" style="display:none">
+    <!-- Contextual Toolbar -->
+    <footer id="contextual-toolbar">
+        <div data-control="palette"></div>
+        <div data-control="size"></div>
+        <!-- <div data-control="alpha"></div> -->
+    </footer>
 
-    <!-- <canvas id="bg-canvas"></canvas> -->
-    <canvas id="canvas"></canvas>
-    <canvas id="cursor-canvas"></canvas>
-
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script src="js/settings.js"></script>
 </body>

@@ -1,0 +1,126 @@
+#palette-window {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    padding: 5px;
+    z-index: 9999;
+    bottom: 2vh;
+    left: 8vw;
+    box-shadow: 0px 0px 32px 0px #000000;
+}
+
+#palette-options {
+    display: flex;
+    margin: 10px;
+}
+
+#palette-content {
+    margin: 10px;
+}
+
+#color-picker-content {
+    justify-content: center;
+    gap: 10px;
+}
+
+#color-palette-content {
+    display: grid;
+    width: fit-content;
+    margin: auto;
+    grid-template-columns: repeat(8, 24px);
+    gap: 0;
+    background-color: #585858;
+    outline: 5px solid #272629;
+}
+
+.color-button {
+    width: 24px;
+    height: 24px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.color-button[data-focus="false"] {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(31, 29, 37);
+}
+
+.color-button[data-focus="true"] {
+    border-style: solid;
+    border-width: 3px;
+    transform: scale(1.2);
+}
+
+#delete-color-btn {
+    margin: 10px;
+}
+
+#current-color {
+    border-style: solid;
+    border-width: 7px;
+    border-color: #353338;
+}
+
+#current-color-checkerboard {
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+
+    background:
+        repeating-conic-gradient(#555 0% 25%, #aaa 0% 50%);
+    background-size: 20px 20px;
+}
+
+#color-slider {
+    height: 150px;
+    width: 10px;
+
+    writing-mode: vertical-lr;
+    -webkit-appearance: none;
+    appearance: none;
+
+    border-radius: 10px;
+    background: linear-gradient(
+        to bottom,
+        hsl(0, 100%, 50%),
+        hsl(0, 100%, 50%),
+        hsl(30, 100%, 50%),
+        hsl(60, 100%, 50%),
+        hsl(90, 100%, 50%),
+        hsl(120, 100%, 50%),
+        hsl(150, 100%, 50%),
+        hsl(180, 100%, 50%),
+        hsl(210, 100%, 50%),
+        hsl(240, 100%, 50%),
+        hsl(270, 100%, 50%),
+        hsl(300, 100%, 50%),
+        hsl(330, 100%, 50%),
+        hsl(360, 100%, 50%),
+        hsl(360, 100%, 50%)
+    );
+}
+
+#color-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%; 
+    background: var(--thumb-color, red);
+    border: 3px solid black;
+    cursor: pointer;
+}
+
+#color-slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 50%; 
+    background: var(--thumb-color, red);
+    border: 3px solid black;
+    cursor: pointer;
+}
+
+#add-to-palette-btn {
+    margin: 10px;
+}

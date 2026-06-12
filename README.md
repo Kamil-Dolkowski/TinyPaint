@@ -4,12 +4,93 @@
 
 Check out my app: [TinyPaint](https://kamil-dolkowski.github.io/TinyPaint/)
 
-In the future, I want to add a cooperative option to draw with friends :), but now I am working at basic functionalities of my graphic application.
+<!-- In the future, I want to add a cooperative option to draw with friends :), but now I am working at basic functionalities of my graphic application. -->
+
+The application can serve as an equivalent to **MS Paint** on **GNU/Linux** systems.
 
 The application has only polish interface now, but I plan to add english interface in the future (but it's not a big problem, because app is very intuitive thanks to many icons :D).
 
 
+# Technologies
+
+- HTML
+- CSS
+- JavaScript
+- Canvas API
+- Font Awesome
+
+
 # Changelog
+
+## [1.0.0] - 2026-06-12
+
+### Added
+- New systems:
+    - Canvas system
+    - Input system (PointerManager, WheelManager, KeyboardManager, InteractionController)
+    - Gesture system
+    - Drawing state system (DrawingState and DrawingController)
+- Improved mobile user experience:
+    - Gesture support
+    - UI adjustments
+- Gestures: 
+    - Pinch-to-zoom
+    - Pinch-to-pan
+- Tools: 
+    - Move-zoom
+    - Fit-to-screen
+    - Eyedropper
+    - Settings
+- UI:
+    - Contextual toolbar
+    - Palette (color selector) (includes: color-palette and color-picker)
+- Keyboard shortcuts: 
+    - Tool shortcuts (change tool): 
+        - P - Pencil
+        - B - Brush
+        - L - Line
+        - E - Eraser
+        - M - Manipulate
+    - Temporary tool shortcuts (hold key to temporarily change tool):
+        - CTRL - Manipulate
+        - (CTRL+)ALT - Eyedropper
+    - Operation shortcuts:
+        - F - Fit-to-screen
+        - CTRL+S - Save image
+- Settings: 
+    - Change canvas size
+- UI Components:
+    - Option slider
+    - Palette control
+- Other:
+    - Roboto font
+    - ToolBase class - the base of tool classes
+    - `/code_ideas` directory for unused and experimental code ideas
+   
+
+### Changed
+- Major UI update:
+    - App color theme changed from light to dark
+    - Tools toolbar split into two sections (app tools and basic tools)
+    - Brush settings changed to contextual toolbar and moved to the bottom of app
+    - SVG icons moved to local `/assets/icons` (no longer loaded from Font Awesome repository)
+    - Buttons changed to circular shape
+    - Color button changed to current color button and now is non-interactive
+- Canvas:
+    - Canvas is no longer fullscreen; it now has a fixed size
+- Tools:
+    - Pencil now draws true 1 px line using Bresenham algorithm
+- Code structure: 
+    - Refactored into multiple modules and directories
+- Import/Export:
+    - Updated import/export functions to support the new canvas system
+
+ 
+### Fixed
+- Undo/redo shortcuts
+- Undo bug after switching eraser tool
+
+
 
 ## [0.5.0] - 2026-03-30
 The first changes after uploading the project to GitHub.
@@ -23,6 +104,7 @@ The first changes after uploading the project to GitHub.
 ### Fixed
 - hidden unimplemented buttons (fill, text, move, zoom, pick color, select, background)
 - fixed line color visualization - now visualization has the same color as drawing line
+
 
 
 ## [0.4.0] - 2026-03-26
@@ -84,6 +166,4 @@ Start of the project.
 
 
 # Known Issues
-- after draw, choose eraser and do undo action, chosen is brush instead of eraser
-- line's edges (round, square) depends on the latest chosen tool - brush or pencil
-- after color change, line's visualization is always black
+- Slight color differences in canvas `getImageData()` on Brave (Chromium-based browsers). Firefox returns exact RGB values.

@@ -1,0 +1,100 @@
+html, body {
+    margin: 0;
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Roboto", sans-serif;
+}
+
+#toolbar {
+    background-color: #353338;
+    padding-bottom: 2px;
+    box-shadow: 0px 5px 5px 1px #29272b;
+    z-index: 9999;
+}
+
+#toolbar section {
+    margin: 2px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+#contextual-toolbar {
+    height: 44px;
+    background-color: #353338;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    box-shadow: 0px -5px 5px 1px #29272b;
+    z-index: 9999;
+}
+
+canvas {
+    image-rendering: pixelated;
+    touch-action: none;
+}
+
+#workspace {
+    position: relative;
+    flex: 1;
+    background-color: #585858;
+    overflow: hidden;
+}
+
+#canvas-space {
+    position: absolute;
+    transform-origin: top left;
+}
+
+#canvas-border {
+    outline: 3px solid #000000;
+    touch-action: none;
+    pointer-events: none;
+}
+
+#checkerboard {
+    position: absolute;
+    transform-origin: top left;
+    z-index: 0;
+}
+
+#canvas {
+    position: absolute;
+    transform-origin: top left;
+    z-index: 1;
+}
+
+#cursor-canvas {
+    position: absolute;
+    transform-origin: top left;
+    z-index: 2;
+}
+
+#brush-settings {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    bottom: 2vh;
+    left: 2vw;
+    z-index: 9999;
+}
+
+#size-lbl {
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: x-large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    pointer-events: none;
+}
